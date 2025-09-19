@@ -1,5 +1,23 @@
+import Anime from "@/components/Anime";
+import Banner from "@/components/Banner";
+import Category from "@/components/Category";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import HotMovies from "@/components/HotMovies";
+import MoviesByRegion from "@/components/MoviesByRegion";
+
 const HomePage = () =>{
-    return <div className="text-3xl font-bold underline ">HomePage</div>
+    return (
+      <>
+        <Header />
+        <Banner />
+        <Category />
+        <MoviesByRegion />
+        <HotMovies />
+        <Anime />
+        <Footer />
+      </>
+    );
 }
 
 export default HomePage;

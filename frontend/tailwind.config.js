@@ -77,9 +77,11 @@ module.exports = {
         },
       },
       backgroundImage: {
+        'banner': "url('/test.png')",
         "gradient-primary": "var(--gradient-primary)",
         "gradient-background": "var(--gradient-background)",
         "gradient-card": "var(--gradient-card)",
+
       },
       boxShadow: {
         "custom-sm": "var(--shadow-sm)",

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 @config "../tailwind.config.js";
@@ -140,5 +139,16 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .clip-trapezoidleft {
+    clip-path: polygon(0 10%, 100% 0, 100% 100%, 0% 100%);
+  }
+}
+@layer utilities {
+  .clip-trapezoidright {
+    clip-path: polygon(0 0%, 100% 10%, 100% 100%, 0% 100%);
   }
 }
