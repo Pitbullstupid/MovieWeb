@@ -9,13 +9,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Link } from "react-router";
 const HotMovies = () => {
   return (
-    <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full h-[470px]"    >
+    <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full h-[470px]">
       <div className="ml-5 w-full">
-        <h1 className="font-bold text-white text-2xl">
-          Top 10 phim hôm nay
-        </h1>
+        <h1 className="font-bold text-white text-2xl">Top 10 phim hôm nay</h1>
         <Carousel>
           <CarouselContent>
             <CarouselItem>
@@ -29,31 +28,33 @@ const HotMovies = () => {
                         : "clip-trapezoidleft"
                     }`}
                   >
-                    <div className="group relative">
-                      <img
-                        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                        className="w-full h-[350px] object-cover transform transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        <FontAwesomeIcon
-                          icon={faCirclePlay}
-                          className="text-white text-3xl hover:text-gray-400"
+                    <Link to={`/phim/${movie.original_title}`}>
+                      <div className="group relative">
+                        <img
+                          src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                          className="w-full h-[350px] object-cover transform transition-transform duration-500 group-hover:scale-110"
                         />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                          <FontAwesomeIcon
+                            icon={faCirclePlay}
+                            className="text-white text-3xl hover:text-gray-400"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex">
-                      <h1 className="w-[25%] text-center font-bold text-5xl italic bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-400">
-                        {movie.id}
-                      </h1>
-                      <div className="w-[75%]">
-                        <h3 className="text-white hover:text-yellow-400 cursor-pointer">
-                          {movie.title}
-                        </h3>
-                        <p className="text-gray-500 text-sm">
-                          {movie.original_title}
-                        </p>
+                      <div className="flex">
+                        <h1 className="w-[25%] text-center font-bold text-5xl italic bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-400">
+                          {movie.id}
+                        </h1>
+                        <div className="w-[75%]">
+                          <h3 className="text-white hover:text-yellow-400 cursor-pointer">
+                            {movie.title}
+                          </h3>
+                          <p className="text-gray-500 text-sm">
+                            {movie.original_title}
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 ))}
               </div>
@@ -69,31 +70,33 @@ const HotMovies = () => {
                         : "clip-trapezoidleft"
                     }`}
                   >
-                    <div className="group relative">
-                      <img
-                        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                        className="w-full h-[350px] object-cover transform transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        <FontAwesomeIcon
-                          icon={faCirclePlay}
-                          className="text-white text-3xl hover:text-gray-400"
+                    <Link to={`/phim/${movie.original_title}`}>
+                      <div className="group relative">
+                        <img
+                          src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                          className="w-full h-[350px] object-cover transform transition-transform duration-500 group-hover:scale-110"
                         />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                          <FontAwesomeIcon
+                            icon={faCirclePlay}
+                            className="text-white text-3xl hover:text-gray-400"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex">
-                      <h1 className="w-[25%] text-center font-bold text-5xl italic bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-400">
-                        {movie.id}
-                      </h1>
-                      <div className="w-[75%]">
-                        <h3 className="text-white hover:text-yellow-400 cursor-pointer">
-                          {movie.title}
-                        </h3>
-                        <p className="text-gray-500 text-sm">
-                          {movie.original_title}
-                        </p>
+                      <div className="flex">
+                        <h1 className="w-[25%] text-center font-bold text-5xl italic bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-400">
+                          {movie.id}
+                        </h1>
+                        <div className="w-[75%]">
+                          <h3 className="text-white hover:text-yellow-400 cursor-pointer">
+                            {movie.title}
+                          </h3>
+                          <p className="text-gray-500 text-sm">
+                            {movie.original_title}
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 ))}
               </div>

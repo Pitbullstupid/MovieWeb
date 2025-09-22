@@ -15,7 +15,6 @@ const Footer = () => {
             <p className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#db5840] to-[#b6b2b2] w-fit">
               MovieWeb
             </p>
-
             <div className="flex gap-2.5">
               <div className="w-[35px] h-[35px] rounded-full border-[1px] border-gray-300 flex items-center justify-center">
                 <FontAwesomeIcon
