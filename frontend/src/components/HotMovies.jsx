@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/carousel";
 import { Link } from "react-router";
 const HotMovies = () => {
+  //tạo 1 mảng sắp xếp theo popularity
+  const sortedMovies = [...movies].sort((a, b) => b.popularity - a.popularity);
   return (
     <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full h-[470px]">
       <div className="ml-5 w-full">
@@ -19,7 +21,7 @@ const HotMovies = () => {
           <CarouselContent>
             <CarouselItem>
               <div className="flex gap-5">
-                {movies.slice(0, 5).map((movie, index) => (
+                {sortedMovies.slice(0, 5).map((movie, index) => (
                   <div
                     key={movie.id}
                     className={`w-[20%] h-[400px] overflow-hidden mt-3 rounded-2xl ${
@@ -43,7 +45,7 @@ const HotMovies = () => {
                       </div>
                       <div className="flex">
                         <h1 className="w-[25%] text-center font-bold text-5xl italic bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-400">
-                          {movie.id}
+                          {index + 1}
                         </h1>
                         <div className="w-[75%]">
                           <h3 className="text-white hover:text-yellow-400 cursor-pointer">
@@ -61,7 +63,7 @@ const HotMovies = () => {
             </CarouselItem>
             <CarouselItem>
               <div className="flex gap-5">
-                {movies.slice(5, 10).map((movie, index) => (
+                {sortedMovies.slice(5, 10).map((movie, index) => (
                   <div
                     key={movie.id}
                     className={`w-[20%] h-[400px] overflow-hidden mt-3 rounded-2xl ${
@@ -85,7 +87,7 @@ const HotMovies = () => {
                       </div>
                       <div className="flex">
                         <h1 className="w-[25%] text-center font-bold text-5xl italic bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-400">
-                          {movie.id}
+                          {index + 6}
                         </h1>
                         <div className="w-[75%]">
                           <h3 className="text-white hover:text-yellow-400 cursor-pointer">

@@ -54,9 +54,11 @@ const Anime = () => {
           </p>
           {/* Nav */}
           <div className="flex items-center space-x-4">
+            <Link to={`/xem-phim/${selectedMovie.original_title}`}>
             <button className="w-16 h-16 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-500 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] ">
               <FontAwesomeIcon icon={faPlay} className="text-black text-3xl " />
             </button>
+            </Link>
             <div className="flex items-center space-x-4 border p-2 rounded-full">
               <button>
                 <FontAwesomeIcon

@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import AnimatedPage from "@/components/AnimatedPage";
 import Footer from "@/components/Footer";
+import { Link } from "react-router";
 
 const MovieDetails = () => {
   const { slug } = useParams();
@@ -56,12 +57,14 @@ const MovieDetails = () => {
             {/* Category */}
             <div className="flex flex-wrap gap-2 w-[70%]">
               {movie.genre_ids?.map((gid) => (
-                <Badge
-                  key={gid}
-                  className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-sm font-normal shadow-none border border-white/30 hover:text-yellow-300 cursor-pointer"
-                >
-                  {genreMap[gid]}
-                </Badge>
+                <Link to={`/the-loai/${gid}`}>
+                  <Badge
+                    key={gid}
+                    className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-sm font-normal shadow-none border border-white/30 hover:text-yellow-300 cursor-pointer"
+                  >
+                    {genreMap[gid]}
+                  </Badge>
+                </Link>
               ))}
             </div>
             {/* Overview */}
@@ -77,7 +80,7 @@ const MovieDetails = () => {
               </p>
             </div>
             {/* Release */}
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center pb-5">
               <p className="text-white font-semibold whitespace-nowrap">
                 Ngày ra mắt:
               </p>
@@ -89,11 +92,12 @@ const MovieDetails = () => {
 
           {/* Direction */}
           <div className="flex items-start mt-8 gap-8">
-            <button className="w-[200px] flex items-center justify-center h-14 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-300 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] cursor-pointer">
-              <FontAwesomeIcon icon={faPlay} className="text-black text-xl" />
-              <p className="text-black text-xl ml-2">Xem ngay</p>
-            </button>
-
+            <Link to={`/xem-phim/${movie.original_title}`}>
+              <button className="w-[200px] flex items-center justify-center h-14 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-300 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] cursor-pointer">
+                <FontAwesomeIcon icon={faPlay} className="text-black text-xl" />
+                <p className="text-black text-xl ml-2">Xem ngay</p>
+              </button>
+            </Link>
             <button className="flex flex-col items-center justify-center w-14 h-14 rounded-full bg-[#23272f]/40 transition cursor-pointer">
               <FontAwesomeIcon
                 icon={faHeart}
@@ -120,13 +124,13 @@ const MovieDetails = () => {
                 className="text-white text-xl"
               />
               <p className="text-white text-xl flex items-center gap-1 font-bold">
-                {movie.vote_average}{" "}
+                {movie.vote_average}
                 <span className="text-sm font-normal">đánh giá</span>
               </p>
             </button>
           </div>
         </div>
-        <Footer/>
+        <Footer />
       </AnimatedPage>
     </>
   );
