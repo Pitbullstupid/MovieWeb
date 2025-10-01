@@ -11,27 +11,100 @@ export const getAllMovies = async (req, res) => {
 
 export const createMovies = async (req, res) => {
     try {
-        const {movieId, title, original_title, overview, poster_path, backdrop_path, release_date, genre_ids, vote_average, vote_count, popularity, original_language, adult, video} = req.body;
-        const movie = new Movie({ movieId, title, original_title, overview, poster_path, backdrop_path, release_date, genre_ids, vote_average, vote_count, popularity, original_language, adult, video });
-        await movie.save();
-        res.status(200).json(movie);
+        let movies;
+
+        if (Array.isArray(req.body)) {
+            // Nếu req.body là mảng => thêm nhiều phim
+            movies = await Movie.insertMany(req.body);
+        } else {
+            // Nếu req.body là object => thêm 1 phim
+            const {
+                movieId,
+                title,
+                original_title,
+                overview,
+                poster_path,
+                backdrop_path,
+                release_date,
+                genre_ids,
+                vote_average,
+                vote_count,
+                popularity,
+                original_language,
+                adult,
+                video
+            } = req.body;
+
+            const movie = new Movie({
+                movieId,
+                title,
+                original_title,
+                overview,
+                poster_path,
+                backdrop_path,
+                release_date,
+                genre_ids,
+                vote_average,
+                vote_count,
+                popularity,
+                original_language,
+                adult,
+                video
+            });
+
+            movies = await movie.save();
+        }
+
+        res.status(200).json(movies);
     } catch (error) {
-        console.log("Lỗi khi tạo phim:", error);
+        console.error("Lỗi khi tạo phim:", error);
         res.status(500).json({ message: "Lỗi server" });
     }
-}
+};
+
 
 export const updateMovies = async (req, res) => {
     try {
-        const { movieId, title, overview, poster_path, backdrop_path, release_date, genre_ids, vote_average, vote_count, popularity, original_language, adult, video } = req.body;
+        const { 
+            movieId,
+            title, 
+            original_title, 
+            overview, poster_path, 
+            backdrop_path, 
+            release_date, 
+            genre_ids, 
+            vote_average, 
+            vote_count, 
+            popularity, 
+            original_language, 
+            adult, 
+            video
+         } = req.body;
+
         const updateMovie = await Movie.findByIdAndUpdate(
             req.params.id,
-            { movieId, title, overview, poster_path, backdrop_path, release_date, genre_ids, vote_average, vote_count, popularity, original_language, adult, video },
-            { new: true }
+            { 
+                movieId, 
+                title, 
+                original_title, 
+                overview, 
+                poster_path, 
+                backdrop_path, 
+                release_date, 
+                genre_ids, 
+                vote_average, 
+                vote_count, 
+                popularity, 
+                original_language, 
+                adult, 
+                video },
+            { new: true, runValidators: true }
         );
+
         if (!updateMovie) {
             return res.status(404).json({ message: 'không tìm thấy phim' });
         }
+
         res.status(200).json(updateMovie);
     } catch (error) {
         console.log("Lỗi khi cập nhật phim:", error);
