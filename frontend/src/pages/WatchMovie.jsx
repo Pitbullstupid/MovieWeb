@@ -1,8 +1,8 @@
 import AnimatedPage from "@/components/AnimatedPage";
 import Header from "@/components/Header";
-import { movies, genreMap } from "@/lib/data";
+import { genreMap } from "@/lib/data"; 
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useParams } from "react-router-dom"; 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleChevronLeft,
@@ -17,31 +17,69 @@ import ReactPlayer from "react-player/youtube";
 
 const WatchMovie = () => {
   const { slug } = useParams();
-  //tìm phim theo slug
-  const movie = movies.find((m) => m.original_title === slug);
-  //tạo trailerKey
-  const [trailerKey, setTrailerKey] = useState(null);
-  const fetchMovie = async () => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
-      },
+  const decodedSlug = decodeURIComponent(slug || "")
+    .trim()
+    .normalize("NFC")
+    .toLowerCase();
+
+  const [moviesData, setMoviesData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [trailerKey, setTrailerKey] = useState(null); 
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const res = await fetch("http://localhost:5001/api/movies");
+        const data = await res.json();
+        setMoviesData(Array.isArray(data) ? data : []);
+      } catch {
+        setMoviesData([]);
+      } finally {
+        setLoading(false);
+      }
     };
-    const urlTrailer = `https://api.themoviedb.org/3/movie/${movie.id}/videos?language=en-US`;
-    const responseTrailer = await fetch(urlTrailer, options);
-    const trailerData = await responseTrailer.json();
-    const trailer = trailerData.results.find(
-      (vid) => vid.site === "YouTube" && vid.type === "Trailer"
-    );
-    setTrailerKey(trailer.key);
+    fetchMovies();
+  }, []);
+
+  const findNormalized = (s) => (s || "").trim().normalize("NFC").toLowerCase();
+
+  const movie = moviesData.find(
+    (m) =>
+      findNormalized(m.original_title) === decodedSlug ||
+      findNormalized(m.title) === decodedSlug
+  );
+
+  // fetch trailer từ TMDB
+  const fetchMovieTrailer = async () => {
+    if (!movie) return;
+    try {
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+        },
+      };
+      const urlTrailer = `https://api.themoviedb.org/3/movie/${movie.movieId}/videos?language=en-US`;
+      const responseTrailer = await fetch(urlTrailer, options);
+      const trailerData = await responseTrailer.json();
+      const trailer = trailerData.results.find(
+        (vid) => vid.site === "YouTube" && vid.type === "Trailer"
+      );
+      setTrailerKey(trailer ? trailer.key : null); // ✅ check null
+    } catch (error) {
+      console.error("Error fetching trailer:", error);
+      setTrailerKey(null);
+    }
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchMovie();
-  }, [slug]);
+    fetchMovieTrailer();
+  }, [slug, moviesData]);
+
+  if (loading) return <div className="text-center p-10">Đang tải phim...</div>;
+  if (!movie) return <div className="p-10 text-white">Không tìm thấy phim</div>;
 
   return (
     <>
@@ -57,17 +95,21 @@ const WatchMovie = () => {
               Xem phim {movie.title || movie.original_title}
             </h1>
           </div>
+
           {/* video */}
           <ReactPlayer
-            url={trailerKey ? `https://www.youtube.com/watch?v=${trailerKey}` : ""}
+            url={
+              trailerKey ? `https://www.youtube.com/watch?v=${trailerKey}` : ""
+            }
             controls
             width="90%"
             height="500px"
             className=" mx-auto rounded-t-2xl overflow-hidden"
           />
-          {/*  favou & share */}
+
+          {/* fav & share */}
           <div className="flex items-center justify-start w-[90%] gap-3 mx-auto bg-black border-t-[1.5px] border-gray-900 pt-2 pb-2 rounded-bl-2xl rounded-br-2xl">
-            <div className="flex items-center gap-2 ml-2  ">
+            <div className="flex items-center gap-2 ml-2">
               <FontAwesomeIcon
                 icon={faHeart}
                 className="text-white hover:text-yellow-400"
@@ -82,6 +124,7 @@ const WatchMovie = () => {
               <p className="text-white mr-2">Chia sẻ</p>
             </div>
           </div>
+
           {/* detail */}
           <div className="w-[90%] mx-auto mt-5 flex gap-5 pb-5">
             {/* poster */}
@@ -92,6 +135,7 @@ const WatchMovie = () => {
                 className="w-full h-fit rounded-2xl object-cover"
               />
             </div>
+
             {/* title & genre */}
             <div className="w-[35%] space-y-1.5">
               <h1 className="text-white font-bold">
@@ -100,7 +144,6 @@ const WatchMovie = () => {
               <p className="text-yellow-400 text-sm mb-4">
                 {movie.original_title}
               </p>
-              {/* */}
               <div className="flex flex-wrap gap-2 w-[100%]">
                 {movie.genre_ids?.map((gid) => (
                   <Link key={gid} to={`/the-loai/${gid}`}>
@@ -111,6 +154,7 @@ const WatchMovie = () => {
                 ))}
               </div>
             </div>
+
             {/* overview */}
             <div className="w-[30%] space-y-3">
               <p className="text-sm text-[#5E5F64]">{movie.overview}</p>
@@ -121,6 +165,7 @@ const WatchMovie = () => {
                 </p>
               </Link>
             </div>
+
             {/* evaluate */}
             <div>
               <button className="w-[150px] h-[40px] flex items-center gap-2 justify-center rounded-full bg-[#3556B6] ml-[150px]">

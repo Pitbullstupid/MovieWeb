@@ -38,7 +38,7 @@ const TaskListPagination = ({
   const pagesToShow = generatePages();
 
   return (
-    <div className="flex justify-center h-[50px] bg-[#191B24]">
+    <div className="flex justify-center h-[50px] mt-20">
       <Pagination>
         <PaginationContent>
           {/* Btn prev */}

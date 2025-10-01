@@ -13,12 +13,15 @@ import { Link } from "react-router";
 const Header = () => {
   const [scrollHotMovie, setScrollHotMovie] = useState(false);
   useEffect(() => {
-    window.scrollTo({
-      top: 1600,
-      behavior: "smooth",
-    });
-    setScrollHotMovie(false);
-  }, [scrollHotMovie])
+    if (scrollHotMovie) {
+      window.scrollTo({
+        top: 1600,
+        behavior: "smooth",
+      });
+      setScrollHotMovie(false);
+    }
+  }, [scrollHotMovie]);
+
   return (
     <>
       <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-black to-gray-900 border-b border-gray-800">
@@ -39,11 +42,13 @@ const Header = () => {
 
           {/* Menu */}
           <nav className="flex items-center font-medium gap-10 ml-9">
-            <a href="#" className="hover:text-yellow-400 text-white"
-            onClick={(e) => {
-              e.preventDefault();
-              setScrollHotMovie(true);
-            }}
+            <a
+              href="#"
+              className="hover:text-yellow-400 text-white"
+              onClick={(e) => {
+                e.preventDefault();
+                setScrollHotMovie(true);
+              }}
             >
               Phim hot
             </a>

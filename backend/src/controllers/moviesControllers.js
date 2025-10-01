@@ -12,12 +12,11 @@ export const getAllMovies = async (req, res) => {
 export const createMovies = async (req, res) => {
     try {
         let movies;
-
         if (Array.isArray(req.body)) {
-            // Nếu req.body là mảng => thêm nhiều phim
+            //req.body là mảng
             movies = await Movie.insertMany(req.body);
         } else {
-            // Nếu req.body là object => thêm 1 phim
+            //req.body là object 
             const {
                 movieId,
                 title,
@@ -65,39 +64,40 @@ export const createMovies = async (req, res) => {
 
 export const updateMovies = async (req, res) => {
     try {
-        const { 
+        const {
             movieId,
-            title, 
-            original_title, 
-            overview, poster_path, 
-            backdrop_path, 
-            release_date, 
-            genre_ids, 
-            vote_average, 
-            vote_count, 
-            popularity, 
-            original_language, 
-            adult, 
+            title,
+            original_title,
+            overview, poster_path,
+            backdrop_path,
+            release_date,
+            genre_ids,
+            vote_average,
+            vote_count,
+            popularity,
+            original_language,
+            adult,
             video
-         } = req.body;
+        } = req.body;
 
         const updateMovie = await Movie.findByIdAndUpdate(
             req.params.id,
-            { 
-                movieId, 
-                title, 
-                original_title, 
-                overview, 
-                poster_path, 
-                backdrop_path, 
-                release_date, 
-                genre_ids, 
-                vote_average, 
-                vote_count, 
-                popularity, 
-                original_language, 
-                adult, 
-                video },
+            {
+                movieId,
+                title,
+                original_title,
+                overview,
+                poster_path,
+                backdrop_path,
+                release_date,
+                genre_ids,
+                vote_average,
+                vote_count,
+                popularity,
+                original_language,
+                adult,
+                video
+            },
             { new: true, runValidators: true }
         );
 

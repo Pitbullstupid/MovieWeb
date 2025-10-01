@@ -8,10 +8,20 @@ import {
   faCircleExclamation,
   faCirclePlay,
 } from "@fortawesome/free-solid-svg-icons";
-import { movies } from "@/lib/data";
+
 import { genreMap } from "@/lib/data";
 import { Link } from "react-router-dom"; //đường dẫn
-const Banner = () => {
+const Banner = ({ movies }) => {
+  if (!movies || movies.length === 0) {
+    return (
+      <div className="w-full h-[500px] flex items-center justify-center bg-black text-white">
+        Đang tải dữ liệu...
+      </div>
+    );
+  }
+  const truncate = (text, maxLength) =>
+    text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+
   return (
     <div className="w-full h-[500px] relative overflow-hidden">
       {/* Video bg */}
@@ -29,10 +39,10 @@ const Banner = () => {
           {/* Title */}
           <h1>
             <Link
-              to={`/phim/${movies[0].original_title}`}
+              to={`/phim/${movies[1].original_title}`}
               className="text-4xl font-bold text-white cursor-pointer"
             >
-              {movies[0].title || movies[0].original_title}
+              {movies[1].title || movies[1].original_title}
             </Link>
           </h1>
           {/* Evaluate */}
@@ -49,7 +59,7 @@ const Banner = () => {
           </div>
           {/* Genre */}
           <div className="flex space-x-3">
-            {movies[0].genre_ids?.map((gid) => (
+            {movies[1].genre_ids?.map((gid) => (
               <Link to={`/the-loai/${gid}`}>
                 <Badge
                   key={gid}
@@ -61,17 +71,17 @@ const Banner = () => {
             ))}
           </div>
           {/* Overview */}
-          <p className="text-white">{movies[0].overview}</p>
+          <p className="text-white">{truncate(movies[1].overview, 260)}</p>
           {/* Nav */}
           <div>
             <div className="flex items-center space-x-4">
-              <Link to={`/xem-phim/${movies[0].original_title}`}>
-              <button className="w-16 h-16 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-500 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] ">
-                <FontAwesomeIcon
-                  icon={faPlay}
-                  className="text-black text-3xl "
-                />
-              </button>
+              <Link to={`/xem-phim/${movies[1].original_title}`}>
+                <button className="w-16 h-16 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-500 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] ">
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    className="text-black text-3xl "
+                  />
+                </button>
               </Link>
               <div className="flex items-center space-x-4 border p-2 rounded-full">
                 <button>
@@ -80,7 +90,7 @@ const Banner = () => {
                     className="mx-auto text-white text-2xl pt-[2px] hover:text-yellow-400"
                   />
                 </button>
-                <Link to={`/phim/${movies[0].original_title}`}>
+                <Link to={`/phim/${movies[1].original_title}`}>
                   <button>
                     <FontAwesomeIcon
                       icon={faCircleExclamation}
@@ -94,10 +104,10 @@ const Banner = () => {
         </div>
         {/* Image Section */}
         <div className="w-[60%] flex items-center justify-center ">
-          <Link to={`/phim/${movies[0].original_title}`}>
+          <Link to={`/phim/${movies[1].original_title}`}>
             <div className="w-full max-w-[250px] h-[300px] relative z-10">
               <img
-                src={`https://image.tmdb.org/t/p/original/${movies[0].poster_path}`}
+                src={`https://image.tmdb.org/t/p/original/${movies[1].poster_path}`}
                 alt="Banner Image"
                 className="w-[250px] h-full object-cover rounded-lg shadow-lg"
               />

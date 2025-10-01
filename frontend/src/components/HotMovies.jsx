@@ -1,7 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
-import { movies } from "@/lib/data";
 import {
   Carousel,
   CarouselContent,
@@ -10,7 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Link } from "react-router";
-const HotMovies = () => {
+const HotMovies = ({ movies }) => {
   //tạo 1 mảng sắp xếp theo popularity
   const sortedMovies = [...movies].sort((a, b) => b.popularity - a.popularity);
   return (

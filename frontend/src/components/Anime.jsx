@@ -7,12 +7,18 @@ import {
   faHeart,
   faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
-import { movies } from "@/lib/data";
 import { genreMap } from "@/lib/data";
 import { Link } from "react-router";
 
-const Anime = () => {
-  const [selectedMovie, setSelectedMovie] = useState(movies[0]);
+const Anime = ({ movies }) => {
+  // Lọc ra chỉ những phim có gid = 16 (Anime)
+  const animeMovies = movies.filter((m) => m.genre_ids?.includes(16));
+
+  // Nếu không có phim Anime thì return null
+  if (animeMovies.length === 0) return null;
+
+  const [selectedMovie, setSelectedMovie] = useState(animeMovies[0]);
+
   return (
     <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full h-[800px]">
       <div className="m-6 bg-gradient-to-r from-[#272A39] to-[#272A39]/100 rounded-lg w-full h-[400px] flex relative">
@@ -23,6 +29,7 @@ const Anime = () => {
               {selectedMovie.title || selectedMovie.original_title}
             </h1>
           </Link>
+
           {/* Evaluate */}
           <div className="flex items-center space-x-1 mt-3">
             {[1, 2, 3, 4, 5].map((_, i) => (
@@ -33,12 +40,12 @@ const Anime = () => {
               />
             ))}
           </div>
+
           {/* Genre */}
           <div className="flex gap-3 w-[80%] h-[70px] flex-wrap">
             {selectedMovie.genre_ids?.map((gid) => (
-              <Link to={`/the-loai/${gid}`}>
+              <Link key={gid} to={`/the-loai/${gid}`}>
                 <Badge
-                  key={gid}
                   className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-base font-normal shadow-none border border-white/30 hover:text-yellow-300 cursor-pointer h-fit"
                 >
                   {genreMap[gid]}
@@ -46,18 +53,23 @@ const Anime = () => {
               </Link>
             ))}
           </div>
+
           {/* Overview */}
           <p className="text-white w-[80%] h-[80px]">
             {selectedMovie.overview.length > 150
               ? selectedMovie.overview.slice(0, 150) + "..."
               : selectedMovie.overview}
           </p>
+
           {/* Nav */}
           <div className="flex items-center space-x-4">
             <Link to={`/xem-phim/${selectedMovie.original_title}`}>
-            <button className="w-16 h-16 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-500 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] ">
-              <FontAwesomeIcon icon={faPlay} className="text-black text-3xl " />
-            </button>
+              <button className="w-16 h-16 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-500 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] ">
+                <FontAwesomeIcon
+                  icon={faPlay}
+                  className="text-black text-3xl "
+                />
+              </button>
             </Link>
             <div className="flex items-center space-x-4 border p-2 rounded-full">
               <button>
@@ -77,6 +89,7 @@ const Anime = () => {
             </div>
           </div>
         </div>
+
         {/* Main img */}
         <div className="w-[60%] relative overflow-hidden">
           <img
@@ -89,12 +102,12 @@ const Anime = () => {
 
         {/* Menu img */}
         <div className="absolute -bottom-[60px] left-[50%] -translate-x-1/2 z-20  flex gap-4 p-2">
-          {movies.slice(0, 5).map((movie, i) => (
+          {animeMovies.slice(0, 5).map((movie, i) => (
             <div
               key={i}
               onClick={() => setSelectedMovie(movie)}
               className={`w-[80px] h-[120px] rounded-2xl overflow-hidden shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300 ${
-                selectedMovie.id === movie.id ? "ring-4 ring-yellow-400" : ""
+                selectedMovie.movieId === movie.movieId ? "ring-4 ring-yellow-400" : ""
               }`}
             >
               <img

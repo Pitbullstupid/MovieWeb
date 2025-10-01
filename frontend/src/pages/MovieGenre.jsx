@@ -1,13 +1,33 @@
 import Header from "@/components/Header";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { genreMap, movies } from "@/lib/data";
+import { genreMap } from "@/lib/data";
 import Pagination from "@/components/Pagination";
 import AnimatedPage from "@/components/AnimatedPage";
 import Footer from "@/components/Footer";
 const MovieGenre = () => {
-  const { slug } = useParams(); //nhận id
+  const truncate = (text, maxLength) =>
+    text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  const { slug } = useParams();
+  //lấy thể loại
   const genre = genreMap[Number(slug)];
+  const [moviesData, setMoviesData] = useState([]);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const res = await fetch("http://localhost:5001/api/movies");
+        const data = await res.json();
+        setMoviesData(Array.isArray(data) ? data : []);
+      } catch {
+        setMoviesData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovies();
+  }, []);
+
   const [page, setPage] = useState(1);
   //kéo trang lên đầu
   useEffect(() => {
@@ -18,9 +38,10 @@ const MovieGenre = () => {
   }, [genre, page]);
 
   //lọc phim theo id
-  const moviesByGenre = movies.filter((m) =>
+  const moviesByGenre = moviesData.filter((m) =>
     m.genre_ids.includes(Number(slug))
   );
+
   //Pagination
   const totalPages = Math.ceil(moviesByGenre.length / 18);
   //chuyển về trang 1 khi id thay đổi
@@ -48,7 +69,7 @@ const MovieGenre = () => {
     <>
       <Header />
       <AnimatedPage>
-        <div className="w-full min-h-[1150px] mt-4 bg-[#191B24]">
+        <div className="w-full min-h-[1150px] mt-4 bg-[#272A39]">
           {/* Genre */}
           <h1 className="text-white font-semibold text-2xl ml-4 pt-20">
             Thể loại : {genre}
@@ -56,9 +77,9 @@ const MovieGenre = () => {
           {/* Movie */}
           <div className="flex w-full h-[500px] mt-4 items-start flex-wrap space-y-4">
             {moviesByGenre.length === 0 ? (
-                <p className="text-white text-lg mt-10 mx-[35%]">
-                  Không có phim nào trong thể loại này.
-                </p>
+              <p className="text-white text-lg mt-10 mx-[35%]">
+                Không có phim nào trong thể loại này.
+              </p>
             ) : (
               visibleMovies.map((movie) => (
                 <div
@@ -72,10 +93,10 @@ const MovieGenre = () => {
                       className="w-[200px] h-[300px] rounded-2xl"
                     />
                     <p className="text-white hover:text-yellow-400">
-                      {movie.title || movie.original_title}
+                      {truncate(movie.title || movie.original_title, 25)}
                     </p>
                     <p className="text-[#5E5F64] text-sm">
-                      {movie.original_title}
+                      {truncate(movie.original_title, 10)}
                     </p>
                   </Link>
                 </div>
