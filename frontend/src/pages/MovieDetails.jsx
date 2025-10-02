@@ -99,12 +99,12 @@ const MovieDetails = () => {
               </button>
             </Link>
 
-            <button className="flex flex-col items-center w-14 h-14 rounded-full bg-[#23272f]/40">
+            <button className="flex flex-col items-center w-18 h-18 my-2">
               <FontAwesomeIcon icon={faHeart} className="text-white text-2xl hover:text-yellow-400" />
               <p className="text-white text-sm">Yêu thích</p>
             </button>
 
-            <button className="flex flex-col items-center w-14 h-14 rounded-full bg-[#23272f]/40">
+            <button className="flex flex-col items-center w-18 h-18  my-2">
               <FontAwesomeIcon icon={faShare} className="text-white text-2xl hover:text-yellow-400" />
               <p className="text-white text-sm">Chia sẻ</p>
             </button>

@@ -1,16 +1,18 @@
 import Header from "@/components/Header";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { genreMap } from "@/lib/data";
+import { languageCountryMap } from "@/lib/data";
 import Pagination from "@/components/Pagination";
 import AnimatedPage from "@/components/AnimatedPage";
 import Footer from "@/components/Footer";
-const MovieGenre = () => {
+
+const MovieRegion = () => {
   const truncate = (text, maxLength) =>
     text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   const { slug } = useParams();
-  //lấy thể loại
-  const genre = genreMap[Number(slug)];
+  //lấy quốc gia
+  const region = languageCountryMap[(slug)];
+
   const [moviesData, setMoviesData] = useState([]);
 
   useEffect(() => {
@@ -25,7 +27,6 @@ const MovieGenre = () => {
     };
     fetchMovies();
   }, []);
-
   const [page, setPage] = useState(1);
   //kéo trang lên đầu
   useEffect(() => {
@@ -33,15 +34,15 @@ const MovieGenre = () => {
       top: 0,
       behavior: "smooth",
     });
-  }, [genre, page]);
+  }, [region, page]);
 
   //lọc phim theo id
-  const moviesByGenre = moviesData.filter((m) =>
-    m.genre_ids.includes(Number(slug))
+  const moviesByRegion = moviesData.filter(
+    (m) => m.original_language === slug
   );
 
   //Pagination
-  const totalPages = Math.ceil(moviesByGenre.length / 18);
+  const totalPages = Math.ceil(moviesByRegion.length / 18);
   //chuyển về trang 1 khi id thay đổi
   useEffect(() => {
     setPage(1);
@@ -62,21 +63,21 @@ const MovieGenre = () => {
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
-  const visibleMovies = moviesByGenre.slice((page - 1) * 18, page * 18);
+  const visibleMovies = moviesByRegion.slice((page - 1) * 18, page * 18);
   return (
-    <>
+        <>
       <Header />
       <AnimatedPage>
         <div className="w-full min-h-[1150px] mt-4 bg-[#272A39]">
-          {/* Genre */}
+          {/* Region */}
           <h1 className="text-white font-semibold text-2xl ml-4 pt-20">
-            Thể loại : {genre}
+            Phim : {region}
           </h1>
           {/* Movie */}
           <div className="flex w-full h-[500px] mt-4 items-start flex-wrap space-y-4">
-            {moviesByGenre.length === 0 ? (
+            {moviesByRegion.length === 0 ? (
               <p className="text-white text-lg mt-10 mx-[35%]">
-                Không có phim nào trong thể loại này.
+                Không có phim nào của quốc gia này.
               </p>
             ) : (
               visibleMovies.map((movie) => (
@@ -116,4 +117,4 @@ const MovieGenre = () => {
   );
 };
 
-export default MovieGenre;
+export default MovieRegion;

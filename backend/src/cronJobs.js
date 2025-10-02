@@ -24,7 +24,7 @@ cron.schedule("0 0 * * *", async () => {
     let allMovies = [];
 
     // Lấy 5 trang (~100 phim)
-    for (let page = 1; page <= 5; page++) {
+    for (let page = 1; page <= 15; page++) {
       const url = `https://api.themoviedb.org/3/movie/now_playing?language=vi&page=${page}`;
       const response = await fetch(url, options);
       const data = await response.json();

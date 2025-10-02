@@ -51,14 +51,16 @@ const MoviesByRegion = ({ movies }) => {
       <div key={region.code} className="flex justify-start mt-4">
         {/* Tiêu đề */}
         <div className="w-[18%] h-[270px] flex flex-col justify-center pb-10">
-          <h1
-            className={`pl-4 w-[80%] font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r ${region.gradient}`}
-          >
-            {region.label}
-          </h1>
-          <p className="text-sm pl-4 hover:text-yellow-400 text-white mt-2 cursor-pointer">
-            Xem toàn bộ <ChevronRight size={15} className="inline-block" />
-          </p>
+          <Link to={`/quoc-gia/${region.code}`}>
+            <h1
+              className={`pl-4 w-[80%] font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r ${region.gradient}`}
+            >
+              {region.label}
+            </h1>
+            <p className="text-sm pl-4 hover:text-yellow-400 text-white mt-2 cursor-pointer">
+              Xem toàn bộ <ChevronRight size={15} className="inline-block" />
+            </p>
+          </Link>
         </div>
 
         {/* Carousel */}
@@ -75,7 +77,7 @@ const MoviesByRegion = ({ movies }) => {
                             <img
                               src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                               alt={movie.title}
-                              className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110"
+                              className="w-full h-full object-cover  transform transition-transform duration-500 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-all duration-500">
                               <FontAwesomeIcon
@@ -85,7 +87,7 @@ const MoviesByRegion = ({ movies }) => {
                             </div>
                           </div>
                           <h3 className="font-semibold text-white pl-4 hover:text-yellow-400 cursor-pointer">
-                            {truncate(movie.title || movie.original_title,33)}
+                            {truncate(movie.title || movie.original_title, 33)}
                           </h3>
                           <p className="pl-4 text-sm text-gray-500">
                             {truncate(movie.original_title, 20)}

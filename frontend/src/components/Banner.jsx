@@ -105,11 +105,11 @@ const Banner = ({ movies }) => {
         {/* Image Section */}
         <div className="w-[60%] flex items-center justify-center ">
           <Link to={`/phim/${movies[1].original_title}`}>
-            <div className="w-full max-w-[250px] h-[300px] relative z-10">
+            <div className="w-full max-w-[250px] h-[300px] relative z-10 mt-7">
               <img
                 src={`https://image.tmdb.org/t/p/original/${movies[1].poster_path}`}
                 alt="Banner Image"
-                className="w-[250px] h-full object-cover rounded-lg shadow-lg"
+                className="w-[250px] h-full object-cover rounded-lg shadow-lg object-top"
               />
               <div className="w-[250px] h-full absolute top-0 left-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-500 cursor-pointer bg-black/30">
                 <FontAwesomeIcon

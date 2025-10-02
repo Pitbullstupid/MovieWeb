@@ -34,6 +34,12 @@ export const languageCountryMap = {
   ru: "Nga",
   th: "Thái Lan",
 };
+export const year = Object.fromEntries(
+  Array.from({ length: 2025 - 2000 + 1 }, (_, i) => {
+    const y = 2025 - i;
+    return [y, `Năm ${y}`];
+  })
+);
 
 
 
