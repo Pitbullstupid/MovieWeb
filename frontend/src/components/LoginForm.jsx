@@ -1,0 +1,72 @@
+import { useState } from "react";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import  ForgotPasswordForm  from "./ForgotPasswordForm";
+import  RegisterForm  from "./RegisterForm";
+
+const LoginForm = ({ className = "", setOpenModal, setIsLogin, ...props }) => {
+  const [view, setView] = useState("login");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    toast.success("Đăng nhập thành công");
+    setOpenModal(false);
+    setIsLogin(true);
+  };
+
+  if (view === "forgot") return <ForgotPasswordForm setView={setView} />;
+  if (view === "register") return <RegisterForm setView={setView} />;
+
+  return (
+    <div className={`flex flex-col gap-6 ${className}`} {...props}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Đăng nhập tài khoản</CardTitle>
+          <CardDescription>Nhập email và mật khẩu để đăng nhập</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="w-[290px] h-[320px]">
+            <div className="flex flex-col gap-6">
+              <div className="grid gap-3">
+                <Label>Email</Label>
+                <Input type="email" placeholder="m@example.com" required />
+              </div>
+              <div className="grid gap-3">
+                <div className="flex items-center gap-20">
+                  <Label>Mật khẩu</Label>
+                  <button
+                    type="button"
+                    onClick={() => setView("forgot")}
+                    className="ml-auto text-sm underline-offset-4 hover:underline"
+                    tabIndex={-1}
+                  >
+                    Quên mật khẩu?
+                  </button>
+                </div>
+                <Input type="password" required />
+              </div>
+              <div className="flex flex-col gap-3">
+                <Button type="submit" className="w-full">Đăng nhập</Button>
+                <Button variant="outline" className="w-full">Đăng nhập với Google</Button>
+              </div>
+            </div>
+            <div className="mt-4 text-center text-sm">
+              Bạn chưa có tài khoản?
+              <button
+                type="button"
+                onClick={() => setView("register")}
+                className="underline underline-offset-4 ml-2"
+              >
+                Đăng ký
+              </button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+export default LoginForm

@@ -66,7 +66,7 @@ const WatchMovie = () => {
       const trailer = trailerData.results.find(
         (vid) => vid.site === "YouTube" && vid.type === "Trailer"
       );
-      setTrailerKey(trailer ? trailer.key : null); // ✅ check null
+      setTrailerKey(trailer ? trailer.key : null);
     } catch (error) {
       console.error("Error fetching trailer:", error);
       setTrailerKey(null);
@@ -174,7 +174,7 @@ const WatchMovie = () => {
                   className="text-white text-xl"
                 />
                 <p className="text-white text-xl flex items-center gap-1 font-bold">
-                  {movie.vote_average}{" "}
+                  {movie.vote_average.toFixed(2)}
                   <span className="text-sm font-normal">đánh giá</span>
                 </p>
               </button>

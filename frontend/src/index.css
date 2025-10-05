@@ -5,35 +5,28 @@
 
 @layer base {
   :root {
-    /* Modern todo app color palette */
-    --background: 240 10% 98%;
-    --background-secondary: 245 15% 96%;
-    --foreground: 215 28% 27%;
-    /* slate 700 */
+    /* Light mode - trắng đen */
+    --background: 0 0% 100%; /* trắng */
+    --background-secondary: 0 0% 98%;
+    --foreground: 240 6% 10%; /* gần đen */
 
     --card: 0 0% 100%;
-    --card-foreground: 215 28% 27%;
-    --card-shadow: 218 36% 18%;
-    /* slate 800 */
+    --card-foreground: 240 6% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 28% 27%;
+    --popover-foreground: 240 6% 10%;
 
-    /* Beautiful gradient colors */
-    --primary: 258 89% 65%;
-    --primary-light: 255 92% 76%;
-    --primary-dark: 263 69% 50%;
+    --primary: 240 6% 10%; /* đen xám */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 5% 96%;
+    --secondary: 0 0% 96%;
     --secondary-foreground: 240 6% 10%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 215 18% 47%;
-    /* slate-500 */
+    --muted: 0 0% 96%;
+    --muted-foreground: 240 5% 46%;
 
-    --accent: 204 94% 94%;
-    --accent-foreground: 204 100% 40%;
+    --accent: 220 10% 95%;
+    --accent-foreground: 240 6% 20%;
 
     --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 98%;
@@ -41,56 +34,43 @@
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
 
-    --info: 226, 100%, 63%;
-    --destructive-foreground: 0 0% 98%;
+    --info: 210 100% 50%;
+    --info-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    /* slate-200 */
-    --input: 210 40% 96%;
-    --ring: 258 89% 65%;
+    --border: 240 5% 90%;
+    --input: 240 5% 96%;
+    --ring: 240 6% 10%;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg,
-        hsl(255 92% 76%) 0%,
-        hsl(263 69% 50%) 100%);
-    --gradient-background: linear-gradient(135deg,
-        hsl(240 10% 98%) 0%,
-        hsl(245 15% 96%) 100%);
-    --gradient-card: linear-gradient(135deg,
-        hsl(0 0% 100%) 0%,
-        hsl(240 10% 99%) 100%);
+    /* Gradients tối màu */
+    --gradient-primary: linear-gradient(135deg, hsl(220 10% 15%) 0%, hsl(240 10% 5%) 100%);
+    --gradient-background: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(0 0% 96%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 100%);
 
     /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(218 36% 18% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(218 36% 18% / 0.1),
-      0 2px 4px -2px hsl(218 36% 18% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(218 36% 18% / 0.1),
-      0 4px 6px -4px hsl(218 36% 18% / 0.1);
-    --shadow-glow: 0 0 20px hsl(258 89% 65% / 0.3);
+    --shadow-sm: 0 1px 2px 0 hsl(240 6% 10% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(240 6% 10% / 0.1),
+      0 2px 4px -2px hsl(240 6% 10% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(240 6% 10% / 0.1),
+      0 4px 6px -4px hsl(240 6% 10% / 0.1);
+    --shadow-glow: 0 0 20px hsl(240 6% 10% / 0.3);
 
-    /* Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Transition */
+    --transition-smooth: all 0.3s ease;
     --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     --radius: 0.5rem;
 
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-foreground: 240 6% 10%;
+    --sidebar-primary: 240 6% 10%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 95%;
+    --sidebar-accent-foreground: 240 6% 10%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 217 91% 60%;
   }
-/* Chuyển trang không bị nháy trắng */
+
   html, 
   body,
   #root {
@@ -99,41 +79,47 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 240 6% 8%; /* gần đen */
+    --background-secondary: 240 6% 12%;
+    --foreground: 0 0% 100%; /* trắng */
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 240 6% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 240 6% 12%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 240 6% 10%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 240 6% 12%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 240 6% 15%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 220 10% 20%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 240 6% 20%;
+    --input: 240 6% 20%;
+    --ring: 0 0% 100%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(240 6% 12%) 0%, hsl(240 6% 5%) 100%);
+    --gradient-background: linear-gradient(135deg, hsl(240 6% 10%) 0%, hsl(240 6% 5%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(240 6% 12%) 0%, hsl(240 6% 8%) 100%);
+
+    --sidebar-background: 240 6% 10%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 220 100% 40%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 240 6% 15%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 6% 20%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -141,9 +127,8 @@
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
   }
 }
 
@@ -151,10 +136,19 @@
   .clip-trapezoidleft {
     clip-path: polygon(0 10%, 100% 0, 100% 100%, 0% 100%);
   }
-}
-
-@layer utilities {
   .clip-trapezoidright {
     clip-path: polygon(0 0%, 100% 10%, 100% 100%, 0% 100%);
   }
+}
+/* Xóa padding mặc định */
+.react-responsive-modal-modal {
+  padding: 0 !important;
+  border-radius: 0.5rem; /* nếu muốn bo */
+  background: #fff;
+}
+
+/* Đưa nút X sát trong */
+.react-responsive-modal-closeButton {
+  top: 8px !important;
+  right: 8px !important;
 }

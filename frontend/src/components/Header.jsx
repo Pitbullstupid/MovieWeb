@@ -9,9 +9,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { genreMap, languageCountryMap, year } from "@/lib/data";
 import { Link, useNavigate } from "react-router";
+import "react-responsive-modal/styles.css";
+import { Modal } from "react-responsive-modal";
+import LoginForm from "./LoginForm";
+import UserMenu from "./UserMenu";
 
 const Header = () => {
   const [scrollHotMovie, setScrollHotMovie] = useState(false);
+  //Login
+  const [openModal, setOpenModal] = useState(false);
+  const [isLogin, setIsLogin] = useState(() => {
+    return localStorage.getItem("isLogin") === "true";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("isLogin", isLogin);
+  }, [isLogin]);
   // xử lý tìm kiếm
   const [keyword, setKeyWord] = useState("");
   const navigate = useNavigate();
@@ -20,12 +33,17 @@ const Header = () => {
       navigate(`/tim-kiem/${encodeURIComponent(keyword.trim())}`);
     }
   };
+
+  // scroll hotmovie
   useEffect(() => {
     if (scrollHotMovie) {
-      window.scrollTo({
+      navigate(`/`);
+      setTimeout(() => {
+              window.scrollTo({
         top: 1600,
         behavior: "smooth",
       });
+      }, 400)
       setScrollHotMovie(false);
     }
   }, [scrollHotMovie]);
@@ -144,14 +162,31 @@ const Header = () => {
             </DropdownMenu>
           </nav>
           {/* Login */}
-          <div className="ml-[150px]">
-            <Button
-              variant="outline"
-              className="px-6 py-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 rounded-lg font-medium"
-            >
-              Login
-            </Button>
-          </div>
+          {isLogin === false ? (
+            <div className="ml-[150px]">
+              <Button
+                variant="outline"
+                className="px-6 py-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 rounded-lg font-medium"
+                onClick={() => setOpenModal(true)}
+              >
+                Login
+              </Button>
+            </div>
+          ) : (
+            <div className="ml-[190px]">
+              <UserMenu setIsLogin={setIsLogin} />
+            </div>
+          )}
+          <Modal open={openModal} onClose={() => setOpenModal(false)} center>
+            <div className="w-full flex items-center justify-between">
+              <img
+                src="/sticker(2).webp"
+                alt=""
+                className="w-[435px] h-[435px]"
+              />
+              <LoginForm setOpenModal={setOpenModal} setIsLogin={setIsLogin} />
+            </div>
+          </Modal>
         </div>
       </header>
     </>
