@@ -60,6 +60,21 @@ export const gradients = [
   ["#C65E93", "#DD8AB3"],
 ];
 
+export const users = [
+  {
+    userId: 1,
+    userName: "Phạm Duy Anh",
+    email: "test@gmail.com",
+    password: "test",
+    role: "admin",
+    isPremium: true,
+    favoriteMovies: [1267319, 1328803], 
+    watchedMovies: [1267319, 1328803], 
+    createdAt: "2025-10-04T09:00:00Z",
+    updatedAt: "2025-10-04T09:00:00Z",
+  },
+];
+
 
 
 

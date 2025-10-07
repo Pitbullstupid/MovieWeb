@@ -1,20 +1,43 @@
 import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import  ForgotPasswordForm  from "./ForgotPasswordForm";
-import  RegisterForm  from "./RegisterForm";
+import ForgotPasswordForm from "./ForgotPasswordForm";
+import RegisterForm from "./RegisterForm";
+import { users } from "@/lib/data";
 
-const LoginForm = ({ className = "", setOpenModal, setIsLogin, ...props }) => {
+const LoginForm = ({
+  className = "",
+  setOpenModal,
+  setIsLogin,
+  setUserId,
+  ...props
+}) => {
   const [view, setView] = useState("login");
-
+  const [email, setEmail] = useState("");
+  const [password, setPassWord] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast.success("Đăng nhập thành công");
-    setOpenModal(false);
-    setIsLogin(true);
+    const user = users.find(
+      (u) => u.email === email && u.password === password
+    );
+    if (user) {
+      toast.success("Đăng nhập thành công");
+      localStorage.setItem("userId", user.userId);
+      setUserId(user.userId);
+      setOpenModal(false);
+      setIsLogin(true);
+    } else {
+      toast.error("Sai email hoặc mật khẩu");
+    }
   };
 
   if (view === "forgot") return <ForgotPasswordForm setView={setView} />;
@@ -32,7 +55,13 @@ const LoginForm = ({ className = "", setOpenModal, setIsLogin, ...props }) => {
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label>Email</Label>
-                <Input type="email" placeholder="m@example.com" required />
+                <Input
+                  type="email"
+                  placeholder="m@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center gap-20">
@@ -46,11 +75,20 @@ const LoginForm = ({ className = "", setOpenModal, setIsLogin, ...props }) => {
                     Quên mật khẩu?
                   </button>
                 </div>
-                <Input type="password" required />
+                <Input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassWord(e.target.value)}
+                />
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">Đăng nhập</Button>
-                <Button variant="outline" className="w-full">Đăng nhập với Google</Button>
+                <Button type="submit" className="w-full">
+                  Đăng nhập
+                </Button>
+                <Button variant="outline" className="w-full">
+                  Đăng nhập với Google
+                </Button>
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
@@ -69,4 +107,4 @@ const LoginForm = ({ className = "", setOpenModal, setIsLogin, ...props }) => {
     </div>
   );
 };
-export default LoginForm
+export default LoginForm;

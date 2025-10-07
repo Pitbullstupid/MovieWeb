@@ -17,7 +17,10 @@ import {
   faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "./ui/button";
-const UserMenu = ({ setIsLogin }) => {
+import { users } from "@/lib/data";
+import { number } from "framer-motion";
+const UserMenu = ({ setIsLogin,userId }) => {
+  const user = users.find((u) => u.userId === Number(userId));
   const handleLogout = (e) => {
     e.preventDefault();
     toast.success("Đăng xuất thành công");
@@ -33,7 +36,7 @@ const UserMenu = ({ setIsLogin }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-[#2B3047] opacity-90 text-sm w-[240px] h-[300px] p-1 mt-2 border-none rounded-md shadow-lg mr-3 text-white font-semibold space-y-1 ">
         <DropdownMenuLabel className="text-yellow-400 font-bold">
-          My Account
+          Xin chào, {" "}{user?.userName || "Người dùng"}
         </DropdownMenuLabel>
         <DropdownMenuLabel>
           <p className="text-sm">

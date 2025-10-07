@@ -1,8 +1,8 @@
 import AnimatedPage from "@/components/AnimatedPage";
 import Header from "@/components/Header";
-import { genreMap } from "@/lib/data"; 
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom"; 
+import { genreMap } from "@/lib/data";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleChevronLeft,
@@ -13,7 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight } from "lucide-react";
 import Footer from "@/components/Footer";
-import ReactPlayer from "react-player/youtube";
+import ReactPlayer from "react-player";
 
 const WatchMovie = () => {
   const { slug } = useParams();
@@ -24,90 +24,114 @@ const WatchMovie = () => {
 
   const [moviesData, setMoviesData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [trailerKey, setTrailerKey] = useState(null); 
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const res = await fetch("http://localhost:5001/api/movies");
-        const data = await res.json();
-        setMoviesData(Array.isArray(data) ? data : []);
-      } catch {
-        setMoviesData([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMovies();
-  }, []);
+  const [videoUrl, setVideoUrl] = useState(null);
 
   const findNormalized = (s) => (s || "").trim().normalize("NFC").toLowerCase();
 
-  const movie = moviesData.find(
-    (m) =>
-      findNormalized(m.original_title) === decodedSlug ||
-      findNormalized(m.title) === decodedSlug
+  useEffect(() => {
+    let cancelled = false;
+    const fetchMovies = async () => {
+      setLoading(true);
+      setMoviesData([]);
+      try {
+        const res = await fetch("http://localhost:5001/api/movies");
+        const data = await res.json();
+        if (!cancelled) {
+          setMoviesData(Array.isArray(data) ? data : []);
+        }
+      } catch {
+        if (!cancelled) setMoviesData([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    fetchMovies();
+    return () => {
+      cancelled = true;
+    };
+  }, [decodedSlug]);
+
+  const movie = useMemo(
+    () =>
+      moviesData.find(
+        (m) =>
+          findNormalized(m.original_title) === decodedSlug ||
+          findNormalized(m.title) === decodedSlug
+      ),
+    [moviesData, decodedSlug]
   );
 
-  // fetch trailer từ TMDB
-  const fetchMovieTrailer = async () => {
-    if (!movie) return;
-    try {
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
-        },
-      };
-      const urlTrailer = `https://api.themoviedb.org/3/movie/${movie.movieId}/videos?language=en-US`;
-      const responseTrailer = await fetch(urlTrailer, options);
-      const trailerData = await responseTrailer.json();
-      const trailer = trailerData.results.find(
-        (vid) => vid.site === "YouTube" && vid.type === "Trailer"
-      );
-      setTrailerKey(trailer ? trailer.key : null);
-    } catch (error) {
-      console.error("Error fetching trailer:", error);
-      setTrailerKey(null);
-    }
-  };
-
+  // Lấy link phim từ phimapi
   useEffect(() => {
-    window.scrollTo(0, 0);
-    fetchMovieTrailer();
-  }, [slug, moviesData]);
+    let cancelled = false;
+    const fetchMovieVideo = async () => {
+      setVideoUrl(null);
+      if (!movie?.movieId) return;
 
+      try {
+        const res = await fetch(
+          `https://phimapi.com/tmdb/movie/${movie.movieId}`
+        );
+        const data = await res.json();
+
+        const vietsub = data.episodes?.find((ep) =>
+          ep.server_name.toLowerCase().includes("vietsub")
+        );
+        const fallbackServer = data.episodes?.[0];
+
+        const link =
+          vietsub?.server_data?.[0]?.link_m3u8 ||
+          vietsub?.server_data?.[0]?.link_embed ||
+          fallbackServer?.server_data?.[0]?.link_m3u8 ||
+          data.trailer_url ||
+          null;
+        if (!cancelled) setVideoUrl(link);
+      } catch {
+        if (!cancelled) setVideoUrl(null);
+      }
+    };
+    fetchMovieVideo();
+    return () => {
+      cancelled = true;
+    };
+  }, [movie]);
   if (loading) return <div className="text-center p-10">Đang tải phim...</div>;
   if (!movie) return <div className="p-10 text-white">Không tìm thấy phim</div>;
 
   return (
     <>
       <Header />
-      <AnimatedPage>
-        <div className="pt-[20px] w-full bg-[#191B24]">
-          {/* title */}
+      <AnimatedPage key={slug}>
+        <div className="pt-[10px] w-full bg-[#191B24]">
+          {/* Title */}
           <div className="mt-20 ml-10 mb-4 flex text-white items-center space-x-2">
-            <Link to={`/phim/${movie.original_title}`}>
+            <Link to={`/phim/${movie.original_title || movie.title}`}>
               <FontAwesomeIcon icon={faCircleChevronLeft} className="w-5" />
             </Link>
-            <h1 className=" font-semibold">
+            <h1 className="font-semibold">
               Xem phim {movie.title || movie.original_title}
             </h1>
           </div>
 
-          {/* video */}
-          <ReactPlayer
-            url={
-              trailerKey ? `https://www.youtube.com/watch?v=${trailerKey}` : ""
-            }
-            controls
-            width="90%"
-            height="500px"
-            className=" mx-auto rounded-t-2xl overflow-hidden"
-          />
+          {/* Video */}
+          {videoUrl ? (
+            <ReactPlayer
+              key={videoUrl}
+              url={videoUrl}
+              controls
+              width="90%"
+              height="500px"
+              playing
+              light={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+              className="mx-auto rounded-t-2xl overflow-hidden"
+            />
+          ) : (
+            <div className="text-center text-white p-10">
+              Không tìm thấy link video hoặc đang chờ load...
+            </div>
+          )}
 
-          {/* fav & share */}
+          {/* Yêu thích & Chia sẻ */}
           <div className="flex items-center justify-start w-[90%] gap-3 mx-auto bg-black border-t-[1.5px] border-gray-900 pt-2 pb-2 rounded-bl-2xl rounded-br-2xl">
             <div className="flex items-center gap-2 ml-2">
               <FontAwesomeIcon
@@ -125,9 +149,9 @@ const WatchMovie = () => {
             </div>
           </div>
 
-          {/* detail */}
+          {/* Chi tiết phim */}
           <div className="w-[90%] mx-auto mt-5 flex gap-5 pb-5">
-            {/* poster */}
+            {/* Poster */}
             <div className="w-[10%]">
               <img
                 src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
@@ -136,7 +160,7 @@ const WatchMovie = () => {
               />
             </div>
 
-            {/* title & genre */}
+            {/* Thông tin */}
             <div className="w-[35%] space-y-1.5">
               <h1 className="text-white font-bold">
                 {movie.title || movie.original_title}
@@ -155,7 +179,7 @@ const WatchMovie = () => {
               </div>
             </div>
 
-            {/* overview */}
+            {/* Mô tả */}
             <div className="w-[30%] space-y-3">
               <p className="text-sm text-[#5E5F64]">{movie.overview}</p>
               <Link to={`/phim/${movie.original_title}`}>
@@ -166,7 +190,7 @@ const WatchMovie = () => {
               </Link>
             </div>
 
-            {/* evaluate */}
+            {/* Đánh giá */}
             <div>
               <button className="w-[150px] h-[40px] flex items-center gap-2 justify-center rounded-full bg-[#3556B6] ml-[150px]">
                 <FontAwesomeIcon
@@ -174,7 +198,7 @@ const WatchMovie = () => {
                   className="text-white text-xl"
                 />
                 <p className="text-white text-xl flex items-center gap-1 font-bold">
-                  {movie.vote_average.toFixed(2)}
+                  {Number(movie.vote_average || 0).toFixed(2)}
                   <span className="text-sm font-normal">đánh giá</span>
                 </p>
               </button>

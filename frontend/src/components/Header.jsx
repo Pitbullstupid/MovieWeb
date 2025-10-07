@@ -18,6 +18,7 @@ const Header = () => {
   const [scrollHotMovie, setScrollHotMovie] = useState(false);
   //Login
   const [openModal, setOpenModal] = useState(false);
+  const [userId, setUserId] = useState(null);
   const [isLogin, setIsLogin] = useState(() => {
     return localStorage.getItem("isLogin") === "true";
   });
@@ -25,6 +26,12 @@ const Header = () => {
   useEffect(() => {
     localStorage.setItem("isLogin", isLogin);
   }, [isLogin]);
+
+  useEffect(() => {
+    const id = localStorage.getItem("userId");
+    if (id) setUserId(id);
+  }, [isLogin, openModal]);
+
   // xử lý tìm kiếm
   const [keyword, setKeyWord] = useState("");
   const navigate = useNavigate();
@@ -39,11 +46,11 @@ const Header = () => {
     if (scrollHotMovie) {
       navigate(`/`);
       setTimeout(() => {
-              window.scrollTo({
-        top: 1600,
-        behavior: "smooth",
-      });
-      }, 400)
+        window.scrollTo({
+          top: 1600,
+          behavior: "smooth",
+        });
+      }, 400);
       setScrollHotMovie(false);
     }
   }, [scrollHotMovie]);
@@ -72,7 +79,7 @@ const Header = () => {
           {/* Menu */}
           <nav className="flex items-center font-medium gap-6 ml-9">
             <Link to={`/`}>
-              <a
+              <p
                 href="/"
                 className="hover:text-yellow-400 text-white"
                 onClick={(e) => {
@@ -81,7 +88,7 @@ const Header = () => {
                 }}
               >
                 Phim hot
-              </a>
+              </p>
             </Link>
 
             {/* Thể loại */}
@@ -106,9 +113,9 @@ const Header = () => {
             </DropdownMenu>
 
             <Link to={`/phim-chieu-rap`}>
-              <a href="#" className="hover:text-yellow-400 text-white">
+              <p href="#" className="hover:text-yellow-400 text-white">
                 Phim chiếu rạp
-              </a>
+              </p>
             </Link>
 
             <Link to={`/anime`}>
@@ -174,7 +181,7 @@ const Header = () => {
             </div>
           ) : (
             <div className="ml-[190px]">
-              <UserMenu setIsLogin={setIsLogin} />
+              <UserMenu setIsLogin={setIsLogin} userId={userId} />
             </div>
           )}
           <Modal open={openModal} onClose={() => setOpenModal(false)} center>
@@ -184,7 +191,11 @@ const Header = () => {
                 alt=""
                 className="w-[435px] h-[435px]"
               />
-              <LoginForm setOpenModal={setOpenModal} setIsLogin={setIsLogin} />
+              <LoginForm
+                setOpenModal={setOpenModal}
+                setIsLogin={setIsLogin}
+                setUserId={setUserId}
+              />
             </div>
           </Modal>
         </div>
