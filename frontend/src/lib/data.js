@@ -1,3 +1,4 @@
+
 export const genreMap = {
   28: "Hành động",
   12: "Phiêu lưu",
@@ -68,6 +69,20 @@ export const users = [
     password: "test",
     role: "admin",
     isPremium: true,
+    Avatar : "https://www.rophim.mx/images/avatars/pack6/05.jpg",
+    favoriteMovies: [1267319, 1328803], 
+    watchedMovies: [1267319, 1328803], 
+    createdAt: "2025-10-04T09:00:00Z",
+    updatedAt: "2025-10-04T09:00:00Z",
+  },
+  {
+    userId: 2,
+    userName: "Pitbull Stupid",
+    email: "hehe@gmail.com",
+    password: "test",
+    role: "users",
+    isPremium: false,
+    Avatar : "",
     favoriteMovies: [1267319, 1328803], 
     watchedMovies: [1267319, 1328803], 
     createdAt: "2025-10-04T09:00:00Z",

@@ -10,10 +10,11 @@ import MovieRegion from "./pages/MovieRegion";
 import CinemaMovies from "./pages/CinemaMovies";
 import AnimeMovies from "./pages/AnimeMovies";
 import Search from "./pages/Search";
-import YearPage from "./pages/YearMovie";
 import YearMovie from "./pages/YearMovie";
+import Profile from "./pages/user/Profile";
 
 function App() {
+  const [isLogin, setIsLogin] = useState(localStorage.getItem("isLogin") === "true");
   return (
     <>
       <AnimatePresence mode="wait">
@@ -29,6 +30,7 @@ function App() {
             <Route path="/anime" element={<AnimeMovies />} />
             <Route path="/tim-kiem/:slug" element={<Search />} />
             <Route path="/nam-phat-hanh/:slug" element={<YearMovie />} />
+            <Route path="/user/profile/:slug" element={<Profile setIsLogin={setIsLogin}/>} />
           </Routes>
         </BrowserRouter>
       </AnimatePresence>

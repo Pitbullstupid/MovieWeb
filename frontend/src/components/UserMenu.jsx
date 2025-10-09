@@ -18,25 +18,27 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "./ui/button";
 import { users } from "@/lib/data";
-import { number } from "framer-motion";
-const UserMenu = ({ setIsLogin,userId }) => {
+import { Link, useNavigate } from "react-router-dom";
+const UserMenu = ({ setIsLogin, userId }) => {
   const user = users.find((u) => u.userId === Number(userId));
+  const navigate = useNavigate();
   const handleLogout = (e) => {
     e.preventDefault();
     toast.success("Đăng xuất thành công");
     setIsLogin(false);
+    navigate(`/`);
   };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarImage src={`${user?.Avatar || "https://github.com/shadcn.png"}`} />
           <AvatarFallback>Avt</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-[#2B3047] opacity-90 text-sm w-[240px] h-[300px] p-1 mt-2 border-none rounded-md shadow-lg mr-3 text-white font-semibold space-y-1 ">
         <DropdownMenuLabel className="text-yellow-400 font-bold">
-          Xin chào, {" "}{user?.userName || "Người dùng"}
+          Xin chào, {user?.userName || "Người dùng"}
         </DropdownMenuLabel>
         <DropdownMenuLabel>
           <p className="text-sm">
@@ -58,13 +60,15 @@ const UserMenu = ({ setIsLogin,userId }) => {
             </div>
           </Button>
         </DropdownMenuItem>
-        <DropdownMenuItem className="hover:bg-[#5665a8] cursor-pointer">
-          <FontAwesomeIcon
-            icon={faUser}
-            className="text-white text-[15px] mr-2"
-          />
-          Tài khoản
-        </DropdownMenuItem>
+        <Link to={`/user/profile/${user?.userId}`} state={{ fromMenu: true }}>
+          <DropdownMenuItem className="hover:bg-[#5665a8] cursor-pointer ">
+            <FontAwesomeIcon
+              icon={faUser}
+              className="text-white text-[15px] mr-2"
+            />
+            Tài khoản
+          </DropdownMenuItem>
+        </Link>
 
         <DropdownMenuItem className="hover:bg-[#5665a8] cursor-pointer">
           <FontAwesomeIcon
