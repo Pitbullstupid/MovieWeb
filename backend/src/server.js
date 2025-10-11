@@ -1,5 +1,6 @@
 import express from 'express';
 import movieRoute from './routes/moviesRoutes.js'
+import userRoute from './routes/usersRoutes.js'
 import connectDB from './config/db.js';
 import dotenv from 'dotenv';
 import "./cronJobs.js";
@@ -26,7 +27,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use('/api/movies', movieRoute);
-
+app.use('/api/users', userRoute);
 connectDB().then(() =>{
     app.listen(PORT,() => {
     console.log(`Server đang chạy trên  http://localhost:${PORT}`)
