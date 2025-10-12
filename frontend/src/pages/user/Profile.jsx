@@ -7,6 +7,7 @@ import {
   faCrown,
   faGrip,
   faHeart,
+  faInfinity,
   faRightFromBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -16,6 +17,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import ModalAvatar from "@/components/ModalAvatar";
 import ModalPassword from "@/components/ModalPassword"; // ⬅️ import modal riêng
+import Footer from "@/components/Footer";
 
 const Profile = ({ setIsLogin }) => {
   const { slug } = useParams();
@@ -96,7 +98,7 @@ const Profile = ({ setIsLogin }) => {
     <>
       <Header key={renderKey} />
       <AnimatedPage>
-        <div className="mt-25 w-full flex px-5">
+        <div className="mt-25 w-full flex px-5 min-h-115">
           {/* Sidebar */}
           <div className="w-[20%] h-[420px] bg-[#25272F] rounded-2xl flex flex-col justify-center items-center">
             <div className="w-[80%] h-[90%]">
@@ -157,19 +159,25 @@ const Profile = ({ setIsLogin }) => {
                           className="text-[#FFD875]"
                         />
                       )}
+                      {!user?.isPremium && (
+                        <FontAwesomeIcon
+                          icon={faInfinity}
+                          className="text-[#FFD875]"
+                        />
+                      )}
                     </div>
                     <p className="text-[#AAAAAA] text-[15px]">{user?.email}</p>
                   </div>
                 </div>
 
                 {/* Logout */}
-                <div className="group flex space-x-2 items-center mt-3">
+                <div className="group flex space-x-2 items-center mt-3 ">
                   <FontAwesomeIcon
                     icon={faRightFromBracket}
-                    className="text-white pb-2 group-hover:text-[#FFD875]"
+                    className="text-white pb-2 group-hover:text-[#FFD875] cursor-pointer"
                   />
                   <button
-                    className="text-white pb-2 group-hover:text-[#FFD875]"
+                    className="text-white pb-2 group-hover:text-[#FFD875] cursor-pointer"
                     onClick={handleLogout}
                   >
                     Đăng xuất
@@ -204,7 +212,7 @@ const Profile = ({ setIsLogin }) => {
               </div>
 
               {/* Avatar */}
-              <div>
+              <div className=" flex flex-col items-center">
                 <Avatar className="w-28 h-28 mt-10">
                   <AvatarImage
                     src={`${user?.Avatar || "https://github.com/shadcn.png"}`}
@@ -223,6 +231,18 @@ const Profile = ({ setIsLogin }) => {
                     <p className="group-hover:text-[#FFD875]">Chọn avatar</p>
                   </button>
                 )}
+                {!user?.isPremium && (
+                  <div>
+                    <p className="text-[#AAAAAA] mt-3 text-sm ">
+                      Nâng cấp tài khoản, tại{" "}
+                      <Link to={`/user/premium/${user?._id}`}>
+                        <button className="text-[#FFD875] hover:underline cursor-pointer">
+                          đây
+                        </button>
+                      </Link>
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -232,7 +252,7 @@ const Profile = ({ setIsLogin }) => {
                 Đổi mật khẩu, nhấn vào
               </p>
               <button
-                className="pt-4 text-[#FFD875] hover:underline"
+                className="pt-4 text-[#FFD875] hover:underline cursor-pointer"
                 onClick={() => setOpenModalPass(true)}
               >
                 đây
@@ -241,7 +261,7 @@ const Profile = ({ setIsLogin }) => {
 
             {/* Update button */}
             <button
-              className="bg-[#FFD875] px-[20px] py-[10px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm"
+              className="bg-[#FFD875] px-[20px] py-[10px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm cursor-pointer"
               onClick={handleUpdateUser}
             >
               Cập nhật
@@ -264,6 +284,7 @@ const Profile = ({ setIsLogin }) => {
           user={user}
           setUserList={setUserList}
         />
+        <Footer />
       </AnimatedPage>
     </>
   );

@@ -34,7 +34,7 @@ const LoginForm = ({
       }
     };
     fetchUsers();
-  }, []);
+  }, [view]);
   const [email, setEmail] = useState("");
   const [password, setPassWord] = useState("");
   const handleSubmit = (e) => {

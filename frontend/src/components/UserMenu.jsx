@@ -51,9 +51,7 @@ const UserMenu = ({ setIsLogin, userId }) => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage
-            src={user?.Avatar || "https://github.com/shadcn.png"}
-          />
+          <AvatarImage src={user?.Avatar || "https://github.com/shadcn.png"} />
           <AvatarFallback>Avt</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -66,30 +64,47 @@ const UserMenu = ({ setIsLogin, userId }) => {
             Nâng cấp tài khoản để được hưởng thêm nhiều ưu đãi hơn
           </p>
         </DropdownMenuLabel>
-        <DropdownMenuItem className="w-full bg-transparent hover:bg-transparent focus:bg-transparent">
-          <Button className="mx-auto bg-[#FFD875] hover:opacity-85 hover:bg-[#FFD875]">
-            <p className="text-black">Nâng cấp ngay</p>
-            <div className="flex flex-col space-y-0">
-              <FontAwesomeIcon icon={faChevronUp} className="text-black text-[7px]" />
-              <FontAwesomeIcon icon={faChevronUp} className="text-black text-[7px]" />
-            </div>
-          </Button>
+        <DropdownMenuItem className="w-full flex justify-center bg-transparent hover:bg-transparent focus:bg-transparent">
+          <Link to={`/user/premium/${user?._id}`}>
+            <Button className=" bg-[#FFD875] hover:opacity-85 hover:bg-[#FFD875] cursor-pointer">
+              <p className="text-black">Nâng cấp ngay</p>
+              <div className="flex flex-col space-y-0">
+                <FontAwesomeIcon
+                  icon={faChevronUp}
+                  className="text-black text-[7px]"
+                />
+                <FontAwesomeIcon
+                  icon={faChevronUp}
+                  className="text-black text-[7px]"
+                />
+              </div>
+            </Button>
+          </Link>
         </DropdownMenuItem>
 
         <Link to={`/user/profile/${user?._id}`} state={{ fromMenu: true }}>
           <DropdownMenuItem className="hover:bg-[#5665a8] cursor-pointer ">
-            <FontAwesomeIcon icon={faUser} className="text-white text-[15px] mr-2" />
+            <FontAwesomeIcon
+              icon={faUser}
+              className="text-white text-[15px] mr-2"
+            />
             Tài khoản
           </DropdownMenuItem>
         </Link>
 
         <DropdownMenuItem className="hover:bg-[#5665a8] cursor-pointer">
-          <FontAwesomeIcon icon={faHeart} className="text-white text-[15px] mr-2" />
+          <FontAwesomeIcon
+            icon={faHeart}
+            className="text-white text-[15px] mr-2"
+          />
           Danh sách yêu thích
         </DropdownMenuItem>
 
         <DropdownMenuItem className="hover:bg-[#5665a8] cursor-pointer">
-          <FontAwesomeIcon icon={faClockRotateLeft} className="text-white text-[15px] mr-2" />
+          <FontAwesomeIcon
+            icon={faClockRotateLeft}
+            className="text-white text-[15px] mr-2"
+          />
           Lịch sử xem
         </DropdownMenuItem>
 
@@ -97,7 +112,10 @@ const UserMenu = ({ setIsLogin, userId }) => {
           onClick={handleLogout}
           className="hover:bg-[#5665a8] cursor-pointer"
         >
-          <FontAwesomeIcon icon={faRightFromBracket} className="text-white text-[15px] mr-2" />
+          <FontAwesomeIcon
+            icon={faRightFromBracket}
+            className="text-white text-[15px] mr-2"
+          />
           Đăng xuất
         </DropdownMenuItem>
       </DropdownMenuContent>
