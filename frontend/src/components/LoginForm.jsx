@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import RegisterForm from "./RegisterForm";
-import { users } from "@/lib/data";
+
 
 const LoginForm = ({
   className = "",
@@ -22,17 +22,31 @@ const LoginForm = ({
   ...props
 }) => {
   const [view, setView] = useState("login");
+  const [userList, setUserList] = useState([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/api/users");
+        const data = await response.json();
+        setUserList(data);
+      } catch (error) {
+        console.error("Lỗi khi lấy user:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
   const [email, setEmail] = useState("");
   const [password, setPassWord] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    const user = users.find(
-      (u) => u.email === email && u.password === password
+    const user = userList?.find(
+      (u) => u.email === email.trim() && u.password === password.trim()
     );
     if (user) {
       toast.success("Đăng nhập thành công");
-      localStorage.setItem("userId", user.userId);
-      setUserId(user.userId);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("userId", user._id);
+      setUserId(user._id);
       setOpenModal(false);
       setIsLogin(true);
     } else {

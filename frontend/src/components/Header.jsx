@@ -31,7 +31,6 @@ const Header = () => {
     const id = localStorage.getItem("userId");
     if (id) setUserId(id);
   }, [isLogin, openModal]);
-  console.log(userId)
 
   // xử lý tìm kiếm
   const [keyword, setKeyWord] = useState("");
