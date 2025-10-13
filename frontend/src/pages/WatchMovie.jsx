@@ -14,9 +14,12 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronRight } from "lucide-react";
 import Footer from "@/components/Footer";
 import ReactPlayer from "react-player";
+import { toast } from "sonner";
+import ModalShare from "@/components/ModalShare";
 
 const WatchMovie = () => {
   const { slug } = useParams();
+  const [openModal, setOpenModal] = useState(false);
   const decodedSlug = decodeURIComponent(slug || "")
     .trim()
     .normalize("NFC")
@@ -95,6 +98,62 @@ const WatchMovie = () => {
       cancelled = true;
     };
   }, [movie]);
+  // add favourite movie
+  const [userList, setUserList] = useState([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/api/users");
+        const data = await response.json();
+        setUserList(data);
+      } catch (error) {
+        console.error("Lỗi khi lấy user:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
+  const userId = localStorage.getItem("userId");
+  const user = userList?.find((u) => u._id === userId);
+
+  const [favouriteMovies, setFavouriteMovies] = useState([]);
+  useEffect(() => {
+    if (user && user.favoriteMovies) {
+      setFavouriteMovies(user.favoriteMovies);
+    }
+  }, [user]);
+  const handleFavouriteMovie = async (movieId) => {
+    if (!user) {
+      toast.error("Vui lòng đăng nhập trước!");
+      return;
+    }
+
+    let newFavouriteList;
+    // add or remove
+    if (favouriteMovies.includes(movieId)) {
+      newFavouriteList = favouriteMovies.filter((id) => id !== movieId);
+      toast.info("Đã xóa khỏi danh sách yêu thích");
+    } else {
+      newFavouriteList = [...favouriteMovies, movieId];
+      toast.success("Đã thêm phim vào danh sách yêu thích");
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5001/api/users/${userId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            favoriteMovies: newFavouriteList,
+          }),
+        }
+      );
+      setFavouriteMovies(newFavouriteList);
+    } catch (error) {
+      toast.error("Lỗi khi cập nhật danh sách yêu thích!");
+      console.error(error);
+    }
+  };
   if (loading) return <div className="text-center p-10">Đang tải phim...</div>;
   if (!movie) return <div className="p-10 text-white">Không tìm thấy phim</div>;
 
@@ -133,14 +192,25 @@ const WatchMovie = () => {
 
           {/* Yêu thích & Chia sẻ */}
           <div className="flex items-center justify-start w-[90%] gap-3 mx-auto bg-black border-t-[1.5px] border-gray-900 pt-2 pb-2 rounded-bl-2xl rounded-br-2xl">
-            <div className="flex items-center gap-2 ml-2">
+            <div
+              className="flex items-center gap-2 ml-2"
+              onClick={() => handleFavouriteMovie(movie.movieId)}
+            >
               <FontAwesomeIcon
                 icon={faHeart}
-                className="text-white hover:text-yellow-400"
+                className={`text-white
+                    ${
+                      favouriteMovies.includes(movie.movieId)
+                        ? "text-yellow-500 hover:text-yellow-400"
+                        : "text-white hover:text-yellow-400"
+                    }`}
               />
               <p className="text-white mr-2">Yêu thích</p>
             </div>
-            <div className="flex items-center gap-2 ml-2">
+            <div
+              className="flex items-center gap-2 ml-2"
+              onClick={() => setOpenModal(true)}
+            >
               <FontAwesomeIcon
                 icon={faShare}
                 className="text-white hover:text-yellow-400"
@@ -206,6 +276,11 @@ const WatchMovie = () => {
           </div>
         </div>
         <Footer />
+        <ModalShare
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          slug={slug}
+        />
       </AnimatedPage>
     </>
   );

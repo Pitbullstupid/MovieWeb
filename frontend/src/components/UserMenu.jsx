@@ -37,7 +37,6 @@ const UserMenu = ({ setIsLogin, userId }) => {
   }, []);
 
   const user = userList?.find((u) => u._id === userId);
-  console.log(user);
   const handleLogout = (e) => {
     e.preventDefault();
     toast.success("Đăng xuất thành công");
@@ -45,6 +44,7 @@ const UserMenu = ({ setIsLogin, userId }) => {
     localStorage.removeItem("userId");
     setIsLogin(false);
     navigate(`/`);
+    navigate(0);
   };
 
   return (

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import RegisterForm from "./RegisterForm";
+import { useNavigate } from "react-router";
 
 
 const LoginForm = ({
@@ -23,6 +24,7 @@ const LoginForm = ({
 }) => {
   const [view, setView] = useState("login");
   const [userList, setUserList] = useState([]);
+    const navigate = useNavigate();
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -49,6 +51,7 @@ const LoginForm = ({
       setUserId(user._id);
       setOpenModal(false);
       setIsLogin(true);
+      navigate(0);
     } else {
       toast.error("Sai email hoặc mật khẩu");
     }

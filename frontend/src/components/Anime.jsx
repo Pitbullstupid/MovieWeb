@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,8 +9,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { genreMap } from "@/lib/data";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
-const Anime = ({ movies }) => {
+const Anime = ({ movies, userList }) => {
   // Lọc ra chỉ những phim có gid = 16 (Anime)
   const animeMovies = movies.filter((m) => m.genre_ids?.includes(16));
 
@@ -19,6 +20,49 @@ const Anime = ({ movies }) => {
 
   const [selectedMovie, setSelectedMovie] = useState(animeMovies[0]);
 
+  // add favourite movie
+  const userId = localStorage.getItem("userId");
+  const user = userList?.find((u) => u._id === userId);
+
+  const [favouriteMovies, setFavouriteMovies] = useState([]);
+  useEffect(() => {
+    if (user && user.favoriteMovies) {
+      setFavouriteMovies(user.favoriteMovies);
+    }
+  }, [user]);
+  const handleFavouriteMovie = async (movieId) => {
+    if (!user) {
+      toast.error("Vui lòng đăng nhập trước!");
+      return;
+    }
+
+    let newFavouriteList;
+    // add or remove
+    if (favouriteMovies.includes(movieId)) {
+      newFavouriteList = favouriteMovies.filter((id) => id !== movieId);
+      toast.info("Đã xóa khỏi danh sách yêu thích");
+    } else {
+      newFavouriteList = [...favouriteMovies, movieId];
+      toast.success("Đã thêm phim vào danh sách yêu thích");
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5001/api/users/${userId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            favoriteMovies: newFavouriteList,
+          }),
+        }
+      );
+      setFavouriteMovies(newFavouriteList);
+    } catch (error) {
+      toast.error("Lỗi khi cập nhật danh sách yêu thích!");
+      console.error(error);
+    }
+  };
   return (
     <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full h-[800px]">
       <div className="m-6 bg-gradient-to-r from-[#272A39] to-[#272A39]/100 rounded-lg w-full h-[400px] flex relative">
@@ -45,9 +89,7 @@ const Anime = ({ movies }) => {
           <div className="flex gap-3 w-[80%] h-[70px] flex-wrap">
             {selectedMovie.genre_ids?.map((gid) => (
               <Link key={gid} to={`/the-loai/${gid}`}>
-                <Badge
-                  className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-base font-normal shadow-none border border-white/30 hover:text-yellow-300 cursor-pointer h-fit"
-                >
+                <Badge className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-base font-normal shadow-none border border-white/30 hover:text-yellow-300 cursor-pointer h-fit">
                   {genreMap[gid]}
                 </Badge>
               </Link>
@@ -72,10 +114,15 @@ const Anime = ({ movies }) => {
               </button>
             </Link>
             <div className="flex items-center space-x-4 border p-2 rounded-full">
-              <button>
+              <button onClick={() => handleFavouriteMovie(selectedMovie.movieId)}>
                 <FontAwesomeIcon
                   icon={faHeart}
-                  className="mx-auto text-white text-2xl pt-[2px] hover:text-yellow-400"
+                  className={`mx-auto text-2xl pt-[2px] transition-colors duration-300 
+                    ${
+                      favouriteMovies.includes(selectedMovie.movieId)
+                        ? "text-yellow-500 hover:text-yellow-400"
+                        : "text-white hover:text-yellow-400"
+                    }`}
                 />
               </button>
               <Link to={`/phim/${selectedMovie.original_title}`}>
@@ -107,7 +154,9 @@ const Anime = ({ movies }) => {
               key={i}
               onClick={() => setSelectedMovie(movie)}
               className={`w-[80px] h-[120px] rounded-2xl overflow-hidden shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300 ${
-                selectedMovie.movieId === movie.movieId ? "ring-4 ring-yellow-400" : ""
+                selectedMovie.movieId === movie.movieId
+                  ? "ring-4 ring-yellow-400"
+                  : ""
               }`}
             >
               <img

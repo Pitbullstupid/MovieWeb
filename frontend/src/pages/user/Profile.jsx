@@ -1,7 +1,6 @@
 import AnimatedPage from "@/components/AnimatedPage";
 import Header from "@/components/Header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
 import {
   faClockRotateLeft,
   faCrown,
@@ -16,11 +15,15 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import ModalAvatar from "@/components/ModalAvatar";
-import ModalPassword from "@/components/ModalPassword"; // ⬅️ import modal riêng
+import ModalPassword from "@/components/ModalPassword";
 import Footer from "@/components/Footer";
+import FavouriteMovies from "@/components/FavouriteMovies";
+import Inforform from "@/components/Inforform";
+import HistoryMovies from "@/components/HistoryMovies";
 
 const Profile = ({ setIsLogin }) => {
   const { slug } = useParams();
+  const [view, setView] = useState("account");
   const navigate = useNavigate();
 
   // Lấy danh sách users từ backend
@@ -107,7 +110,10 @@ const Profile = ({ setIsLogin }) => {
               </h1>
               <div>
                 <Link>
-                  <div className="group flex space-x-2 items-center border-b-2 border-[#2E313A] mb-5">
+                  <div
+                    className="group flex space-x-2 items-center border-b-2 border-[#2E313A] mb-5"
+                    onClick={() => setView("favouMovies")}
+                  >
                     <FontAwesomeIcon
                       icon={faHeart}
                       className="text-white pb-2 group-hover:text-[#FFD875]"
@@ -118,7 +124,7 @@ const Profile = ({ setIsLogin }) => {
                   </div>
                 </Link>
                 <Link>
-                  <div className="group flex space-x-2 items-center border-b-2 border-[#2E313A] mb-5">
+                  <div className="group flex space-x-2 items-center border-b-2 border-[#2E313A] mb-5" onClick={() => setView("historyMovies")}>
                     <FontAwesomeIcon
                       icon={faClockRotateLeft}
                       className="text-white pb-2 group-hover:text-[#FFD875]"
@@ -129,7 +135,10 @@ const Profile = ({ setIsLogin }) => {
                   </div>
                 </Link>
                 <Link>
-                  <div className="group flex space-x-2 items-center border-b-2 border-[#2E313A] mb-5">
+                  <div
+                    className="group flex space-x-2 items-center border-b-2 border-[#2E313A] mb-5"
+                    onClick={() => setView("account")}
+                  >
                     <FontAwesomeIcon
                       icon={faUser}
                       className="text-white pb-2 group-hover:text-[#FFD875]"
@@ -186,86 +195,20 @@ const Profile = ({ setIsLogin }) => {
               </div>
             </div>
           </div>
-
-          {/* Input form */}
+          {/* Content*/}
           <div className="w-[80%] pl-[40px]">
-            <h1 className="text-white font-semibold text-[20px]">Tài khoản</h1>
-            <p className="text-[#AAAAAA]">Cập nhật thông tin tài khoản</p>
-            <div className="flex items-center gap-15">
-              <div className="mt-4">
-                <div>
-                  <p className="text-[#AAAAAA]">Email</p>
-                  <Input
-                    disabled
-                    placeholder={`${user?.email}`}
-                    className="w-[350px] placeholder:text-white mt-3"
-                  ></Input>
-                </div>
-                <div className="mt-6">
-                  <p className="text-[#AAAAAA]">Tên hiển thị</p>
-                  <Input
-                    placeholder={`${user?.userName}`}
-                    onChange={(e) => setUserName(e.target.value)}
-                    className="w-[350px] placeholder:text-white mt-3 text-white"
-                  ></Input>
-                </div>
-              </div>
-
-              {/* Avatar */}
-              <div className=" flex flex-col items-center">
-                <Avatar className="w-28 h-28 mt-10">
-                  <AvatarImage
-                    src={`${user?.Avatar || "https://github.com/shadcn.png"}`}
-                  />
-                  <AvatarFallback>Avt</AvatarFallback>
-                </Avatar>
-                {user?.isPremium && (
-                  <button
-                    className="group flex text-white items-center gap-2 cursor-pointer mt-3"
-                    onClick={() => setOpenModalAvt(true)}
-                  >
-                    <FontAwesomeIcon
-                      icon={faGrip}
-                      className="group-hover:text-[#FFD875]"
-                    />
-                    <p className="group-hover:text-[#FFD875]">Chọn avatar</p>
-                  </button>
-                )}
-                {!user?.isPremium && (
-                  <div>
-                    <p className="text-[#AAAAAA] mt-3 text-sm ">
-                      Nâng cấp tài khoản, tại{" "}
-                      <Link to={`/user/premium/${user?._id}`}>
-                        <button className="text-[#FFD875] hover:underline cursor-pointer">
-                          đây
-                        </button>
-                      </Link>
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Change password */}
-            <div className="flex items-center gap-1">
-              <p className="text-sm text-[#AAAAAA] pt-4">
-                Đổi mật khẩu, nhấn vào
-              </p>
-              <button
-                className="pt-4 text-[#FFD875] hover:underline cursor-pointer"
-                onClick={() => setOpenModalPass(true)}
-              >
-                đây
-              </button>
-            </div>
-
-            {/* Update button */}
-            <button
-              className="bg-[#FFD875] px-[20px] py-[10px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm cursor-pointer"
-              onClick={handleUpdateUser}
-            >
-              Cập nhật
-            </button>
+            {view === "favouMovies" ? (
+              <FavouriteMovies setView={setView} user={user}/>
+            ) : view === "historyMovies" ? (
+              <HistoryMovies setView={setView} />
+            ) : (
+              <Inforform
+                user={user}
+                setUserName={setUserName}
+                setOpenModalAvt={setOpenModalAvt}
+                handleUpdateUser={handleUpdateUser}
+              />
+            )}
           </div>
         </div>
 

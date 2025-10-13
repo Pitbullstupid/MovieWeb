@@ -25,6 +25,19 @@ const HomePage = () => {
     };
     fetchMovies();
   }, []);
+  const [userList, setUserList] = useState([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/api/users");
+        const data = await response.json();
+        setUserList(data);
+      } catch (error) {
+        console.error("Lỗi khi lấy user:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -35,11 +48,11 @@ const HomePage = () => {
       <AnimatedPage>
         {movies.length > 0 ? (
           <>
-            <Banner movies={movies} />
+            <Banner movies={movies} userList={userList} />
             <Category />
             <MoviesByRegion movies={movies} />
             <HotMovies movies={movies} />
-            <Anime movies={movies} />
+            <Anime movies={movies} userList={userList} />
           </>
         ) : (
           <div className="text-center p-100">Không có phim nào!</div>

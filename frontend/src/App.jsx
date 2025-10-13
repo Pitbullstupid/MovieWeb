@@ -15,7 +15,11 @@ import Profile from "./pages/user/Profile";
 import Premium from "./pages/user/Premium";
 
 function App() {
-  const [isLogin, setIsLogin] = useState(localStorage.getItem("isLogin") === "true");
+  const [isLogin, setIsLogin] = useState(
+    localStorage.getItem("isLogin") === "true"
+  );
+
+  
   return (
     <>
       <AnimatePresence mode="wait">
@@ -31,7 +35,10 @@ function App() {
             <Route path="/anime" element={<AnimeMovies />} />
             <Route path="/tim-kiem/:slug" element={<Search />} />
             <Route path="/nam-phat-hanh/:slug" element={<YearMovie />} />
-            <Route path="/user/profile/:slug" element={<Profile setIsLogin={setIsLogin}/>} />
+            <Route
+              path="/user/profile/:slug"
+              element={<Profile setIsLogin={setIsLogin} />}
+            />
             <Route path="/user/premium/:slug" element={<Premium />} />
           </Routes>
         </BrowserRouter>
