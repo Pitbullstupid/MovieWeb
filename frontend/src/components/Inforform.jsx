@@ -10,6 +10,7 @@ const Inforform = ({
   setUserName,
   setOpenModalAvt,
   handleUpdateUser,
+  setOpenModalPass
 }) => {
   return (
     <>

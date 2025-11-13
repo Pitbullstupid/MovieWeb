@@ -17,7 +17,7 @@ import { toast } from "sonner";
 const Premium = () => {
   const { slug } = useParams();
   const [openModal, setOpenModal] = useState(false);
-
+  const [headerKey, setHeaderKey] = useState(0);
   // Lấy danh sách users từ backend
   const [userList, setUserList] = useState([]);
   useEffect(() => {
@@ -49,6 +49,7 @@ const Premium = () => {
       setUserList((prevUsers) =>
         prevUsers.map((u) => (u._id === updatePremium._id ? updatePremium : u))
       );
+      setHeaderKey((prev) => prev + 1);
       setOpenModal(false);
     } catch (error) {
       console.error("Lỗi khi nâng cấp tài khoản:", error);
@@ -58,7 +59,7 @@ const Premium = () => {
   const user = userList?.find((u) => u._id === slug);
   return (
     <>
-      <Header />
+      <Header key={headerKey}/>
       <AnimatedPage>
         <div className="w-full mt-25 min-h-115">
           <div className="w-full">

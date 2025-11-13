@@ -99,13 +99,13 @@ const ModalPassword = ({ open, onClose, user, setUserList }) => {
           {/* update or exit */}
           <div className="flex justify-end gap-3 mt-5 mr-3">
             <button
-              className="bg-[#FFD875] px-[15px] py-[5px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm"
+              className="bg-[#FFD875] px-[15px] py-[6px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm"
               onClick={handleChangePassword}
             >
               Cập nhật
             </button>
             <button
-              className="bg-white px-[15px] py-[5px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm"
+              className="bg-white px-[15px] py-[6px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm"
               onClick={onClose}
             >
               Thoát

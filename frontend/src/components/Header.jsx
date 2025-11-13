@@ -26,7 +26,6 @@ const Header = () => {
   useEffect(() => {
     localStorage.setItem("isLogin", isLogin);
   }, [isLogin]);
-
   useEffect(() => {
     const id = localStorage.getItem("userId");
     if (id) setUserId(id);

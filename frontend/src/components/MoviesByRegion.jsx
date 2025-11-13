@@ -13,8 +13,6 @@ import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const MoviesByRegion = ({ movies }) => {
-  const truncate = (text, maxLength) =>
-    text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
   //QG
   const regions = [
@@ -86,11 +84,11 @@ const MoviesByRegion = ({ movies }) => {
                               />
                             </div>
                           </div>
-                          <h3 className="font-semibold text-white pl-4 hover:text-yellow-400 cursor-pointer">
-                            {truncate(movie.title || movie.original_title, 33)}
+                          <h3 className="font-semibold text-white pl-4 hover:text-yellow-400 cursor-pointer truncate w-[90%]">
+                            {movie.title || movie.original_title}
                           </h3>
-                          <p className="pl-4 text-sm text-gray-500">
-                            {truncate(movie.original_title, 20)}
+                          <p className="pl-4 text-sm text-gray-500 truncate w-[90%]">
+                            {movie.original_title}
                           </p>
                         </Link>
                       </div>

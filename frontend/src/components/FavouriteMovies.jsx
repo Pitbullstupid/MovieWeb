@@ -4,10 +4,12 @@ import { Link } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "sonner";
+import { Spinner } from "./ui/spinner";
 
 const FavouriteMovies = () => {
   const [moviesData, setMoviesData] = useState([]);
   const [userList, setUserList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
   const userId = localStorage.getItem("userId");
@@ -22,6 +24,8 @@ const FavouriteMovies = () => {
         setMoviesData(Array.isArray(data) ? data : []);
       } catch {
         setMoviesData([]);
+      } finally {
+        setLoading(false);
       }
     };
     fetchMovies();
@@ -54,11 +58,14 @@ const FavouriteMovies = () => {
     toast.info("Đã xóa khỏi danh sách yêu thích");
 
     try {
-      const response = await fetch(`http://localhost:5001/api/users/${user._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ favoriteMovies: newFavouriteList }),
-      });
+      const response = await fetch(
+        `http://localhost:5001/api/users/${user._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ favoriteMovies: newFavouriteList }),
+        }
+      );
 
       if (!response.ok) throw new Error("Cập nhật thất bại");
 
@@ -102,53 +109,66 @@ const FavouriteMovies = () => {
     text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
   return (
-    <div>
-      <h1 className="text-white font-semibold text-[20px] pb-5">Phim yêu thích</h1>
-      <div className="w-full min-h-165 mt-4 bg-[#272A39]">
-        <div className="flex w-full h-[500px] mt-4 items-start flex-wrap space-y-4">
-          {favouriteMovies.length === 0 ? (
-            <p className="text-white text-lg mt-10 mx-[35%]">
-              Không có phim nào trong danh sách yêu thích.
-            </p>
-          ) : (
-            visibleMovies.map((movie) => (
-              <div
-                key={movie.movieId}
-                className="flex flex-col justify-center items-center w-1/4 relative"
-              >
-                <Link to={`/phim/${movie.original_title}`}>
-                  <img
-                    src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-                    alt={movie.original_title}
-                    className="w-[200px] h-[300px] rounded-2xl"
-                  />
-                  <p className="text-white hover:text-yellow-400">
-                    {truncate(movie.title || movie.original_title, 25)}
-                  </p>
-                  <p className="text-[#5E5F64] text-sm">
-                    {truncate(movie.original_title, 10)}
-                  </p>
-                </Link>
-                <div className="w-8 h-8 rounded-full bg-white absolute top-2 right-7 flex items-center justify-center">
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    onClick={() => handleRemove(movie.movieId)}
-                  />
-                </div>
-              </div>
-            ))
-          )}
+    <>
+      {loading ? (
+        <div className="flex flex-col items-center justify-center h-[80vh]">
+          <Spinner className="text-xl text-white" />
+          <p className="mt-3 text-xl text-white">Đang lấy danh sách phim yêu thích...</p>
         </div>
-      </div>
-      {/* Pagination */}
-        <Pagination
-          handleNext={handleNext}
-          handlePrev={handlePrev}
-          handlePageChange={handlePageChange}
-          page={page}
-          totalPages={totalPages}
-        />
-    </div>
+      ) : (
+        <>
+          <div>
+            <h1 className="text-white font-semibold text-[20px] pb-5">
+              Phim yêu thích
+            </h1>
+            <div className="w-full min-h-170 mt-4 bg-[#272A39]">
+              <div className="flex w-full h-[500px] mt-4 items-start flex-wrap space-y-4">
+                {favouriteMovies.length === 0 ? (
+                  <p className="text-white text-lg mt-10 mx-[35%]">
+                    Không có phim nào trong danh sách yêu thích.
+                  </p>
+                ) : (
+                  visibleMovies.map((movie) => (
+                    <div
+                      key={movie.movieId}
+                      className="flex flex-col justify-center items-center w-1/4 relative"
+                    >
+                      <Link to={`/phim/${movie.original_title}`}>
+                        <img
+                          src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                          alt={movie.original_title}
+                          className="w-[210px] h-[300px] rounded-2xl"
+                        />
+                        <p className="text-white hover:text-yellow-400 truncate max-w-[210px]">
+                          {movie.title || movie.original_title}
+                        </p>
+                        <p className="text-[#5E5F64] text-sm truncate max-w-[210px]">
+                          {movie.original_title}
+                        </p>
+                      </Link>
+                      <div className="w-8 h-8 rounded-full bg-white absolute top-2 right-5 flex items-center justify-center cursor-pointer">
+                        <FontAwesomeIcon
+                          icon={faXmark}
+                          onClick={() => handleRemove(movie.movieId)}
+                        />
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+            {/* Pagination */}
+            <Pagination
+              handleNext={handleNext}
+              handlePrev={handlePrev}
+              handlePageChange={handlePageChange}
+              page={page}
+              totalPages={totalPages}
+            />
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

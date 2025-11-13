@@ -16,6 +16,8 @@ import Footer from "@/components/Footer";
 import ReactPlayer from "react-player";
 import { toast } from "sonner";
 import ModalShare from "@/components/ModalShare";
+import AdModal from "@/components/AdModal";
+import { Spinner } from "@/components/ui/spinner";
 
 const WatchMovie = () => {
   const { slug } = useParams();
@@ -154,12 +156,60 @@ const WatchMovie = () => {
       console.error(error);
     }
   };
-  if (loading) return <div className="text-center p-10">Đang tải phim...</div>;
+  const [watchedMovies, setWatchedMovies] = useState([]);
+  useEffect(() => {
+    if (user && user.watchedMovies) {
+      setWatchedMovies(user.watchedMovies);
+    }
+  }, [user]);
+  const handleWatchedMovie = async (movieId) => {
+    if (!user) {
+      toast.error("Vui lòng đăng nhập trước!");
+      return;
+    }
+
+    let newWatchedList = watchedMovies.includes(movieId)
+      ? watchedMovies
+      : [...watchedMovies, movieId];
+
+    try {
+      const response = await fetch(
+        `http://localhost:5001/api/users/${userId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            watchedMovies: newWatchedList,
+          }),
+        }
+      );
+      setWatchedMovies(newWatchedList);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+  if (videoUrl && !user?.isPremium) {
+    toast.info("Vui lòng đăng nhập trước hoặc nâng cấp tài khoản để xem phim!");
+  }
+}, [videoUrl, user]);
+
+  if (loading)
+    return (
+      <>
+        <Header />
+        <div className="flex flex-col items-center justify-center h-[80vh]">
+          <Spinner className="text-xl text-white" />
+          <p className="mt-3 text-xl text-white">Đang tải dữ liệu...</p>
+        </div>
+      </>
+    );
   if (!movie) return <div className="p-10 text-white">Không tìm thấy phim</div>;
 
   return (
     <>
       <Header />
+      {!user?.isPremium && <AdModal user={user} />}
       <AnimatedPage key={slug}>
         <div className="pt-[10px] w-full bg-[#191B24]">
           {/* Title */}
@@ -174,19 +224,27 @@ const WatchMovie = () => {
 
           {/* Video */}
           {videoUrl ? (
-            <ReactPlayer
-              key={videoUrl}
-              url={videoUrl}
-              controls
-              width="90%"
-              height="500px"
-              playing
-              light={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-              className="mx-auto rounded-t-2xl overflow-hidden"
-            />
+            user?.isPremium ? (
+              <ReactPlayer
+                key={videoUrl}
+                url={videoUrl}
+                controls
+                width="90%"
+                height="610px"
+                playing
+                light={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+                onPlay={() => handleWatchedMovie(movie.movieId)}
+                className="mx-auto rounded-t-2xl overflow-hidden"
+              />
+            ) : (
+              <>
+              <img src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`} className="w-[90%] h-[610px] mx-auto rounded-t-2xl overflow-hidden" />
+              </>
+            )
           ) : (
-            <div className="text-center text-white p-10">
-              Không tìm thấy link video hoặc đang chờ load...
+            <div className="text-white p-10 min-h-[500px] bg-black w-[90%] mx-auto flex flex-col items-center justify-center ">
+              <Spinner className="text-sm text-white" />
+              <p className="text-sm text-white">Đang tải dữ liệu...</p>
             </div>
           )}
 

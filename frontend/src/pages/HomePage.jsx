@@ -1,3 +1,4 @@
+import AdModal from "@/components/AdModal";
 import AnimatedPage from "@/components/AnimatedPage";
 import Anime from "@/components/Anime";
 import Banner from "@/components/Banner";
@@ -6,11 +7,14 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import HotMovies from "@/components/HotMovies";
 import MoviesByRegion from "@/components/MoviesByRegion";
+import { Spinner } from "@/components/ui/spinner";
 import { useEffect, useState } from "react";
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userList, setUserList] = useState([]);
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -25,7 +29,7 @@ const HomePage = () => {
     };
     fetchMovies();
   }, []);
-  const [userList, setUserList] = useState([]);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -38,27 +42,41 @@ const HomePage = () => {
     };
     fetchUsers();
   }, []);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const userId = localStorage.getItem("userId");
+  const user = userList?.find((u) => u._id === userId);
+
   return (
     <>
       <Header />
-      <AnimatedPage>
-        {movies.length > 0 ? (
-          <>
-            <Banner movies={movies} userList={userList} />
-            <Category />
-            <MoviesByRegion movies={movies} />
-            <HotMovies movies={movies} />
-            <Anime movies={movies} userList={userList} />
-          </>
-        ) : (
-          <div className="text-center p-100">Không có phim nào!</div>
-        )}
-        <Footer />
-      </AnimatedPage>
+      {loading ? (
+        <div className="flex flex-col items-center justify-center h-[80vh]">
+          <Spinner className="text-xl text-white"/>
+          <p className="mt-3 text-xl text-white">Đang tải dữ liệu...</p>
+        </div>
+      ) : (
+        <>
+          {!user?.isPremium && <AdModal user={user} />}
+          <AnimatedPage>
+            {movies.length > 0 ? (
+              <>
+                <Banner movies={movies} userList={userList} />
+                <Category />
+                <MoviesByRegion movies={movies} />
+                <HotMovies movies={movies} />
+                <Anime movies={movies} userList={userList} />
+              </>
+            ) : (
+              <div className="text-center p-20">Không có phim nào!</div>
+            )}
+            <Footer />
+          </AnimatedPage>
+        </>
+      )}
     </>
   );
 };

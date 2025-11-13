@@ -64,7 +64,7 @@ const Anime = ({ movies, userList }) => {
     }
   };
   return (
-    <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full h-[800px]">
+    <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full min-h-[550px]">
       <div className="m-6 bg-gradient-to-r from-[#272A39] to-[#272A39]/100 rounded-lg w-full h-[400px] flex relative">
         <div className="w-[40%] mt-6 ml-6 space-y-4">
           {/* Title */}

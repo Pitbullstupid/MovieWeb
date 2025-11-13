@@ -25,7 +25,7 @@ const HotMovies = ({ movies }) => {
 
   return (
     <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full h-[470px]">
-      <div className="ml-5 w-full">
+      <div className="ml-5 w-[97%]">
         <h1 className="font-bold text-white text-2xl">Top 10 phim hôm nay</h1>
         <Carousel>
           <CarouselContent>
@@ -57,10 +57,10 @@ const HotMovies = ({ movies }) => {
                             {chunkIndex * 5 + index + 1}
                           </h1>
                           <div className="w-[75%]">
-                            <h3 className="text-white hover:text-yellow-400 cursor-pointer">
+                            <h3 className="text-white hover:text-yellow-400 cursor-pointer truncate w-[90%]">
                               {movie.title}
                             </h3>
-                            <p className="text-gray-500 text-sm">
+                            <p className="text-gray-500 text-sm truncate w-[90%]">
                               {movie.original_title}
                             </p>
                           </div>
@@ -72,8 +72,8 @@ const HotMovies = ({ movies }) => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="top-[40%] left-[-10px]" />
-          <CarouselNext className="top-[40%] right-[-2px]" />
+          <CarouselPrevious className="top-[50%] left-[-10px]" />
+          <CarouselNext className="top-[50%] right-[-15px]" />
         </Carousel>
       </div>
     </div>

@@ -13,7 +13,8 @@ import { toast } from "sonner";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import RegisterForm from "./RegisterForm";
 import { useNavigate } from "react-router";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const LoginForm = ({
   className = "",
@@ -24,7 +25,7 @@ const LoginForm = ({
 }) => {
   const [view, setView] = useState("login");
   const [userList, setUserList] = useState([]);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -39,6 +40,7 @@ const LoginForm = ({
   }, [view]);
   const [email, setEmail] = useState("");
   const [password, setPassWord] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
     const user = userList?.find(
@@ -80,8 +82,8 @@ const LoginForm = ({
                   required
                 />
               </div>
-              <div className="grid gap-3">
-                <div className="flex items-center gap-20">
+              <div className="grid gap-3 relative">
+                <div className="flex items-center gap-20 ">
                   <Label>Mật khẩu</Label>
                   <button
                     type="button"
@@ -93,10 +95,15 @@ const LoginForm = ({
                   </button>
                 </div>
                 <Input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassWord(e.target.value)}
+                />
+                <FontAwesomeIcon
+                  icon={showPassword ? faEyeSlash : faEye}
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-[42px] cursor-pointer text-[#AAAAAA]"
                 />
               </div>
               <div className="flex flex-col gap-3">

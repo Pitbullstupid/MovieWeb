@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import ModalAvatar from "@/components/ModalAvatar";
 import ModalPassword from "@/components/ModalPassword";
@@ -23,9 +23,16 @@ import HistoryMovies from "@/components/HistoryMovies";
 
 const Profile = ({ setIsLogin }) => {
   const { slug } = useParams();
-  const [view, setView] = useState("account");
   const navigate = useNavigate();
+  const location = useLocation();
+  const [view, setView] = useState(location.state?.view || "account");
 
+  console.log(location.state);
+  useEffect(() => {
+    if (location.state?.view) {
+      setView(location.state.view);
+    }
+  }, [location.state]);
   // Lấy danh sách users từ backend
   const [userList, setUserList] = useState([]);
   useEffect(() => {
@@ -124,7 +131,10 @@ const Profile = ({ setIsLogin }) => {
                   </div>
                 </Link>
                 <Link>
-                  <div className="group flex space-x-2 items-center border-b-2 border-[#2E313A] mb-5" onClick={() => setView("historyMovies")}>
+                  <div
+                    className="group flex space-x-2 items-center border-b-2 border-[#2E313A] mb-5"
+                    onClick={() => setView("historyMovies")}
+                  >
                     <FontAwesomeIcon
                       icon={faClockRotateLeft}
                       className="text-white pb-2 group-hover:text-[#FFD875]"
@@ -198,7 +208,7 @@ const Profile = ({ setIsLogin }) => {
           {/* Content*/}
           <div className="w-[80%] pl-[40px]">
             {view === "favouMovies" ? (
-              <FavouriteMovies setView={setView} user={user}/>
+              <FavouriteMovies setView={setView} user={user} />
             ) : view === "historyMovies" ? (
               <HistoryMovies setView={setView} />
             ) : (
@@ -207,6 +217,7 @@ const Profile = ({ setIsLogin }) => {
                 setUserName={setUserName}
                 setOpenModalAvt={setOpenModalAvt}
                 handleUpdateUser={handleUpdateUser}
+                setOpenModalPass={setOpenModalPass}
               />
             )}
           </div>

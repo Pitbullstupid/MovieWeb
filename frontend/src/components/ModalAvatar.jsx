@@ -23,7 +23,7 @@ const ModalAvatar = ({ open, onClose, onUpdate, setUserAvatar }) => {
           </div>
           <div className="flex justify-end gap-3 mb-3 mr-3">
             <button
-              className="bg-[#FFD875] px-[15px] py-[5px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm"
+              className="bg-[#FFD875] px-[15px] py-[6px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm"
               onClick={() => {
                 onUpdate();
                 onClose();
@@ -32,7 +32,7 @@ const ModalAvatar = ({ open, onClose, onUpdate, setUserAvatar }) => {
               Cập nhật
             </button>
             <button
-              className="bg-white px-[15px] py-[5px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm"
+              className="bg-white px-[15px] py-[6px] rounded-xl font-semibold mt-5 hover:opacity-90 text-sm"
               onClick={onClose}
             >
               Thoát

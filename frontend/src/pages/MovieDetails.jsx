@@ -17,7 +17,8 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import Modal from "react-responsive-modal";
 import ModalShare from "@/components/ModalShare";
-
+import AdModal from "@/components/AdModal";
+import { Spinner } from "@/components/ui/spinner";
 
 const MovieDetails = () => {
   const { slug } = useParams();
@@ -53,7 +54,7 @@ const MovieDetails = () => {
       findNormalized(m.title) === decodedSlug
   );
 
-    const [userList, setUserList] = useState([]);
+  const [userList, setUserList] = useState([]);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -109,12 +110,22 @@ const MovieDetails = () => {
       console.error(error);
     }
   };
-  if (loading) return <div className="text-center p-10">Đang tải phim...</div>;
+  if (loading)
+    return (
+      <>
+        <Header />
+        <div className="flex flex-col items-center justify-center h-[80vh]">
+          <Spinner className="text-xl text-white" />
+          <p className="mt-3 text-xl text-white">Đang tải dữ liệu...</p>
+        </div>
+      </>
+    );
   if (!movie) return <div className="p-10 text-white">Không tìm thấy phim</div>;
 
   return (
     <>
       <Header />
+      {!user?.isPremium && <AdModal user={user} />}
       <AnimatedPage>
         {/* Banner */}
         <div className="relative w-full h-[500px]">
@@ -221,9 +232,9 @@ const MovieDetails = () => {
         </div>
         <Footer />
         <ModalShare
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        slug={slug}
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          slug={slug}
         />
       </AnimatedPage>
     </>
