@@ -19,6 +19,7 @@ const Header = () => {
   //Login
   const [openModal, setOpenModal] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [hidden, setHidden] = useState(false);
   const [isLogin, setIsLogin] = useState(() => {
     return localStorage.getItem("isLogin") === "true";
   });
@@ -53,10 +54,31 @@ const Header = () => {
       setScrollHotMovie(false);
     }
   }, [scrollHotMovie]);
+// menu sticky
+  useEffect(() => {
+    let lastY = 0;
+
+    const onScroll = () => {
+      if (window.scrollY > lastY) {
+        setHidden(true); // cuộn xuống -> ẩn header
+      } else {
+        setHidden(false); // cuộn lên -> hiện header
+      }
+      lastY = window.scrollY;
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-black to-gray-900 border-b border-gray-800">
+      <header
+        className={`fixed top-0 left-0 w-full z-50 
+  bg-gradient-to-r from-black to-gray-900 border-b border-gray-800
+  transition-transform duration-300 
+  ${hidden ? "-translate-y-full" : "translate-y-0"}`}
+      >
         <div className="max-w-screen-xl mx-auto flex items-center py-3 px-6">
           {/* Logo + Search */}
           <div className="flex items-center space-x-6">
@@ -80,7 +102,7 @@ const Header = () => {
             <Link to={`/`}>
               <p
                 href="/"
-                className="hover:text-yellow-400 text-white"
+                className="hover:text-default text-white"
                 onClick={(e) => {
                   e.preventDefault();
                   setScrollHotMovie(true);
@@ -92,7 +114,7 @@ const Header = () => {
 
             {/* Thể loại */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="hover:text-yellow-400 focus:outline-none text-white">
+              <DropdownMenuTrigger className="hover:text-default focus:outline-none text-white cursor-pointer">
                 Thể loại<span className="text-[10px]"> ▼</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-[#0b0b0b] opacity-90 text-sm min-w-[300px] p-2 grid grid-cols-2 gap-1 rounded-md shadow-lg mt-4 border-none">
@@ -101,8 +123,8 @@ const Header = () => {
                     <Link
                       to={`/the-loai/${id}`}
                       className="block px-3 py-2 rounded text-white transition-colors
-               hover:bg-gray-500/70 hover:text-yellow-400/70
-               data-[highlighted]:bg-gray-500/70 data-[highlighted]:text-yellow-400/70"
+               hover:bg-gray-500/70 hover:text-default/70
+               data-[highlighted]:bg-gray-500/70 data-[highlighted]:text-default/70 cursor-pointer"
                     >
                       {name}
                     </Link>
@@ -112,20 +134,20 @@ const Header = () => {
             </DropdownMenu>
 
             <Link to={`/phim-chieu-rap`}>
-              <p href="#" className="hover:text-yellow-400 text-white">
+              <p href="#" className="hover:text-default text-white">
                 Phim chiếu rạp
               </p>
             </Link>
 
             <Link to={`/anime`}>
-              <a href="#" className="hover:text-yellow-400 text-white">
+              <a href="#" className="hover:text-default text-white">
                 Anime
               </a>
             </Link>
 
             {/* Quốc gia */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="hover:text-yellow-400 focus:outline-none text-white">
+              <DropdownMenuTrigger className="hover:text-default focus:outline-none text-white cursor-pointer">
                 Quốc gia<span className="text-[10px]"> ▼</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-[#0b0b0b] opacity-90 text-sm min-w-[150px] h-[300px] p-1 mt-4 border-none rounded-md shadow-lg scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-900">
@@ -134,8 +156,8 @@ const Header = () => {
                     <Link
                       to={`/quoc-gia/${id}`}
                       className="block px-3 py-2 rounded text-white transition-colors
-               hover:bg-gray-500/70 hover:text-yellow-400/70
-               data-[highlighted]:bg-gray-500/70 data-[highlighted]:text-yellow-400/70"
+               hover:bg-gray-500/70 hover:text-default/70
+               data-[highlighted]:bg-gray-500/70 data-[highlighted]:text-default/70 cursor-pointer"
                     >
                       {name}
                     </Link>
@@ -146,10 +168,10 @@ const Header = () => {
 
             {/* Lịch chiếu */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="hover:text-yellow-400 focus:outline-none text-white">
+              <DropdownMenuTrigger className="hover:text-default focus:outline-none text-white cursor-pointer">
                 Năm phát hành<span className="text-[10px]"> ▼</span>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-[#0b0b0b] opacity-90 text-sm min-w-[150px] h-[300px] p-1 mt-4 border-none rounded-md shadow-lg scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-900">
+              <DropdownMenuContent className="bg-[#0b0b0b] opacity-90 text-sm min-w-[120px] h-[300px] p-1 mt-4 border-none rounded-md shadow-lg scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-900">
                 {Object.entries(year)
                   .sort((a, b) => b[0] - a[0])
                   .map(([id, name]) => (
@@ -157,10 +179,10 @@ const Header = () => {
                       <Link
                         to={`/nam-phat-hanh/${id}`}
                         className="block px-3 py-2 rounded text-white transition-colors
-               hover:bg-gray-500/70 hover:text-yellow-400/70
-               data-[highlighted]:bg-gray-500/70 data-[highlighted]:text-yellow-400/70"
+               hover:bg-gray-500/70 hover:text-default/70
+               data-[highlighted]:bg-gray-500/70 data-[highlighted]:text-default/70 cursor-pointer"
                       >
-                        {name}
+                        Năm {name}
                       </Link>
                     </DropdownMenuItem>
                   ))}
@@ -172,19 +194,19 @@ const Header = () => {
             <div className="ml-[150px]">
               <Button
                 variant="outline"
-                className="px-6 py-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 rounded-lg font-medium"
+                className="px-6 py-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 rounded-lg font-medium cursor-pointer"
                 onClick={() => setOpenModal(true)}
               >
                 Login
               </Button>
             </div>
           ) : (
-            <div className="ml-[190px]">
+            <div className="ml-[190px] ">
               <UserMenu setIsLogin={setIsLogin} userId={userId} />
             </div>
           )}
           <Modal open={openModal} onClose={() => setOpenModal(false)} center>
-            <div className="w-full flex items-center justify-between">
+            <div className="w-full flex items-center justify-between ">
               <img
                 src="/sticker(2).webp"
                 alt=""

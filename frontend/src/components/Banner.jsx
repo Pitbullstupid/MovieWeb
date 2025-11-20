@@ -97,7 +97,7 @@ const Banner = ({ movies, userList }) => {
                 <Star
                   key={i}
                   size={30}
-                  className="text-yellow-400 fill-yellow-400"
+                  className="text-default fill-default"
                 />
               ))}
             </div>
@@ -108,7 +108,7 @@ const Banner = ({ movies, userList }) => {
               <Link to={`/the-loai/${gid}`}>
                 <Badge
                   key={gid}
-                  className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-base font-normal shadow-none border border-white/30 hover:text-yellow-300 cursor-pointer h-fit "
+                  className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-base font-normal shadow-none border border-white/30 hover:text-default cursor-pointer h-fit "
                 >
                   {genreMap[gid]}
                 </Badge>
@@ -121,22 +121,22 @@ const Banner = ({ movies, userList }) => {
           <div>
             <div className="flex items-center space-x-4">
               <Link to={`/xem-phim/${movies[2].original_title}`}>
-                <button className="w-16 h-16 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-500 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] ">
+                <button className="w-16 h-16 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-500 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] cursor-pointer">
                   <FontAwesomeIcon
                     icon={faPlay}
                     className="text-black text-3xl "
                   />
                 </button>
               </Link>
-              <div className="flex items-center space-x-4 border p-2 rounded-full">
+              <div className="flex items-center space-x-4 border p-2 rounded-full ">
                 <button onClick={() => handleFavouriteMovie(movies[2].movieId)}>
                   <FontAwesomeIcon
                     icon={faHeart}
-                    className={`mx-auto text-2xl pt-[2px] transition-colors duration-300 
+                    className={`mx-auto text-2xl pt-[2px] transition-colors duration-300 cursor-pointer
                     ${
                       favouriteMovies.includes(movies[2].movieId)
-                        ? "text-yellow-500 hover:text-yellow-400"
-                        : "text-white hover:text-yellow-400"
+                        ? "text-default hover:opacity-80"
+                        : "text-white hover:text-default"
                     }`}
                   />
                 </button>
@@ -145,7 +145,7 @@ const Banner = ({ movies, userList }) => {
                   <button>
                     <FontAwesomeIcon
                       icon={faCircleExclamation}
-                      className="mx-auto text-white text-2xl pt-[2px] hover:text-yellow-400"
+                      className="mx-auto text-white text-2xl pt-[2px] hover:text-default cursor-pointer"
                     />
                   </button>
                 </Link>

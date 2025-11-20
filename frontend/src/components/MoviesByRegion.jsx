@@ -55,7 +55,7 @@ const MoviesByRegion = ({ movies }) => {
             >
               {region.label}
             </h1>
-            <p className="text-sm pl-4 hover:text-yellow-400 text-white mt-2 cursor-pointer">
+            <p className="text-sm pl-4 hover:text-default text-white mt-2 cursor-pointer">
               Xem toàn bộ <ChevronRight size={15} className="inline-block" />
             </p>
           </Link>
@@ -84,7 +84,7 @@ const MoviesByRegion = ({ movies }) => {
                               />
                             </div>
                           </div>
-                          <h3 className="font-semibold text-white pl-4 hover:text-yellow-400 cursor-pointer truncate w-[90%]">
+                          <h3 className="font-semibold text-white pl-4 hover:text-default cursor-pointer truncate w-[90%]">
                             {movie.title || movie.original_title}
                           </h3>
                           <p className="pl-4 text-sm text-gray-500 truncate w-[90%]">

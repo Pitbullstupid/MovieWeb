@@ -80,7 +80,7 @@ const Anime = ({ movies, userList }) => {
               <Star
                 key={i}
                 size={30}
-                className="text-yellow-400 fill-yellow-400"
+                className="text-default fill-default"
               />
             ))}
           </div>
@@ -89,7 +89,7 @@ const Anime = ({ movies, userList }) => {
           <div className="flex gap-3 w-[80%] h-[70px] flex-wrap">
             {selectedMovie.genre_ids?.map((gid) => (
               <Link key={gid} to={`/the-loai/${gid}`}>
-                <Badge className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-base font-normal shadow-none border border-white/30 hover:text-yellow-300 cursor-pointer h-fit">
+                <Badge className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-base font-normal shadow-none border border-white/30 hover:text-default cursor-pointer h-fit">
                   {genreMap[gid]}
                 </Badge>
               </Link>
@@ -106,7 +106,7 @@ const Anime = ({ movies, userList }) => {
           {/* Nav */}
           <div className="flex items-center space-x-4">
             <Link to={`/xem-phim/${selectedMovie.original_title}`}>
-              <button className="w-16 h-16 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-500 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] ">
+              <button className="w-16 h-16 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] text-white hover:scale-110 transition-transform duration-500 hover:shadow-[0_0_15px_4px_rgba(250,206,92,0.8)] cursor-pointer">
                 <FontAwesomeIcon
                   icon={faPlay}
                   className="text-black text-3xl "
@@ -117,11 +117,11 @@ const Anime = ({ movies, userList }) => {
               <button onClick={() => handleFavouriteMovie(selectedMovie.movieId)}>
                 <FontAwesomeIcon
                   icon={faHeart}
-                  className={`mx-auto text-2xl pt-[2px] transition-colors duration-300 
+                  className={`mx-auto text-2xl pt-[2px] transition-colors duration-300 cursor-pointer
                     ${
                       favouriteMovies.includes(selectedMovie.movieId)
-                        ? "text-yellow-500 hover:text-yellow-400"
-                        : "text-white hover:text-yellow-400"
+                        ? "text-default hover:opacity-80"
+                        : "text-white hover:text-default"
                     }`}
                 />
               </button>
@@ -129,7 +129,7 @@ const Anime = ({ movies, userList }) => {
                 <button>
                   <FontAwesomeIcon
                     icon={faCircleExclamation}
-                    className="mx-auto text-white text-2xl pt-[2px] hover:text-yellow-400"
+                    className="mx-auto text-white text-2xl pt-[2px] hover:text-default cursor-pointer"
                   />
                 </button>
               </Link>
@@ -155,7 +155,7 @@ const Anime = ({ movies, userList }) => {
               onClick={() => setSelectedMovie(movie)}
               className={`w-[80px] h-[120px] rounded-2xl overflow-hidden shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300 ${
                 selectedMovie.movieId === movie.movieId
-                  ? "ring-4 ring-yellow-400"
+                  ? "ring-4 ring-default"
                   : ""
               }`}
             >

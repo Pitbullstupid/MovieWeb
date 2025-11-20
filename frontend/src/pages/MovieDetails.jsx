@@ -19,6 +19,7 @@ import Modal from "react-responsive-modal";
 import ModalShare from "@/components/ModalShare";
 import AdModal from "@/components/AdModal";
 import { Spinner } from "@/components/ui/spinner";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const MovieDetails = () => {
   const { slug } = useParams();
@@ -112,13 +113,7 @@ const MovieDetails = () => {
   };
   if (loading)
     return (
-      <>
-        <Header />
-        <div className="flex flex-col items-center justify-center h-[80vh]">
-          <Spinner className="text-xl text-white" />
-          <p className="mt-3 text-xl text-white">Đang tải dữ liệu...</p>
-        </div>
-      </>
+      <LoadingOverlay loading={loading}/>
     );
   if (!movie) return <div className="p-10 text-white">Không tìm thấy phim</div>;
 
@@ -200,8 +195,8 @@ const MovieDetails = () => {
                 className={`text-white text-2xl 
                     ${
                       favouriteMovies.includes(movie.movieId)
-                        ? "text-yellow-500 hover:text-yellow-400"
-                        : "text-white hover:text-yellow-400"
+                        ? "text-default hover:opacity-80"
+                        : "text-white hover:text-default"
                     }`}
               />
               <p className="text-white text-sm">Yêu thích</p>
@@ -213,7 +208,7 @@ const MovieDetails = () => {
             >
               <FontAwesomeIcon
                 icon={faShare}
-                className="text-white text-2xl hover:text-yellow-400"
+                className="text-white text-2xl hover:text-default"
               />
               <p className="text-white text-sm">Chia sẻ</p>
             </button>

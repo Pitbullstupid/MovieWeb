@@ -38,7 +38,7 @@ export const languageCountryMap = {
 export const year = Object.fromEntries(
   Array.from({ length: 2025 - 2000 + 1 }, (_, i) => {
     const y = 2025 - i;
-    return [y, `Năm ${y}`];
+    return [y, `${y}`];
   })
 );
 

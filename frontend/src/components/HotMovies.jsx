@@ -35,12 +35,12 @@ const HotMovies = ({ movies }) => {
                   {chunk.map((movie, index) => (
                     <div
                       key={movie.id}
-                      className={`w-[20%] h-[400px] overflow-hidden mt-3 rounded-2xl ${
+                      className={`w-[20%] h-[400px] overflow-hidden mt-3  ${
                         index % 2 === 0 ? "clip-trapezoidright" : "clip-trapezoidleft"
                       }`}
                     >
                       <Link to={`/phim/${movie.original_title}`}>
-                        <div className="group relative">
+                        <div className="group relative overflow-hidden rounded-2xl">
                           <img
                             src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                             className="w-full h-[350px] object-cover transform transition-transform duration-500 group-hover:scale-110"
@@ -53,11 +53,11 @@ const HotMovies = ({ movies }) => {
                           </div>
                         </div>
                         <div className="flex">
-                          <h1 className="w-[25%] text-center font-bold text-5xl italic bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-400">
+                          <h1 className="w-[25%] text-center font-bold text-5xl italic bg-clip-text text-transparent bg-gradient-to-t from-yellow-500 to-default">
                             {chunkIndex * 5 + index + 1}
                           </h1>
                           <div className="w-[75%]">
-                            <h3 className="text-white hover:text-yellow-400 cursor-pointer truncate w-[90%]">
+                            <h3 className="text-white hover:text-default cursor-pointer truncate w-[90%]">
                               {movie.title}
                             </h3>
                             <p className="text-gray-500 text-sm truncate w-[90%]">

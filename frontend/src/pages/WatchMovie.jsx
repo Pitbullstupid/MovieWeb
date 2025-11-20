@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import ModalShare from "@/components/ModalShare";
 import AdModal from "@/components/AdModal";
 import { Spinner } from "@/components/ui/spinner";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const WatchMovie = () => {
   const { slug } = useParams();
@@ -65,6 +66,29 @@ const WatchMovie = () => {
       ),
     [moviesData, decodedSlug]
   );
+  const fetchTmdbTrailer = async (movieId) => {
+    try {
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+        },
+      };
+
+      const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`;
+      const response = await fetch(url, options);
+      const data = await response.json();
+
+      const trailer = data.results?.find(
+        (v) => v.site === "YouTube" && v.type === "Trailer"
+      );
+
+      return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
+    } catch (err) {
+      return null;
+    }
+  };
 
   // Lấy link phim từ phimapi
   useEffect(() => {
@@ -78,7 +102,12 @@ const WatchMovie = () => {
           `https://phimapi.com/tmdb/movie/${movie.movieId}`
         );
         const data = await res.json();
-
+        if (data.status === false || !data.episodes?.length) {
+          toast.error("Không tìm thấy link xem. Đang chuyển sang trailer...");
+          const trailer = await fetchTmdbTrailer(movie.movieId);
+          if (!cancelled) setVideoUrl(trailer);
+          return;
+        }
         const vietsub = data.episodes?.find((ep) =>
           ep.server_name.toLowerCase().includes("vietsub")
         );
@@ -189,21 +218,14 @@ const WatchMovie = () => {
     }
   };
   useEffect(() => {
-  if (videoUrl && !user?.isPremium) {
-    toast.info("Vui lòng đăng nhập trước hoặc nâng cấp tài khoản để xem phim!");
-  }
-}, [videoUrl, user]);
+    if (videoUrl && !user?.isPremium) {
+      toast.info(
+        "Vui lòng đăng nhập trước hoặc nâng cấp tài khoản để xem phim!"
+      );
+    }
+  }, [videoUrl, user]);
 
-  if (loading)
-    return (
-      <>
-        <Header />
-        <div className="flex flex-col items-center justify-center h-[80vh]">
-          <Spinner className="text-xl text-white" />
-          <p className="mt-3 text-xl text-white">Đang tải dữ liệu...</p>
-        </div>
-      </>
-    );
+  if (loading) return <LoadingOverlay loading={loading} />;
   if (!movie) return <div className="p-10 text-white">Không tìm thấy phim</div>;
 
   return (
@@ -238,7 +260,10 @@ const WatchMovie = () => {
               />
             ) : (
               <>
-              <img src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`} className="w-[90%] h-[610px] mx-auto rounded-t-2xl overflow-hidden" />
+                <img
+                  src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+                  className="w-[90%] h-[610px] mx-auto rounded-t-2xl overflow-hidden"
+                />
               </>
             )
           ) : (
@@ -259,8 +284,8 @@ const WatchMovie = () => {
                 className={`text-white
                     ${
                       favouriteMovies.includes(movie.movieId)
-                        ? "text-yellow-500 hover:text-yellow-400"
-                        : "text-white hover:text-yellow-400"
+                        ? "text-default hover:opacity-80"
+                        : "text-white hover:text-default"
                     }`}
               />
               <p className="text-white mr-2">Yêu thích</p>
@@ -271,7 +296,7 @@ const WatchMovie = () => {
             >
               <FontAwesomeIcon
                 icon={faShare}
-                className="text-white hover:text-yellow-400"
+                className="text-white hover:text-default"
               />
               <p className="text-white mr-2">Chia sẻ</p>
             </div>
@@ -293,13 +318,13 @@ const WatchMovie = () => {
               <h1 className="text-white font-bold">
                 {movie.title || movie.original_title}
               </h1>
-              <p className="text-yellow-400 text-sm mb-4">
+              <p className="text-default text-sm mb-4">
                 {movie.original_title}
               </p>
               <div className="flex flex-wrap gap-2 w-[100%]">
                 {movie.genre_ids?.map((gid) => (
                   <Link key={gid} to={`/the-loai/${gid}`}>
-                    <Badge className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-sm font-normal shadow-none border border-white/30 hover:text-yellow-300 cursor-pointer">
+                    <Badge className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-sm font-normal shadow-none border border-white/30 hover:text-default cursor-pointer">
                       {genreMap[gid]}
                     </Badge>
                   </Link>
@@ -311,7 +336,7 @@ const WatchMovie = () => {
             <div className="w-[30%] space-y-3">
               <p className="text-sm text-[#5E5F64]">{movie.overview}</p>
               <Link to={`/phim/${movie.original_title}`}>
-                <p className="text-sm text-yellow-400 cursor-pointer">
+                <p className="text-sm text-default cursor-pointer">
                   Thông tin phim{" "}
                   <ChevronRight size={15} className="inline-block" />
                 </p>

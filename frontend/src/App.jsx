@@ -13,6 +13,7 @@ import Search from "./pages/Search";
 import YearMovie from "./pages/YearMovie";
 import Profile from "./pages/user/Profile";
 import Premium from "./pages/user/Premium";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const [isLogin, setIsLogin] = useState(
@@ -35,6 +36,7 @@ function App() {
             <Route path="/anime" element={<AnimeMovies />} />
             <Route path="/tim-kiem/:slug" element={<Search />} />
             <Route path="/nam-phat-hanh/:slug" element={<YearMovie />} />
+            <Route path="*" element={<NotFound/>} />
             <Route
               path="/user/profile/:slug"
               element={<Profile setIsLogin={setIsLogin} />}

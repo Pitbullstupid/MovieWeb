@@ -53,7 +53,7 @@ const UserMenu = ({ setIsLogin, userId }) => {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
-            <AvatarImage
+            <AvatarImage className="cursor-pointer"
               src={user?.Avatar || "https://github.com/shadcn.png"}
             />
             <AvatarFallback>Avt</AvatarFallback>

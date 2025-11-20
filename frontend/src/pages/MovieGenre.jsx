@@ -6,6 +6,7 @@ import Pagination from "@/components/Pagination";
 import AnimatedPage from "@/components/AnimatedPage";
 import Footer from "@/components/Footer";
 import { Spinner } from "@/components/ui/spinner";
+import LoadingOverlay from "@/components/LoadingOverlay";
 const MovieGenre = () => {
   const { slug } = useParams();
   //lấy thể loại
@@ -67,14 +68,8 @@ const MovieGenre = () => {
   const visibleMovies = moviesByGenre.slice((page - 1) * 18, page * 18);
   return (
     <>
-      <Header />
-      {loading ? (
-        <div className="flex flex-col items-center justify-center h-[80vh]">
-          <Spinner className="text-xl text-white" />
-          <p className="mt-3 text-xl text-white">Đang tải dữ liệu...</p>
-        </div>
-      ) : (
-        <>
+    <LoadingOverlay loading={loading}/>
+        <Header />
           <AnimatedPage>
             <div className="w-[97%] mx-auto min-h-[1150px] mt-4 bg-[#272A39]">
               {/* Genre */}
@@ -121,8 +116,6 @@ const MovieGenre = () => {
             />
             <Footer />
           </AnimatedPage>
-        </>
-      )}
     </>
   );
 };

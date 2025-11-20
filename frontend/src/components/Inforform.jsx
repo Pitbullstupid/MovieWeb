@@ -7,6 +7,7 @@ import { faGrip } from "@fortawesome/free-solid-svg-icons";
 
 const Inforform = ({
   user,
+  userName,
   setUserName,
   setOpenModalAvt,
   handleUpdateUser,
@@ -31,7 +32,7 @@ const Inforform = ({
           <div className="mt-6">
             <p className="text-[#AAAAAA]">Tên hiển thị</p>
             <Input
-              placeholder={`${user?.userName}`}
+              value={userName}
               onChange={(e) => setUserName(e.target.value)}
               className="w-[350px] placeholder:text-white mt-3 text-white"
             ></Input>

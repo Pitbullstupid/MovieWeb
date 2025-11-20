@@ -27,7 +27,6 @@ const Profile = ({ setIsLogin }) => {
   const location = useLocation();
   const [view, setView] = useState(location.state?.view || "account");
 
-  console.log(location.state);
   useEffect(() => {
     if (location.state?.view) {
       setView(location.state.view);
@@ -214,6 +213,7 @@ const Profile = ({ setIsLogin }) => {
             ) : (
               <Inforform
                 user={user}
+                userName={userName}
                 setUserName={setUserName}
                 setOpenModalAvt={setOpenModalAvt}
                 handleUpdateUser={handleUpdateUser}
