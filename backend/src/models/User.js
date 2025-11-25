@@ -21,8 +21,8 @@ const userSchema = new mongoose.Schema(
             default: 'user',
         },
         isPremium: {
-            type: Boolean,
-            default: false,
+            type: Date,
+            default: null,
         },
         Avatar: {
             type: String,

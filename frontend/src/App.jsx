@@ -14,6 +14,8 @@ import YearMovie from "./pages/YearMovie";
 import Profile from "./pages/user/Profile";
 import Premium from "./pages/user/Premium";
 import NotFound from "./pages/NotFound";
+import Verify from "./pages/Verify";
+import Home from "./pages/admin/Home";
 
 function App() {
   const [isLogin, setIsLogin] = useState(
@@ -36,10 +38,15 @@ function App() {
             <Route path="/anime" element={<AnimeMovies />} />
             <Route path="/tim-kiem/:slug" element={<Search />} />
             <Route path="/nam-phat-hanh/:slug" element={<YearMovie />} />
+            <Route path="/verify" element={<Verify />} />
             <Route path="*" element={<NotFound/>} />
             <Route
               path="/user/profile/:slug"
               element={<Profile setIsLogin={setIsLogin} />}
+            />
+            <Route
+              path="/admin/home/:slug"
+              element={<Home />}
             />
             <Route path="/user/premium/:slug" element={<Premium />} />
           </Routes>

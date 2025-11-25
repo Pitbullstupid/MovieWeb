@@ -4,6 +4,7 @@ import userRoute from './routes/usersRoutes.js'
 import connectDB from './config/db.js';
 import dotenv from 'dotenv';
 import "./cronJobs.js";
+import orderRouter from './routes/ordersRoute.js';
 
 
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(express.json());
 
 app.use('/api/movies', movieRoute);
 app.use('/api/users', userRoute);
+app.use('/api/orders', orderRouter)
 connectDB().then(() =>{
     app.listen(PORT,() => {
     console.log(`Server đang chạy trên  http://localhost:${PORT}`)

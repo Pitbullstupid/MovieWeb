@@ -102,7 +102,7 @@ const Profile = ({ setIsLogin }) => {
       console.error("Lỗi khi cập nhật user:", error);
     }
   };
-
+  const isExpired = user?.isPremium && new Date(user?.isPremium) < new Date();
   return (
     <>
       <Header key={renderKey} />
@@ -171,13 +171,13 @@ const Profile = ({ setIsLogin }) => {
                       <p className="text-[#AAAAAA] text-[15px]">
                         {user?.userName}
                       </p>
-                      {user?.isPremium && (
+                      {user?.isPremium && !isExpired && (
                         <FontAwesomeIcon
                           icon={faCrown}
                           className="text-[#FFD875]"
                         />
                       )}
-                      {!user?.isPremium && (
+                      {(!user?.isPremium || isExpired) && (
                         <FontAwesomeIcon
                           icon={faInfinity}
                           className="text-[#FFD875]"

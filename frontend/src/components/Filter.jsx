@@ -3,11 +3,14 @@ import { Badge } from "./ui/badge";
 import { genreMap, languageCountryMap, year } from "@/lib/data";
 import { Link } from "react-router";
 import Pagination from "@/components/Pagination";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "sonner";
 
 const Filter = ({ movies }) => {
   const arrangeOptions = ["Mới nhất", "Điểm IMDb", "Lượt xem"];
   const [page, setPage] = useState(1);
-
+  const [customYear, setCustomYear] = useState("");
   const [selected, setSelected] = useState({
     country: {},
     genre: {},
@@ -66,6 +69,30 @@ const Filter = ({ movies }) => {
 
     return result;
   }, [movies, selected]);
+
+  const handleInput = (e) => {
+    const value = e.target.value;
+    const currentYear = new Date().getFullYear();
+
+    if (!/^\d*$/.test(value)) {
+      toast.error("Vui lòng nhập số năm hợp lệ!");
+      return;
+    }
+
+    setCustomYear(value);
+
+    // Validate
+    if (value && Number(value) > currentYear) {
+      toast.error(`Năm không vượt quá ${currentYear}`);
+    }
+    // Nhấn Enter -> thêm
+    if (e.key === "Enter" && value && Number(value) <= currentYear) {
+      setSelected((prev) => ({
+        ...prev,
+        year: { ...prev.year, [value]: true },
+      }));
+    }
+  };
   //  tách phim
   useEffect(() => {
     window.scrollTo({
@@ -154,9 +181,12 @@ const Filter = ({ movies }) => {
           <p className="font-semibold text-white w-[12.5%] mt-1">
             Năm phát hành :
           </p>
-          <div className="flex flex-wrap gap-3">
+
+          <div className="flex flex-wrap gap-3 items-center">
+            {/* Top 10 năm */}
             {Object.entries(year)
               .sort((a, b) => b[0] - a[0])
+              .slice(0, 10)
               .map(([id, name]) => (
                 <Badge
                   key={id}
@@ -166,15 +196,37 @@ const Filter = ({ movies }) => {
                       year: { ...prev.year, [id]: !prev.year[id] },
                     }))
                   }
-                  className={`bg-[#23272f]/40 text-white rounded-lg px-2 py-1 text-base font-normal shadow-none border border-white/30 hover:text-default cursor-pointer ${
-                    selected.year[id]
-                      ? "border-default text-default"
-                      : "border-white/30 text-white"
-                  }`}
+                  className={`bg-[#23272f]/40 text-white rounded-lg px-2 py-1 text-base 
+              font-normal shadow-none border cursor-pointer
+              ${
+                selected.year[id]
+                  ? "border-default text-default"
+                  : "border-white/30 text-white"
+              }`}
                 >
                   {name}
                 </Badge>
               ))}
+
+            {/* Ô nhập năm */}
+            <div className="relative">
+              {/* Icon search */}
+              <FontAwesomeIcon
+                icon={faSearch}
+                className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+
+              <input
+                type="text"
+                inputMode="numeric"
+                placeholder="Năm..."
+                value={customYear}
+                onChange={handleInput}
+                onKeyDown={handleInput}
+                className="w-28 bg-[#23272f]/40 text-white pl-8 pr-2 py-1 rounded-lg
+                       border border-white/30 outline-none placeholder-gray-400"
+              />
+            </div>
           </div>
         </div>
 

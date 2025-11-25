@@ -121,7 +121,7 @@ const FavouriteMovies = () => {
             <h1 className="text-white font-semibold text-[20px] pb-5">
               Phim yêu thích
             </h1>
-            <div className="w-full min-h-170 mt-4 bg-[#272A39]">
+            <div className="w-full min-h-185 mt-4 bg-[#272A39]">
               <div className="flex w-full h-[500px] mt-4 items-start flex-wrap space-y-4">
                 {favouriteMovies.length === 0 ? (
                   <p className="text-white text-lg mt-10 mx-[35%]">

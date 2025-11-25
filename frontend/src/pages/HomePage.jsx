@@ -50,7 +50,7 @@ const HomePage = () => {
 
   const userId = localStorage.getItem("userId");
   const user = userList?.find((u) => u._id === userId);
-
+  const isExpired = user?.isPremium && new Date(user?.isPremium) < new Date();
   return (
     <>
       <LoadingOverlay loading={loading} />
@@ -59,7 +59,7 @@ const HomePage = () => {
           loading ? "opacity-0" : "opacity-100"
         }`}
       >
-        {!user?.isPremium && <AdModal user={user} />}
+        {(!user?.isPremium || isExpired) && <AdModal user={user} />}
         <Header />
         <AnimatedPage>
           {movies.length > 0 ? (

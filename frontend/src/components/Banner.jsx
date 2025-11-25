@@ -94,27 +94,21 @@ const Banner = ({ movies, userList }) => {
           <div>
             <div className="flex items-center space-x-1">
               {[1, 2, 3, 4, 5].map((_, i) => (
-                <Star
-                  key={i}
-                  size={30}
-                  className="text-default fill-default"
-                />
+                <Star key={i} size={30} className="text-default fill-default" />
               ))}
             </div>
           </div>
           {/* Genre */}
           <div className="flex space-x-3">
             {movies[2].genre_ids?.map((gid) => (
-              <Link to={`/the-loai/${gid}`}>
-                <Badge
-                  key={gid}
-                  className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-base font-normal shadow-none border border-white/30 hover:text-default cursor-pointer h-fit "
-                >
+              <Link key={gid} to={`/the-loai/${gid}`}>
+                <Badge className="bg-[#23272f]/40 text-white rounded-lg px-3 py-1 text-base font-normal shadow-none border border-white/30 hover:text-default cursor-pointer h-fit ">
                   {genreMap[gid]}
                 </Badge>
               </Link>
             ))}
           </div>
+
           {/* Overview */}
           <p className="text-white">{truncate(movies[2].overview, 260)}</p>
           {/* Nav */}

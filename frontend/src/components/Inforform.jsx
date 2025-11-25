@@ -13,6 +13,7 @@ const Inforform = ({
   handleUpdateUser,
   setOpenModalPass
 }) => {
+  const isExpired = user?.isPremium && new Date(user?.isPremium) < new Date();
   return (
     <>
       {/* Input form */}
@@ -47,7 +48,7 @@ const Inforform = ({
             />
             <AvatarFallback>Avt</AvatarFallback>
           </Avatar>
-          {user?.isPremium && (
+          {user?.isPremium && !isExpired && (
             <button
               className="group flex text-white items-center gap-2 cursor-pointer mt-3"
               onClick={() => setOpenModalAvt(true)}
@@ -59,7 +60,7 @@ const Inforform = ({
               <p className="group-hover:text-[#FFD875]">Chọn avatar</p>
             </button>
           )}
-          {!user?.isPremium && (
+          {(!user?.isPremium || isExpired) && (
             <div>
               <p className="text-[#AAAAAA] mt-3 text-sm ">
                 Nâng cấp tài khoản, tại{" "}

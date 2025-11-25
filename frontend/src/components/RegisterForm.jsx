@@ -54,7 +54,7 @@ const RegisterForm = ({ setView }) => {
           password: password.trim(),
           Avatar: "",
           role: "user",
-          isPremium: false,
+          isPremium: null,
           favoriteMovies: [],
           watchedMovies: [],
         }),

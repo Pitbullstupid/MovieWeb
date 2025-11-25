@@ -16,6 +16,7 @@ import {
   faRightFromBracket,
   faChevronUp,
   faCrown,
+  faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -47,36 +48,56 @@ const UserMenu = ({ setIsLogin, userId }) => {
     navigate(`/`);
     navigate(0);
   };
-
+  const isExpired = user?.isPremium && new Date(user?.isPremium) < new Date();
+  const dayExpired = new Date(user?.isPremium);
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
-            <AvatarImage className="cursor-pointer"
+            <AvatarImage
+              className="cursor-pointer"
               src={user?.Avatar || "https://github.com/shadcn.png"}
             />
             <AvatarFallback>Avt</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-[#2B3047] opacity-90 text-sm w-[240px] min-h-[220px] p-1 mt-2 border-none rounded-md shadow-lg mr-3 text-white font-semibold space-y-1 ">
-          <DropdownMenuLabel className="text-yellow-400 font-bold">
+          <DropdownMenuLabel className="text-default font-bold">
             Xin chào, {user?.userName || "Người dùng"}
           </DropdownMenuLabel>
-          {user?.isPremium && (
+          {user?.isPremium && !isExpired && (
             <>
               <DropdownMenuLabel>
-                <p className="text-sm text-center">
-                  Bạn đã nâng cấp tài khoản lên Premium
+                <p className="text-[14px] text-center">
+                  Tài khoản
                   <FontAwesomeIcon
                     icon={faCrown}
-                    className="text-[#FFD875] ml-2"
-                  />
+                    className="text-default ml-1"
+                  />{" "}
+                  Premium tới {dayExpired.toLocaleDateString("vi-VN")}
                 </p>
               </DropdownMenuLabel>
+              <DropdownMenuItem className="w-full flex justify-center bg-transparent hover:bg-transparent focus:bg-transparent">
+                <Link to={`/user/premium/${user?._id}`} className="w-[90%]">
+                  <Button className="w-full bg-default hover:opacity-85 hover:bg-default cursor-pointer">
+                    <p className="text-black">Gia hạn</p>
+                    <div className="flex flex-col space-y-0">
+                      <FontAwesomeIcon
+                        icon={faChevronUp}
+                        className="text-black text-[7px]"
+                      />
+                      <FontAwesomeIcon
+                        icon={faChevronUp}
+                        className="text-black text-[7px]"
+                      />
+                    </div>
+                  </Button>
+                </Link>
+              </DropdownMenuItem>
             </>
           )}
-          {!user?.isPremium && (
+          {(!user?.isPremium || isExpired) && (
             <>
               <DropdownMenuLabel>
                 <p className="text-sm text-center">
@@ -84,8 +105,8 @@ const UserMenu = ({ setIsLogin, userId }) => {
                 </p>
               </DropdownMenuLabel>
               <DropdownMenuItem className="w-full flex justify-center bg-transparent hover:bg-transparent focus:bg-transparent">
-                <Link to={`/user/premium/${user?._id}`}>
-                  <Button className=" bg-[#FFD875] hover:opacity-85 hover:bg-[#FFD875] cursor-pointer">
+                <Link to={`/user/premium/${user?._id}`} className="w-[90%]">
+                  <Button className="w-full bg-default hover:opacity-85 hover:bg-default cursor-pointer">
                     <p className="text-black">Nâng cấp ngay</p>
                     <div className="flex flex-col space-y-0">
                       <FontAwesomeIcon
@@ -136,6 +157,17 @@ const UserMenu = ({ setIsLogin, userId }) => {
               Lịch sử xem
             </DropdownMenuItem>
           </Link>
+          {user?.role === "admin" && (
+            <Link to={`/admin/home/${user?._id}`}>
+              <DropdownMenuItem className="hover:bg-[#5665a8] cursor-pointer">
+                <FontAwesomeIcon
+                  icon={faUserTie}
+                  className="text-white text-[15px] mr-2"
+                />
+                Trang quản trị
+              </DropdownMenuItem>
+            </Link>
+          )}
           <DropdownMenuItem
             onClick={handleLogout}
             className="hover:bg-[#5665a8] cursor-pointer pb-3"

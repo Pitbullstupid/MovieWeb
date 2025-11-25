@@ -217,8 +217,9 @@ const WatchMovie = () => {
       console.error(error);
     }
   };
+  const isExpired = user?.isPremium && new Date(user?.isPremium) < new Date();
   useEffect(() => {
-    if (videoUrl && !user?.isPremium) {
+    if (videoUrl && !user?.isPremium && isExpired) {
       toast.info(
         "Vui lòng đăng nhập trước hoặc nâng cấp tài khoản để xem phim!"
       );
@@ -231,7 +232,7 @@ const WatchMovie = () => {
   return (
     <>
       <Header />
-      {!user?.isPremium && <AdModal user={user} />}
+      {(!user?.isPremium || isExpired) && <AdModal user={user} />}
       <AnimatedPage key={slug}>
         <div className="pt-[10px] w-full bg-[#191B24]">
           {/* Title */}
@@ -246,7 +247,7 @@ const WatchMovie = () => {
 
           {/* Video */}
           {videoUrl ? (
-            user?.isPremium ? (
+            user?.isPremium && !isExpired ? (
               <ReactPlayer
                 key={videoUrl}
                 url={videoUrl}

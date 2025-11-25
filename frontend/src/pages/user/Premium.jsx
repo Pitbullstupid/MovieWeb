@@ -1,6 +1,7 @@
 import AnimatedPage from "@/components/AnimatedPage";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import PremiumCard from "@/components/PremiumCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   faCheck,
@@ -18,6 +19,8 @@ const Premium = () => {
   const { slug } = useParams();
   const [openModal, setOpenModal] = useState(false);
   const [headerKey, setHeaderKey] = useState(0);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [price, setPrice] = useState(null);
   // Lấy danh sách users từ backend
   const [userList, setUserList] = useState([]);
   useEffect(() => {
@@ -32,36 +35,81 @@ const Premium = () => {
     };
     fetchUsers();
   }, []);
-  const handlePremium = async () => {
+  // const handlePremium = async () => {
+  //   try {
+  //     const expiredDate = new Date();
+  //     expiredDate.setDate(expiredDate.getDate() + selectedPackage * 30);
+  //     const response = await fetch(
+  //       `http://localhost:5001/api/users/${user._id}`,
+  //       {
+  //         method: "PUT",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({
+  //           isPremium: expiredDate,
+  //         }),
+  //       }
+  //     );
+  //     const updatePremium = await response.json();
+  //     toast.success("Nâng cấp tài khoản thành công");
+  //     setUserList((prevUsers) =>
+  //       prevUsers.map((u) => (u._id === updatePremium._id ? updatePremium : u))
+  //     );
+  //     setHeaderKey((prev) => prev + 1);
+  //     setOpenModal(false);
+  //   } catch (error) {
+  //     console.error("Lỗi khi nâng cấp tài khoản:", error);
+  //   }
+  // };
+  const placeOrder = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5001/api/users/${user._id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            isPremium: true,
-          }),
-        }
-      );
-      const updatePremium = await response.json();
-      toast.success("Nâng cấp tài khoản thành công");
-      setUserList((prevUsers) =>
-        prevUsers.map((u) => (u._id === updatePremium._id ? updatePremium : u))
-      );
-      setHeaderKey((prev) => prev + 1);
-      setOpenModal(false);
+      const response = await fetch("http://localhost:5001/api/orders/place", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user._id,
+          months: selectedPackage,
+          price: price,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.session_url) {
+        window.location.href = data.session_url;
+      } else {
+        toast.error("Có lỗi xảy ra khi chọn gói nâng cấp.");
+        console.error(data);
+      }
     } catch (error) {
-      console.error("Lỗi khi nâng cấp tài khoản:", error);
+      console.error("Lỗi API placeOrder:", error);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại.");
     }
   };
+
   // Tìm user theo id
   const user = userList?.find((u) => u._id === slug);
+  const isExpired = user?.isPremium && new Date(user?.isPremium) < new Date();
+  // lấy thời gian
+  const currentDate = new Date();
+  let endDate;
+  let title;
+
+  if (user?.isPremium && new Date(user.isPremium) > currentDate) {
+    const dayExpired = new Date(user.isPremium);
+    endDate = new Date(dayExpired);
+    endDate.setDate(dayExpired.getDate() + selectedPackage * 30);
+    title = "Gia hạn Premium thêm";
+  } else {
+    endDate = new Date(currentDate);
+    endDate.setDate(currentDate.getDate() + selectedPackage * 30);
+    title = "Bạn đang chọn gói";
+  }
+
   return (
     <>
-      <Header key={headerKey}/>
+      <Header key={headerKey} />
       <AnimatedPage>
-        <div className="w-full mt-25 min-h-115">
+        <div className="w-full mt-25 min-h-115 mb-10">
           <div className="w-full">
             <h1 className="w-fit mx-auto text-white font-[Tektur] font-extrabold text-4xl ">
               Tài khoản Premium
@@ -81,13 +129,13 @@ const Premium = () => {
             <div>
               <h2 className="text-white">
                 {user?.userName}
-                {user?.isPremium && (
+                {user?.isPremium  && !isExpired && (
                   <FontAwesomeIcon
                     icon={faCrown}
                     className="text-[#FFD875] ml-2"
                   />
                 )}
-                {!user?.isPremium && (
+                {(!user?.isPremium || isExpired) && (
                   <FontAwesomeIcon
                     icon={faInfinity}
                     className="text-[#FFD875] ml-2"
@@ -99,114 +147,100 @@ const Premium = () => {
                   Bạn đang là thành viên miễn phí.
                 </p>
               )}
-              {user?.isPremium && (
+              {user?.isPremium && !isExpired && (
                 <p className="text-[#AAAAAA]">
-                  Tài khoản của bạn đã được nâng cấp Premium.
+                  Tài khoản Premium. Hết hạn:{" "}
+                  {new Date(user.isPremium).toLocaleDateString("vi-VN")}
                 </p>
+              )}
+              {user?.isPremium && isExpired && (
+                <p className="text-[#AAAAAA]">Tài khoản Premium đã hết hạn.</p>
               )}
             </div>
           </div>
           {!user?.isPremium && (
-            <>
-              <h1 className="w-fit mx-auto text-white font-[Tektur] font-extrabold text-[25px] mt-15">
-                Nâng cấp tài khoản Premium ngay bây giờ
-              </h1>
-              <div class="w-80 h-100 bg-gradient-to-tr from-[#212B5F] to-[#6B7FFA] rounded-2xl mx-auto mt-10 hover:scale-105 transition-smooth duration-300 mb-5">
-                {/* Title */}
-                <div className="w-[90%] mx-auto">
-                  <h1 className="pt-3 text-white font-bold text-2xl">
-                    Vĩnh viễn{" "}
-                    <FontAwesomeIcon
-                      icon={faCrown}
-                      className="text-[#FFD875] ml-2"
-                    />
-                  </h1>
-                  {/* Price */}
-                  <div className="relative flex mt-2 items-center gap-3">
-                    <p className="text-[#FFD875] font-bold text-xl blur-[2px] relative">
-                      234K
-                    </p>
-                    <div className="absolute bg-[#FFD875] w-[2px] h-[50px] rotate-58 blur-[2px] left-[23px]"></div>
-                    <p className="text-[#FFD875] font-bold text-xl relative">
-                      200K
-                    </p>
-                    <div>
-                      <p className="text-[10px] px-[2px] bg-white rounded-[5px] text-black font-semibold">
-                        Giảm 15%
-                      </p>
-                    </div>
-                  </div>
-                  {/* Infor */}
-                  <div className="mt-7 text-white  space-y-3 w-full ml-2">
-                    <div className="flex items-center gap-3">
-                      <FontAwesomeIcon icon={faCheck} />
-                      <p>Tắt quảng cáo</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <FontAwesomeIcon icon={faCheck} />
-                      <p>Xem phim chất lượng cao</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <FontAwesomeIcon icon={faCheck} />
-                      <p>Thay đổi được Avatar</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <FontAwesomeIcon icon={faCheck} />
-                      <p>Tên được gắn nhãn Premium</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <FontAwesomeIcon icon={faCheck} />
-                      <p>Ưu tiên được xử lý khi gặp lỗi</p>
-                    </div>
-                  </div>
-                  <button
-                    className="w-[90%] mx-auto h-[40px] bg-white flex items-center justify-center mt-10 rounded-xl gap-2 hover:opacity-90 font-semibold cursor-pointer"
-                    onClick={() => setOpenModal(true)}
-                  >
-                    Chọn
-                    <div className="flex flex-col mt-[2px]">
-                      <FontAwesomeIcon
-                        icon={faChevronUp}
-                        className="text-black text-[10px]"
-                      />
-                      <FontAwesomeIcon
-                        icon={faChevronUp}
-                        className="text-black text-[10px]"
-                      />
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </>
+            <h1 className="w-fit mx-auto text-white font-[Tektur] font-extrabold text-[25px] mt-15">
+              Nâng cấp tài khoản Premium ngay bây giờ
+            </h1>
           )}
+          {user?.isPremium && (
+            <h1 className="w-fit mx-auto text-white font-[Tektur] font-extrabold text-[25px] mt-15">
+              Gia hạn tài khoản Premium
+            </h1>
+          )}
+          <div className="flex w-[85%] mx-auto">
+            <PremiumCard
+              label="Gói 1 tháng"
+              duration={1}
+              price={50000}
+              oldPrice={70000}
+              onSelect={(months, price) => {
+                setSelectedPackage(months);
+                setOpenModal(true);
+                setPrice(price);
+              }}
+            />
+
+            <PremiumCard
+              label="Gói 3 tháng"
+              duration={3}
+              price={120000}
+              oldPrice={180000}
+              onSelect={(months, price) => {
+                setSelectedPackage(months);
+                setOpenModal(true);
+                setPrice(price);
+              }}
+            />
+
+            <PremiumCard
+              label="Gói 6 tháng"
+              duration={6}
+              price={200000}
+              oldPrice={300000}
+              onSelect={(months, price) => {
+                setSelectedPackage(months);
+                setOpenModal(true);
+                setPrice(price);
+              }}
+            />
+          </div>
         </div>
         <Modal open={openModal} onClose={() => setOpenModal(false)} center>
-          <div className="w-100 h-130 bg-[#2A314E] flex flex-col items-center">
+          <div className="w-100 h-70 bg-[#2A314E] flex flex-col items-center">
             <h1 className="text-white font-bold text-2xl pt-4">Xác nhận</h1>
-            <p className="flex gap-1 text-[#AAAAAA] mt-5">
-              Bạn đang chọn gói{" "}
+            <p className="flex gap-1 text-[18px] text-white mt-5">
+              {title}
               <span className="text-[#FFD875] font-bold">
-                Premium vĩnh viễn
+                {selectedPackage} tháng
               </span>{" "}
-              (200k)
+              ({price?.toLocaleString("vi-VN")}đ)
             </p>
-            <p className="text-[#AAAAAA] mt-2">Vui lòng quét mã thanh toán</p>
-            <img src="/sticker(2).webp" className="w-[60%] rounded-xl mt-5" />
+            <div className="flex gap-1 text-[15px] mb-3">
+              <p className="text-[#AAAAAA] mt-2">
+                Bắt đầu {currentDate.toLocaleDateString("vi-VN")}
+              </p>
+              <span className="text-[#AAAAAA] mt-2">-</span>
+              <p className="text-[#AAAAAA] mt-2">
+                Hết hạn {endDate.toLocaleDateString("vi-VN")}
+              </p>
+            </div>
             <button
-              className="w-[80%] h-[40px] bg-[#FFD875] mt-4 rounded-md font-semibold cursor-pointer"
-              onClick={handlePremium}
+              className="w-[80%] h-[40px] bg-[#FFD875] mt-4 rounded-md font-semibold cursor-pointer flex items-center justify-center gap-1"
+              onClick={placeOrder}
             >
-              Xác nhận
+              <FontAwesomeIcon icon={faCheck} />
+              <p>Xác nhận</p>
             </button>
             <button
-              className="w-[80%] h-[40px] bg-white mt-4 rounded-md font-semibold cursor-pointer"
+              className="w-[80%] h-[40px] border border-white-1 text-white mt-4 rounded-md font-semibold cursor-pointer"
               onClick={() => setOpenModal(false)}
             >
-              Thoát
+              Đóng
             </button>
           </div>
         </Modal>
-        <Footer/>
+        <Footer />
       </AnimatedPage>
     </>
   );

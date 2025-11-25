@@ -111,16 +111,14 @@ const MovieDetails = () => {
       console.error(error);
     }
   };
-  if (loading)
-    return (
-      <LoadingOverlay loading={loading}/>
-    );
+  if (loading) return <LoadingOverlay loading={loading} />;
+  const isExpired = user?.isPremium && new Date(user?.isPremium) < new Date();
   if (!movie) return <div className="p-10 text-white">Không tìm thấy phim</div>;
 
   return (
     <>
       <Header />
-      {!user?.isPremium && <AdModal user={user} />}
+      {(!user?.isPremium || isExpired) && <AdModal user={user} />}
       <AnimatedPage>
         {/* Banner */}
         <div className="relative w-full h-[500px]">
