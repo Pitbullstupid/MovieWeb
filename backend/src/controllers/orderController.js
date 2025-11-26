@@ -77,5 +77,14 @@ const verifyOrder = async (req, res) => {
         res.status(500).json({ message: "Có lỗi xảy ra", error });
     }
 }
+const getAllOrders = async (req, res) => {
+    try {
+        const orders = await orderModel.find();
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error("Lỗi khi lấy đơn hàng:", error);
+        res.status(500).json({ message: "Lỗi khi lấy đơn hàng" });
+    }
+}
 
-export { placeOrder, verifyOrder };
+export { placeOrder, verifyOrder, getAllOrders };

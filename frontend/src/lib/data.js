@@ -86,3 +86,31 @@ export const avatars = [
 
 
 
+// --- Labels cho 7 ngày gần nhất ---
+const now = new Date();
+export const last7DaysLabels = Array.from({ length: 7 }, (_, i) => {
+  const d = new Date(now);
+  d.setDate(now.getDate() - (6 - i));
+  return `${d.getDate()}/${d.getMonth() + 1}`; // dd/MM
+});
+
+// --- Labels cho 7 tháng gần nhất ---
+export const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+  export const monthLabels = Array.from({ length: 7 }, (_, i) => {
+    const monthIndex = now.getMonth() - (6 - i);
+    const d = new Date(now.getFullYear(), monthIndex, 1);
+    return monthNames[d.getMonth()];
+  });
