@@ -109,8 +109,69 @@ export const monthNames = [
   "Nov",
   "Dec",
 ];
-  export const monthLabels = Array.from({ length: 7 }, (_, i) => {
-    const monthIndex = now.getMonth() - (6 - i);
-    const d = new Date(now.getFullYear(), monthIndex, 1);
-    return monthNames[d.getMonth()];
-  });
+export const monthLabels = Array.from({ length: 7 }, (_, i) => {
+  const monthIndex = now.getMonth() - (6 - i);
+  const d = new Date(now.getFullYear(), monthIndex, 1);
+  return monthNames[d.getMonth()];
+});
+
+export const movieColumns = [
+  {
+    accessorKey: "title",
+    header: "Tiêu đề",
+  },
+  {
+    accessorKey: "poster_path",
+    header: "Poster",
+  },
+  {
+    accessorKey: "original_language",
+    header: "Quốc gia",
+  },
+  {
+    accessorKey: "release_date",
+    header: "Năm ra mắt",
+
+  },
+  {
+    accessorKey: "popularity",
+    header: "Lượt xem (nghìn)",
+
+  },
+  {
+    accessorKey: "vote_average",
+    header: "Đánh giá",
+
+  },
+  {
+    accessorKey: "adult",
+    header: "Tag 18+",
+
+  },
+]
+export const userColumns = [
+  {
+    accessorKey: "userName",
+    header: "Tên người dùng",
+  },
+  {
+    accessorKey: "Avatar",
+    header: "Avatar",
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Ngày tạo",
+  },
+  {
+    accessorKey: "isPremium",
+    header: "Premium",
+  },
+  {
+    accessorKey: "role",
+    header: "Role",
+  },
+]

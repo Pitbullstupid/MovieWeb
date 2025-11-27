@@ -60,9 +60,9 @@ const Home = () => {
       <SideBar setView={setView} setTransition={setTransition}/>
       <HeaderAdmin user={user} setIsLogin={setIsLogin} transition={transition}/>
       {view === "account" ?(
-        <Account/>
+        <Account userList={userList}/>
       ): view === "movies" ?(
-        <Movies/>
+        <Movies movieList={movieList}/>
       ): view === "category" ?(
         <Category/>
       ):(
