@@ -104,7 +104,9 @@ const Premium = () => {
     endDate.setDate(currentDate.getDate() + selectedPackage * 30);
     title = "Bạn đang chọn gói";
   }
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <Header key={headerKey} />
@@ -129,7 +131,7 @@ const Premium = () => {
             <div>
               <h2 className="text-white">
                 {user?.userName}
-                {user?.isPremium  && !isExpired && (
+                {user?.isPremium && !isExpired && (
                   <FontAwesomeIcon
                     icon={faCrown}
                     className="text-[#FFD875] ml-2"
@@ -168,7 +170,7 @@ const Premium = () => {
               Gia hạn tài khoản Premium
             </h1>
           )}
-          <div className="flex w-[85%] mx-auto">
+          <div className="flex w-[75%] mx-auto">
             <PremiumCard
               label="Gói 1 tháng"
               duration={1}

@@ -24,7 +24,7 @@ const HotMovies = ({ movies }) => {
   const movieChunks = chunkArray(sortedMovies.slice(0, 10), 5);
 
   return (
-    <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full h-[470px]">
+    <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full h-[550px]">
       <div className="ml-5 w-[97%]">
         <h1 className="font-bold text-white text-2xl">Top 10 phim hôm nay</h1>
         <Carousel>
@@ -35,7 +35,7 @@ const HotMovies = ({ movies }) => {
                   {chunk.map((movie, index) => (
                     <div
                       key={movie.id}
-                      className={`w-[20%] h-[400px] overflow-hidden mt-3  ${
+                      className={`w-[20%] h-[500px] overflow-hidden mt-3  ${
                         index % 2 === 0 ? "clip-trapezoidright" : "clip-trapezoidleft"
                       }`}
                     >
@@ -43,7 +43,7 @@ const HotMovies = ({ movies }) => {
                         <div className="group relative overflow-hidden rounded-2xl">
                           <img
                             src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-                            className="w-full h-[350px] object-cover transform transition-transform duration-500 group-hover:scale-110"
+                            className="w-full h-[420px] object-cover transform transition-transform duration-500 group-hover:scale-110 mb-3"
                           />
                           <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
                             <FontAwesomeIcon

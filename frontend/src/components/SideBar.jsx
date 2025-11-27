@@ -10,8 +10,9 @@ import {
 import { faHome } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router";
 
-export default function SideBar() {
+export default function SideBar({ setView, setTransition }) {
   const [expanded, setExpanded] = useState(false);
+  setTransition(expanded);
 
   return (
     <div
@@ -22,6 +23,7 @@ export default function SideBar() {
       `}
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
+      onClick={() => setExpanded(prev => !prev)}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-600">
@@ -50,43 +52,39 @@ export default function SideBar() {
       </div>
 
       {/* Menu */}
-      <ul className="mt-4 space-y-3 p-2 ml-2">
-        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3 ">
-          <FontAwesomeIcon icon={faHome} className="w-6" />
-          <span
-            className={`transition-opacity duration-200 ${
-              expanded ? "opacity-100" : "opacity-0"
-            } w-32 overflow-hidden whitespace-nowrap`}
-          >
-            Trang chủ
-          </span>
-        </li>
-        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3">
-          <FontAwesomeIcon icon={faFilm} className="w-6" />
-          <span
-            className={`transition-opacity duration-200 ${
-              expanded ? "opacity-100" : "opacity-0"
-            } w-32 overflow-hidden whitespace-nowrap`}
-          >
-            Phim mới
-          </span>
-        </li>
-        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3">
+      <ul className="mt-5 space-y-5 p-2 ml-2">
+          <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3 "onClick={() => setView("home")}>
+            <FontAwesomeIcon icon={faHome} className="w-6" />
+            <span
+              className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
+                } w-32 overflow-hidden whitespace-nowrap`}
+            >
+              Trang chủ
+            </span>
+          </li>
+          <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3" onClick={() => setView("movies")}>
+            <FontAwesomeIcon icon={faFilm} className="w-6" />
+            <span 
+              className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
+                } w-32 overflow-hidden whitespace-nowrap`}
+            >
+              Quản lý phim
+            </span>
+          </li>
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3" onClick={() => setView("category")}>
           <FontAwesomeIcon icon={faList} className="w-6" />
           <span
-            className={`transition-opacity duration-200 ${
-              expanded ? "opacity-100" : "opacity-0"
-            } w-32 overflow-hidden whitespace-nowrap`}
+            className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
+              } w-32 overflow-hidden whitespace-nowrap`}
           >
             Thể loại
           </span>
         </li>
-        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3">
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3"onClick={() => setView("account")}>
           <FontAwesomeIcon icon={faUser} className="w-6" />
           <span
-            className={`transition-opacity duration-200 ${
-              expanded ? "opacity-100" : "opacity-0"
-            } w-32 overflow-hidden whitespace-nowrap`}
+            className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
+              } w-32 overflow-hidden whitespace-nowrap`}
           >
             Tài khoản
           </span>

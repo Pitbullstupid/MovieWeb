@@ -16,6 +16,7 @@ import Premium from "./pages/user/Premium";
 import NotFound from "./pages/NotFound";
 import Verify from "./pages/Verify";
 import Home from "./pages/admin/Home";
+import Movies from "./pages/admin/Movies";
 
 function App() {
   const [isLogin, setIsLogin] = useState(
@@ -45,7 +46,7 @@ function App() {
               element={<Profile setIsLogin={setIsLogin} />}
             />
             <Route
-              path="/admin/home/:slug"
+              path="/admin/:slug"
               element={<Home />}
             />
             <Route path="/user/premium/:slug" element={<Premium />} />

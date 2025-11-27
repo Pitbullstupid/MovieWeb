@@ -62,7 +62,7 @@ const UserMenu = ({ setIsLogin, userId }) => {
             <AvatarFallback>Avt</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-[#2B3047] opacity-90 text-sm w-[240px] min-h-[220px] p-1 mt-2 border-none rounded-md shadow-lg mr-3 text-white font-semibold space-y-1 ">
+        <DropdownMenuContent className="bg-[#2B3047] opacity-90 text-sm w-[240px] min-h-[220px] p-1 mt-4 border-none rounded-md shadow-lg mr-1 text-white font-semibold space-y-1 ">
           <DropdownMenuLabel className="text-default font-bold">
             Xin chào, {user?.userName || "Người dùng"}
           </DropdownMenuLabel>
@@ -158,7 +158,7 @@ const UserMenu = ({ setIsLogin, userId }) => {
             </DropdownMenuItem>
           </Link>
           {user?.role === "admin" && (
-            <Link to={`/admin/home/${user?._id}`}>
+            <Link to={`/admin/${user?._id}`}>
               <DropdownMenuItem className="hover:bg-[#5665a8] cursor-pointer">
                 <FontAwesomeIcon
                   icon={faUserTie}

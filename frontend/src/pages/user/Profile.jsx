@@ -23,6 +23,8 @@ import HistoryMovies from "@/components/HistoryMovies";
 
 const Profile = ({ setIsLogin }) => {
   const { slug } = useParams();
+  const [moviesData, setMoviesData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
   const [view, setView] = useState(location.state?.view || "account");
@@ -32,6 +34,22 @@ const Profile = ({ setIsLogin }) => {
       setView(location.state.view);
     }
   }, [location.state]);
+
+  // Fetch movies
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const res = await fetch("http://localhost:5001/api/movies");
+        const data = await res.json();
+        setMoviesData(Array.isArray(data) ? data : []);
+      } catch {
+        setMoviesData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovies();
+  }, []);
   // Lấy danh sách users từ backend
   const [userList, setUserList] = useState([]);
   useEffect(() => {
@@ -105,11 +123,11 @@ const Profile = ({ setIsLogin }) => {
   const isExpired = user?.isPremium && new Date(user?.isPremium) < new Date();
   return (
     <>
-      <Header key={renderKey} />
+      <Header key={renderKey} movies={moviesData} />
       <AnimatedPage>
         <div className="mt-25 w-full flex px-5 min-h-115">
           {/* Sidebar */}
-          <div className="w-[20%] h-[420px] bg-[#25272F] rounded-2xl flex flex-col justify-center items-center">
+          <div className="w-[20%] h-[480px] bg-[#25272F] rounded-2xl flex flex-col justify-center items-center mb-10">
             <div className="w-[80%] h-[90%]">
               <h1 className="text-white text-center font-semibold text-[20px] pb-5">
                 Quản lý tài khoản
@@ -159,7 +177,7 @@ const Profile = ({ setIsLogin }) => {
                 </Link>
 
                 {/* Infor */}
-                <div className="mt-7">
+                <div className="mt-20">
                   <Avatar className="w-16 h-16">
                     <AvatarImage
                       src={`${user?.Avatar || "https://github.com/shadcn.png"}`}
@@ -207,9 +225,9 @@ const Profile = ({ setIsLogin }) => {
           {/* Content*/}
           <div className="w-[80%] pl-[40px]">
             {view === "favouMovies" ? (
-              <FavouriteMovies setView={setView} user={user} />
+              <FavouriteMovies setView={setView} user={user} moviesData={moviesData} loading={loading}/>
             ) : view === "historyMovies" ? (
-              <HistoryMovies setView={setView} />
+              <HistoryMovies setView={setView} moviesData={moviesData} loading={loading}/>
             ) : (
               <Inforform
                 user={user}

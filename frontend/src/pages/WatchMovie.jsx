@@ -231,7 +231,7 @@ const WatchMovie = () => {
 
   return (
     <>
-      <Header />
+      <Header movies={moviesData}/>
       {(!user?.isPremium || isExpired) && <AdModal user={user} />}
       <AnimatedPage key={slug}>
         <div className="pt-[10px] w-full bg-[#191B24]">
@@ -282,7 +282,7 @@ const WatchMovie = () => {
             >
               <FontAwesomeIcon
                 icon={faHeart}
-                className={`text-white
+                className={`
                     ${
                       favouriteMovies.includes(movie.movieId)
                         ? "text-default hover:opacity-80"

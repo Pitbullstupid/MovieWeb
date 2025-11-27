@@ -65,7 +65,7 @@ const AnimeMovies = () => {
   return (
     <>
       <LoadingOverlay loading={loading} />
-      <Header />
+      <Header movies={moviesData}/>
       <AnimatedPage>
         <div className="w-[97%] mx-auto min-h-[1150px] mt-4 bg-[#272A39]">
           {/* Genre */}
@@ -82,13 +82,13 @@ const AnimeMovies = () => {
               visibleMovies.map((movie) => (
                 <div
                   key={movie.id}
-                  className="flex flex-col justify-center items-center w-1/6"
+                  className="flex flex-col justify-center items-center w-1/6 mb-2"
                 >
                   <Link to={`/phim/${movie.original_title}`}>
                     <img
                       src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                       alt={movie.original_title}
-                      className="w-[190px] h-[280px] rounded-2xl"
+                      className="w-[220px] h-[290px] rounded-2xl"
                     />
                     <p className="text-white hover:text-yellow-400 truncate max-w-[190px]">
                       {movie.title || movie.original_title}

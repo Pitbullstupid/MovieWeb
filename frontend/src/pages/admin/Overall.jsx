@@ -89,11 +89,11 @@ const Overall = ({ users, movieList, orderList }) => {
   return (
     <>
       <div className="ml-16 flex flex-col items-center">
-        <div className=" mt-4 w-full flex justify-around">
+        <div className=" mt-4 w-[96%] flex justify-between">
           {/* User mới 7 ngày gần nhất */}
-          <div className="bg-[#1f2937] p-4 rounded-lg text-white w-64">
+          <div className="bg-[#1f2937] p-4 rounded-lg text-white w-84">
             <p className="text-sm opacity-80 mb-4">
-              New Users (7 ngày gần nhất)
+              Số người dùng mới 
             </p>
             <MiniBarChart
               data={last7Days}
@@ -105,8 +105,8 @@ const Overall = ({ users, movieList, orderList }) => {
             </div>
           </div>
           {/* Biểu đồ số phim */}
-          <div className="bg-[#1f2937] p-4 rounded-lg text-white w-64">
-            <p className="text-sm opacity-80 mb-4">Movies (7 năm gần nhất)</p>
+          <div className="bg-[#1f2937] p-4 rounded-lg text-white w-84">
+            <p className="text-sm opacity-80 mb-4"> Tổng số phim theo các năm</p>
             <MiniBarChart
               data={movieYearData}
               labels={movieYearLabels}
@@ -117,9 +117,9 @@ const Overall = ({ users, movieList, orderList }) => {
             </div>
           </div>
           {/*  Biểu đồ số phim upload */}
-          <div className="bg-[#1f2937] p-4 rounded-lg text-white w-64">
+          <div className="bg-[#1f2937] p-4 rounded-lg text-white w-84">
             <p className="text-sm opacity-80 mb-4">
-              Movies Upload (7 tháng gần nhất)
+              Số phim đã tải lên
             </p>
 
             <MiniBarChart
@@ -133,9 +133,9 @@ const Overall = ({ users, movieList, orderList }) => {
             </div>
           </div>
           {/* Biểu đồ doanh thu theo tháng*/}
-          <div className="bg-[#1f2937] p-4 rounded-lg text-white w-64">
+          <div className="bg-[#1f2937] p-4 rounded-lg text-white w-84">
             <p className="text-sm opacity-80 mb-4">
-              Revenue (7 tháng gần nhất)
+              Doanh số 
             </p>
 
             <MiniBarChart
@@ -150,8 +150,8 @@ const Overall = ({ users, movieList, orderList }) => {
             </div>
           </div>
         </div>
-        <div className="flex justify-around items-center bg-[#1f2937] text-white rounded-lg w-[96%] mt-4">
-          <div className="w-180 border-r border-gray-600 p-4">
+        <div className="flex justify-around items-center bg-[#1f2937] text-white rounded-lg w-[96%] mt-6 ">
+          <div className="w-180 border-r border-gray-600 p-4 ">
             <p className="w-fit mx-auto mb-2">
               Thống kê doanh thu theo tháng
             </p>
@@ -160,7 +160,7 @@ const Overall = ({ users, movieList, orderList }) => {
               revenueData={revenueData}
             />
           </div>
-          <div className="w-80 ">
+          <div className="w-84 ">
             <p className="w-fit mx-auto mb-6">
               Thống kê số lượng phim theo thể loại
             </p>

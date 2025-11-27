@@ -117,7 +117,7 @@ const MovieDetails = () => {
 
   return (
     <>
-      <Header />
+      <Header movies={moviesData}/>
       {(!user?.isPremium || isExpired) && <AdModal user={user} />}
       <AnimatedPage>
         {/* Banner */}
@@ -190,7 +190,7 @@ const MovieDetails = () => {
             >
               <FontAwesomeIcon
                 icon={faHeart}
-                className={`text-white text-2xl 
+                className={` text-2xl 
                     ${
                       favouriteMovies.includes(movie.movieId)
                         ? "text-default hover:opacity-80"

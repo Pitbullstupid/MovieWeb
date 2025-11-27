@@ -60,7 +60,7 @@ const HomePage = () => {
         }`}
       >
         {(!user?.isPremium || isExpired) && <AdModal user={user} />}
-        <Header />
+        <Header movies={movies}/>
         <AnimatedPage>
           {movies.length > 0 ? (
             <>

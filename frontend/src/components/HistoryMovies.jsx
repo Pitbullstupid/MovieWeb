@@ -6,29 +6,12 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "sonner";
 import { Spinner } from "./ui/spinner";
 
-const HistoryMovies = () => {
-  const [moviesData, setMoviesData] = useState([]);
+const HistoryMovies = ({moviesData, loading}) => {
   const [userList, setUserList] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
   const userId = localStorage.getItem("userId");
   const user = userList?.find((u) => u._id === userId);
-  // Fetch movies
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const res = await fetch("http://localhost:5001/api/movies");
-        const data = await res.json();
-        setMoviesData(Array.isArray(data) ? data : []);
-      } catch {
-        setMoviesData([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMovies();
-  }, []);
 
   // Fetch users
   useEffect(() => {
@@ -111,7 +94,7 @@ const HistoryMovies = () => {
             <h1 className="text-white font-semibold text-[20px] pb-5">
               Phim đã xem
             </h1>
-            <div className="w-full min-h-185 mt-4 bg-[#272A39]">
+            <div className="w-full min-h-200 mt-4 bg-[#272A39]">
               <div className="flex w-full h-[500px] mt-4 items-start flex-wrap space-y-4">
                 {watchedMovies.length === 0 ? (
                   <p className="text-white text-lg mt-10 mx-[35%]">
@@ -127,7 +110,7 @@ const HistoryMovies = () => {
                         <img
                           src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                           alt={movie.original_title}
-                          className="w-[210px] h-[300px] rounded-2xl"
+                          className="w-[250px] h-[350px] rounded-2xl"
                         />
                         <p className="text-white hover:text-yellow-400 truncate max-w-[210px]">
                           {movie.title || movie.original_title}
@@ -136,7 +119,7 @@ const HistoryMovies = () => {
                           {movie.original_title}
                         </p>
                       </Link>
-                      <div className="w-8 h-8 rounded-full bg-white absolute top-2 right-5 flex items-center justify-center cursor-pointer">
+                      <div className="w-8 h-8 rounded-full bg-white absolute top-2 right-7 flex items-center justify-center cursor-pointer">
                         <FontAwesomeIcon
                           icon={faXmark}
                           onClick={() => handleRemove(movie.movieId)}
