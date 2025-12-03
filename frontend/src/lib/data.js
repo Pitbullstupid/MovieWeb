@@ -175,3 +175,29 @@ export const userColumns = [
     header: "Role",
   },
 ]
+export const orderColumns = [
+  {
+    accessorKey: "userNameOrder",
+    header: "Tên người dùng",
+  },
+  {
+    accessorKey: "Avatar",
+    header: "Avatar",
+  }
+  , {
+    accessorKey: "months",
+    header: "Gói premium",
+  }
+  , {
+    accessorKey: "price",
+    header: "Giá",
+  }
+  , {
+    accessorKey: "payment",
+    header: "Thanh toán",
+  }
+  , {
+    accessorKey: "createdAt",
+    header: "Ngày tạo",
+  }
+]

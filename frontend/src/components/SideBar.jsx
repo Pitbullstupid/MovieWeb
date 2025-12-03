@@ -17,8 +17,8 @@ export default function SideBar({ setView, setTransition }) {
   return (
     <div
       className={`
-        fixed top-0 left-0 h-full bg-bgdefault text-white z-50 border-r border-gray-600
-        transition-all duration-300 ease-in-out
+        fixed top-0 left-0 h-full bg-bgdefault text-white z-60 border-r border-gray-600
+        transition-all duration-300 ease-in-out 
         ${expanded ? "w-64" : "w-16"}
       `}
       onMouseEnter={() => setExpanded(true)}
@@ -53,40 +53,41 @@ export default function SideBar({ setView, setTransition }) {
 
       {/* Menu */}
       <ul className="mt-5 space-y-5 p-2 ml-2">
-          <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3 "onClick={() => setView("home")}>
-            <FontAwesomeIcon icon={faHome} className="w-6" />
-            <span
-              className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
-                } w-32 overflow-hidden whitespace-nowrap`}
-            >
-              Trang chủ
-            </span>
-          </li>
-          <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3" onClick={() => setView("movies")}>
-            <FontAwesomeIcon icon={faFilm} className="w-6" />
-            <span 
-              className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
-                } w-32 overflow-hidden whitespace-nowrap`}
-            >
-              Quản lý phim
-            </span>
-          </li>
-        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3" onClick={() => setView("category")}>
-          <FontAwesomeIcon icon={faList} className="w-6" />
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3 " onClick={() => setView("home")}>
+          <FontAwesomeIcon icon={faHome} className="w-6" />
           <span
             className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
               } w-32 overflow-hidden whitespace-nowrap`}
           >
-            Thể loại
+            Trang chủ
           </span>
         </li>
-        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3"onClick={() => setView("account")}>
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3" onClick={() => setView("movies")}>
+          <FontAwesomeIcon icon={faFilm} className="w-6" />
+          <span
+            className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
+              } w-32 overflow-hidden whitespace-nowrap`}
+          >
+            Quản lý phim
+          </span>
+        </li>
+
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3" onClick={() => setView("account")}>
           <FontAwesomeIcon icon={faUser} className="w-6" />
           <span
             className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
               } w-32 overflow-hidden whitespace-nowrap`}
           >
             Tài khoản
+          </span>
+        </li>
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center gap-3" onClick={() => setView("order")}>
+          <FontAwesomeIcon icon={faList} className="w-6" />
+          <span
+            className={`transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"
+              } w-32 overflow-hidden whitespace-nowrap`}
+          >
+            Đơn hàng
           </span>
         </li>
       </ul>

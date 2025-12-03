@@ -5,8 +5,8 @@ import HeaderAdmin from "@/components/HeaderAdmin";
 import axios from "axios";
 import { useLocation, useParams } from "react-router";
 import Movies from "./Movies";
-import Category from "./Category";
 import Account from "./Account";
+import Orders from "./Orders";
 
 const Home = () => {
   const [userList, setUserList] = useState([]);
@@ -19,37 +19,39 @@ const Home = () => {
     localStorage.getItem("isLogin") === "true"
   );
   // Lấy dữ liệu người dùng
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("http://localhost:5001/api/users");
+      setUserList(response.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy user:", error);
+    }
+  };
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("http://localhost:5001/api/users");
-        setUserList(response.data);
-      } catch (error) {
-        console.error("Lỗi khi lấy user:", error);
-      }
-    };
     fetchUsers();
   }, []);
+  // Lấy phim
+  const fetchMovies = async () => {
+    try {
+      const response = await axios.get("http://localhost:5001/api/movies");
+      setMovieList(response.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy movies:", error);
+    }
+  };
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await axios.get("http://localhost:5001/api/movies");
-        setMovieList(response.data);
-      } catch (error) {
-        console.error("Lỗi khi lấy movies:", error);
-      }
-    };
     fetchMovies();
   }, []);
+  // Lấy đơn hàng
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get("http://localhost:5001/api/orders");
+      setOrderList(response.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy orders:", error);
+    }
+  };
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get("http://localhost:5001/api/orders");
-        setOrderList(response.data);
-      } catch (error) {
-        console.error("Lỗi khi lấy orders:", error);
-      }
-    };
     fetchOrders();
   }, []);
 
@@ -57,16 +59,16 @@ const Home = () => {
   const user = userList?.find((u) => u._id === userId);
   return (
     <div className="min-h-[100vh] bg-[#181A1F]">
-      <SideBar setView={setView} setTransition={setTransition}/>
-      <HeaderAdmin user={user} setIsLogin={setIsLogin} transition={transition}/>
-      {view === "account" ?(
-        <Account userList={userList}/>
-      ): view === "movies" ?(
-        <Movies movieList={movieList}/>
-      ): view === "category" ?(
-        <Category/>
-      ):(
-        <Overall users={userList} movieList={movieList} orderList={orderList}/>
+      <SideBar setView={setView} setTransition={setTransition} />
+      <HeaderAdmin user={user} setIsLogin={setIsLogin} transition={transition} />
+      {view === "account" ? (
+        <Account userList={userList} refreshUsers={fetchUsers} />
+      ) : view === "movies" ? (
+        <Movies movieList={movieList} refreshMovies={fetchMovies} />
+      ) : view === "order" ? (
+        <Orders orderList={orderList} userList={userList}/>
+      ) : (
+        <Overall users={userList} movieList={movieList} orderList={orderList} />
       )}
     </div>
   );

@@ -31,15 +31,22 @@ import {
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCircleCheck, faCircleXmark, faSearch } from "@fortawesome/free-solid-svg-icons"
+import { faCircleCheck, faCircleXmark, faCrown, faSearch } from "@fortawesome/free-solid-svg-icons"
 import { languageCountryMap } from "@/lib/data"
 import { Skeleton } from "./ui/skeleton"
+import MovieModalForm from "./MovieModalForm"
+import UserModalForm from "./UserModalForm"
+import { toast } from "sonner"
 
-function DataTable({ data, columns, searchKey = "title" }) {
+function DataTable({ data, columns, searchKey, deleteMovie, deleteUser, handleUpdateMovie, handleUpdateUser }) {
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [openModalMovie, setOpenModalMovie] = React.useState(false);
+  const [selectedMovie, setSelectedMovie] = React.useState(null);
+  const [openModalUser, setOpenModalUser] = React.useState(false);
+  const [selectedUser, setSelectedUser] = React.useState(null);
 
   // ===== THÊM ACTIONS NẾU CHƯA CÓ =====
   const enhancedColumns = React.useMemo(() => {
@@ -54,26 +61,46 @@ function DataTable({ data, columns, searchKey = "title" }) {
           cell: ({ row }) => {
             const item = row.original
             return (
-              <div className="flex justify-center">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-700 hover:text-white">
-                      <MoreHorizontal />
-                    </Button>
-                  </DropdownMenuTrigger>
+              <>
+                <div className="flex justify-center">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-700 hover:text-white">
+                        <MoreHorizontal />
+                      </Button>
+                    </DropdownMenuTrigger>
 
-                  <DropdownMenuContent align="end" className="w-36">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => navigator.clipboard.writeText(item.id)}>
-                      Copy ID
-                    </DropdownMenuItem>
+                    <DropdownMenuContent align="end" className="w-36">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      {searchKey == "title" ? (
+                        <>
+                          <DropdownMenuItem onClick={() => deleteMovie(item._id)}>
+                            Xóa phim
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => { setSelectedMovie(item); setOpenModalMovie(true) }}>Sửa</DropdownMenuItem>
+                        </>
+                      ) : searchKey == "userName" ? (
+                        <>
+                          <DropdownMenuItem onClick={() => deleteUser(item._id)}>
+                            Xóa người dùng
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => { setSelectedUser(item); setOpenModalUser(true) }}>Sửa</DropdownMenuItem>
+                        </>
+                      ) : (
+                        <>
+                          <DropdownMenuItem onClick={() => { navigator.clipboard.writeText(item._id); toast.success("Đã lưu id đơn hàng vào clipboard!") }}>
+                            Id đơn hàng
+                          </DropdownMenuItem>
+                        </>
+                      )}
 
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>View</DropdownMenuItem>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </>
             )
           },
         },
@@ -188,7 +215,7 @@ function DataTable({ data, columns, searchKey = "title" }) {
                     }
                     if (cell.column.id === "isPremium") {
                       const now = new Date()
-                      const premiumDate = new Date(value) // convert string ISO sang Date
+                      const premiumDate = new Date(value)
                       const isPremiumActive = premiumDate > now
                       return (
                         <TableCell key={cell.id} className="px-3">
@@ -196,6 +223,17 @@ function DataTable({ data, columns, searchKey = "title" }) {
                             <p className="px-2 py-1 border border-[#2F2F2F] rounded-xl w-[80px] text-center"><FontAwesomeIcon icon={faCircleCheck} className="text-green-500" /> Có</p>
                           ) : (
                             <p className="px-2 py-1 border border-[#2F2F2F] rounded-xl w-[80px] text-center"><FontAwesomeIcon icon={faCircleXmark} className="text-red-500" /> Không</p>
+                          )}
+                        </TableCell>
+                      )
+                    }
+                    if (cell.column.id === "payment") {
+                      return (
+                        <TableCell key={cell.id} className="px-3">
+                          {value ? (
+                            <p className="px-2 py-1 border border-[#2F2F2F] rounded-xl w-[130px] text-center"><FontAwesomeIcon icon={faCircleCheck} className="text-green-500" /> Đã thanh toán</p>
+                          ) : (
+                            <p className="px-2 py-1 border border-[#2F2F2F] rounded-xl w-[130px] text-center"><FontAwesomeIcon icon={faCircleXmark} className="text-red-500" /> Thanh toán lỗi</p>
                           )}
                         </TableCell>
                       )
@@ -274,8 +312,20 @@ function DataTable({ data, columns, searchKey = "title" }) {
                         </TableCell>
                       );
                     }
-
-
+                    if (cell.column.id === "months") {
+                      return (
+                        <TableCell key={cell.id} className="px-3 text-left">
+                          {cell.getValue()} Tháng <FontAwesomeIcon icon={faCrown} className="text-default" />
+                        </TableCell>
+                      );
+                    }
+                    if (cell.column.id === "price") {
+                      return (
+                        <TableCell key={cell.id} className="px-3 text-left">
+                          <p className="px-2 py-2 border border-[#2F2F2F] w-[100px] rounded-xl bg-gray-700 text-center">{cell.getValue().toLocaleString("vi-VN")} VNĐ</p>
+                        </TableCell>
+                      );
+                    }
 
                     if (typeof value === "number") {
                       return (
@@ -313,7 +363,12 @@ function DataTable({ data, columns, searchKey = "title" }) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.previousPage()}
+          onClick={() => {
+            table.previousPage();
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }, 50);
+          }}
           disabled={!table.getCanPreviousPage()}
         >
           Previous
@@ -322,12 +377,32 @@ function DataTable({ data, columns, searchKey = "title" }) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.nextPage()}
+          onClick={() => {
+            table.nextPage();
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }, 50);
+          }}
           disabled={!table.getCanNextPage()}
         >
           Next
         </Button>
       </div>
+      <MovieModalForm
+        open={openModalMovie}
+        onOpenChange={setOpenModalMovie}
+        initialData={selectedMovie}
+        onSubmit={(movieData) => handleUpdateMovie(selectedMovie._id, movieData)}
+        mode="edit"
+      />
+      <UserModalForm
+        open={openModalUser}
+        onOpenChange={setOpenModalUser}
+        initialData={selectedUser}
+        onSubmit={(userData) => handleUpdateUser(selectedUser._id, userData)}
+        mode="edit"
+      />
+
     </div>
   )
 }

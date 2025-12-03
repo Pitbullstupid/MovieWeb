@@ -3,6 +3,7 @@ import AnimatedPage from "@/components/AnimatedPage";
 import Anime from "@/components/Anime";
 import Banner from "@/components/Banner";
 import Category from "@/components/Category";
+import ChatBot from "@/components/ChatBot";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import HotMovies from "@/components/HotMovies";
@@ -69,6 +70,7 @@ const HomePage = () => {
               <MoviesByRegion movies={movies} />
               <HotMovies movies={movies} />
               <Anime movies={movies} userList={userList} />
+              <ChatBot movies={movies} userList={userList}/>
             </>
           ) : (
             <div className="text-center p-20">Không có phim nào!</div>

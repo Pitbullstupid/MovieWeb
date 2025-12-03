@@ -88,7 +88,7 @@ const Overall = ({ users, movieList, orderList }) => {
   });
   return (
     <>
-      <div className="ml-16 flex flex-col items-center">
+      <div className="ml-16 flex flex-col items-center mt-[63px]">
         <div className=" mt-4 w-[96%] flex justify-between">
           {/* User mới 7 ngày gần nhất */}
           <div className="bg-[#1f2937] p-4 rounded-lg text-white w-84">

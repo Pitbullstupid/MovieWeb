@@ -44,6 +44,7 @@ const UserMenu = ({ setIsLogin, userId }) => {
     toast.success("Đăng xuất thành công");
     localStorage.removeItem("user");
     localStorage.removeItem("userId");
+    localStorage.removeItem("isLogin");
     setIsLogin(false);
     navigate(`/`);
     navigate(0);
