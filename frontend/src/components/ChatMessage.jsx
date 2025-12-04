@@ -3,7 +3,10 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faStar } from '@fortawesome/free-solid-svg-icons'
+import { Badge, Sparkles } from 'lucide-react'
+import { genreMap } from '@/lib/data'
+import { Link } from 'react-router'
 
 const ChatMessage = ({ chat, movies, userList }) => {
   const isUser = chat.role === "user"
@@ -16,14 +19,14 @@ const ChatMessage = ({ chat, movies, userList }) => {
   const user = userList?.find((u) => u._id === userId);
   // Avatar mini
   const userAvatar = user?.Avatar;
-  const botAvatar = "https://www.gstatic.com/lamda/images/gemini_sparkle_aurora_33f86dc0c0257da337c63.svg"
+  const botAvatar = "https://upload.wikimedia.org/wikipedia/commons/1/1d/Google_Gemini_icon_2025.svg"
 
   // Render "Thinking..."
   if (chat.text === "Thinking...") {
     return (
       <div className="w-full flex justify-start my-3">
         <img src={botAvatar} className="w-8 h-8 rounded-full mr-3" />
-        <div className="px-4 py-2 bg-[#1F1F1F] rounded-2xl text-blue-400 flex items-center gap-2">
+        <div className="px-4 py-2 bg-[#263344] rounded-2xl text-blue-400 flex items-center gap-2">
           <span className="loading-dots">Đang suy nghĩ...</span>
         </div>
       </div>
@@ -50,19 +53,20 @@ const ChatMessage = ({ chat, movies, userList }) => {
 
       {/* Avatar trái (bot) */}
       {!isUser && (
-        <img src={botAvatar} className="w-8 h-8 rounded-full mr-3 self-start" />
+        <img src={botAvatar} className="w-7 h-7 rounded-full mr-3 self-start" />
       )}
 
       {/* Bubble Chat */}
       <div
-        className={`max-w-[70%] px-4 py-2 rounded-2xl text-[15px] ${isUser
-            ? "bg-[#3A3A3A] text-white rounded-br-none"
-            : "bg-[#1F1F1F] text-gray-200 rounded-bl-none"
+        className={`max-w-[75%] px-4 py-3 rounded-2xl text-[15px] ${isUser
+          ? "bg-gradient-to-br from-purple-600 to-purple-700 text-white rounded-br-none"
+          : "bg-slate-700/70 text-slate-100 rounded-bl-none"
           }`}
       >
+
         {/* Bot icon */}
         {isBot && parsedTexts.length === 0 && (
-          <FontAwesomeIcon icon={faSearch} className="mr-2 opacity-60" />
+          <Sparkles className="mr-2 opacity-60 w-5 h-5 text-slate-500" />
         )}
 
         {/* Render phim JSON */}
@@ -70,31 +74,40 @@ const ChatMessage = ({ chat, movies, userList }) => {
           parsedTexts.map((item, idx) => {
             const movie = movies?.find(m => m._id === item._id)
             return (
-              <div key={idx} className="flex gap-3 my-2">
-                {movie ? (
-                  <>
-                    <img
-                      src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-                      className="w-[70px] h-[110px] rounded-xl"
-                    />
-                    <div>
-                      <p className="font-semibold text-white">
-                        {movie.title || movie.original_title}
-                      </p>
-                      <p className="text-gray-400 text-sm">
-                        {movie.original_title}
-                      </p>
-                      <p className="text-default mt-1 text-sm">
-                        {item.reason}
-                      </p>
+              <>
+                {movie && (
+                  <Link to={`/phim/${movie.original_title}`}>
+                    <div className="flex gap-3 bg-slate-800/60 rounded-xl p-3 border border-slate-600/30 hover:border-purple-500/50 transition-all cursor-pointer mb-2  hover:scale-102">
+
+                      <img
+                        src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                        className="w-16 h-24 rounded-lg object-cover flex-shrink-0"
+                      />
+
+                      <div className="font-semibold text-white text-sm mb-1 line-clamp-1">
+                        <p className="font-semibold text-white truncate w-[90%]">
+                          {movie.title || movie.original_title}
+                        </p>
+
+                        <div className='flex gap-2'>
+                          {movie.genre_ids?.map((gid) => (
+                            <p className="text-slate-400 text-xs mb-2 pt-2">{genreMap[gid]}</p>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-default text-xs font-bold">
+                            <FontAwesomeIcon icon={faStar} /> {movie.vote_average.toFixed(2)}
+                          </span>
+                        </div>
+
+                        <p className="text-blue-300 text-xs leading-relaxed">{item.reason}</p>
+                      </div>
+
                     </div>
-                  </>
-                ) : (
-                  <p className="text-yellow-300">
-                    👉 {item.reason}
-                  </p>
+                  </Link>
                 )}
-              </div>
+              </>
             )
           })
         ) : (

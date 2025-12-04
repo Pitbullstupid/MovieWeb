@@ -6,10 +6,16 @@ import { Input } from "./ui/input.jsx";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "./ui/input-group.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp, faPaperPlane, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { Send, Sparkles } from "lucide-react";
 
 
 const ChatBot = ({ movies, userList }) => {
-  const [chatHistory, setChatHistory] = useState([]);
+  const [chatHistory, setChatHistory] = useState([
+    {
+      role: "model",
+      text: "Bạn chưa biết xem gì? Hãy chat với tôi!=)"
+    }
+  ]);
   const [input, setInput] = useState("");
   const chatBodyRef = useRef();
 
@@ -98,7 +104,7 @@ Câu hỏi người dùng: "${history[history.length - 1].text}"
 
     } catch (e) {
       console.log(e);
-      updateHistory("❌ Lỗi khi tạo phản hồi");
+      updateHistory("Lỗi khi tạo phản hồi");
     }
   };
 
@@ -115,40 +121,74 @@ Câu hỏi người dùng: "${history[history.length - 1].text}"
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-r from-black to-gray-900 p-5">
-      <div className="w-[80%] mx-auto bg-bgdefault rounded-2xl p-5">
-        <div className="rounded-2xl  mb-4">
-          <div className="w-full flex items-center justify-center">
-            <p className="text-white font-semibold text-[22px]">
-              Bạn chưa biết xem gì? Đừng lo đã có AI hỗ trợ
-            </p>
+      <div className="min-h-screen w-[80%] mx-auto rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+        <div className="max-w-5xl mx-auto">
+
+          {/* Header */}
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">
+              Movie Recommendations
+            </h1>
+            <p className="text-slate-400 mt-2">Chatbot AI gợi ý phim thông minh</p>
           </div>
-          <div
-            ref={chatBodyRef}
-            className="w-full h-[450px] bg-[#1A1A1A] rounded-xl p-4 overflow-y-auto"
-          >
-            {chatHistory.map((msg, index) => (
-              <>
-                <ChatMessage key={index} chat={msg} movies={movies} userList={userList}/>
-              </>
-            ))}
+
+          {/* Chat box */}
+          <div className="bg-slate-800/40 border border-slate-700/40 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden">
+
+            {/* Messages */}
+            <div
+              ref={chatBodyRef}
+              className="h-[500px] overflow-y-auto p-6 space-y-4"
+              style={{
+                scrollbarWidth: 'none',
+                // scrollbarColor: '#6366f1 #1e293b'
+              }}
+            >
+              {chatHistory.map((msg, index) => (
+                <ChatMessage
+                  key={index}
+                  chat={msg}
+                  movies={movies}
+                  userList={userList}
+                />
+              ))}
+            </div>
+
+            <div className="border-t border-slate-700/50 bg-slate-800/30 p-4">
+              <div className="flex gap-3 items-center">
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                    placeholder="Nhập câu hỏi về phim..."
+                    className="w-full bg-slate-700/50 border border-slate-600/50 rounded-2xl px-5 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all"
+                  />
+                  <Sparkles className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                </div>
+                <button
+                  onClick={sendMessage}
+                  disabled={!input.trim()}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-slate-700 disabled:to-slate-700 disabled:cursor-not-allowed text-white rounded-2xl p-3 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-        <InputGroup className="w-[60%] mx-auto border-2 border-[#2F2F2F] rounded-2xl text-white">
-          <InputGroupInput
-            placeholder="Nhập câu hỏi về phim..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          />
-
-          <InputGroupButton align="inline-end" onClick={sendMessage} className="bg-white rounded-full text-black hover:opacity-90 h-full flex items-center">
-            <FontAwesomeIcon
-              icon={faPaperPlane}
-
-            />
-          </InputGroupButton>
-        </InputGroup>
-
+        <div className="mt-6 flex flex-wrap gap-2 justify-center">
+          {['Phim hành động', 'Phim tình cảm', 'Phim kinh dị', 'Phim hài'].map((suggestion, idx) => (
+            <button
+              key={idx}
+              onClick={() => setInput(suggestion)}
+              className="px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 hover:border-purple-500/50 rounded-full text-slate-300 text-sm transition-all hover:scale-105"
+            >
+              {suggestion}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

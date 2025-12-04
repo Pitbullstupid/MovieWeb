@@ -64,12 +64,12 @@ const Anime = ({ movies, userList }) => {
     }
   };
   return (
-    <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full min-h-[550px]">
-      <div className="m-6 bg-gradient-to-r from-[#272A39] to-[#272A39]/100 rounded-lg w-full h-[400px] flex relative">
-        <div className="w-[40%] mt-6 ml-6 space-y-4">
+    <div className="flex p-1 bg-gradient-to-r from-black to-gray-900 w-full min-h-[600px]">
+      <div className="m-6 bg-gradient-to-r from-[#272A39] to-[#272A39]/100 rounded-lg w-full h-[500px] flex relative">
+        <div className="w-[40%] mt-6 ml-6 space-y-6">
           {/* Title */}
           <Link to={`/phim/${selectedMovie.original_title}`}>
-            <h1 className="text-white font-bold text-2xl ">
+            <h1 className="text-white font-bold text-2xl mt-4">
               {selectedMovie.title || selectedMovie.original_title}
             </h1>
           </Link>
@@ -142,7 +142,7 @@ const Anime = ({ movies, userList }) => {
           <img
             src={`https://image.tmdb.org/t/p/original/${selectedMovie.backdrop_path}`}
             alt={selectedMovie.title}
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover object-top rounded-lg"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#272A39] via-[#272A39]/5 to-transparent"></div>
         </div>

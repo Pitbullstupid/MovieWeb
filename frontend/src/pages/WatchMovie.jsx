@@ -252,8 +252,8 @@ const WatchMovie = () => {
                 key={videoUrl}
                 url={videoUrl}
                 controls
-                width="90%"
-                height="610px"
+                width="85%"
+                height="678px"
                 playing
                 light={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
                 onPlay={() => handleWatchedMovie(movie.movieId)}
@@ -263,7 +263,7 @@ const WatchMovie = () => {
               <>
                 <img
                   src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-                  className="w-[90%] h-[610px] mx-auto rounded-t-2xl overflow-hidden"
+                  className="w-[85%] h-[678px] mx-auto rounded-t-2xl overflow-hidden"
                 />
               </>
             )
@@ -275,24 +275,24 @@ const WatchMovie = () => {
           )}
 
           {/* Yêu thích & Chia sẻ */}
-          <div className="flex items-center justify-start w-[90%] gap-3 mx-auto bg-black border-t-[1.5px] border-gray-900 pt-2 pb-2 rounded-bl-2xl rounded-br-2xl">
+          <div className="flex items-center justify-start w-[85%] gap-3 mx-auto bg-black border-t-[1.5px] border-gray-900 pt-2 pb-2 rounded-bl-2xl rounded-br-2xl">
             <div
               className="flex items-center gap-2 ml-2"
               onClick={() => handleFavouriteMovie(movie.movieId)}
             >
               <FontAwesomeIcon
                 icon={faHeart}
-                className={`
-                    ${
+                className={` cursor-pointer
+                    ${ 
                       favouriteMovies.includes(movie.movieId)
                         ? "text-default hover:opacity-80"
                         : "text-white hover:text-default"
                     }`}
               />
-              <p className="text-white mr-2">Yêu thích</p>
+              <p className="text-white mr-2 cursor-pointer">Yêu thích</p>
             </div>
             <div
-              className="flex items-center gap-2 ml-2"
+              className="flex items-center gap-2 ml-2 cursor-pointer"
               onClick={() => setOpenModal(true)}
             >
               <FontAwesomeIcon

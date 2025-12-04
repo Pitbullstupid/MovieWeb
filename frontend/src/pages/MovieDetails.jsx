@@ -1,4 +1,4 @@
-// MovieDetails.jsx
+
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Header from "@/components/Header";
@@ -178,7 +178,7 @@ const MovieDetails = () => {
           {/* Buttons */}
           <div className="flex items-start mt-8 gap-8">
             <Link to={`/xem-phim/${movie.original_title}`}>
-              <button className="w-[200px] h-14 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] flex items-center justify-center hover:scale-110 transition duration-300">
+              <button className="w-[200px] h-14 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] flex items-center justify-center hover:scale-110 transition duration-300 cursor-pointer">
                 <FontAwesomeIcon icon={faPlay} className="text-black text-xl" />
                 <span className="text-black text-xl ml-2">Xem ngay</span>
               </button>
@@ -190,7 +190,7 @@ const MovieDetails = () => {
             >
               <FontAwesomeIcon
                 icon={faHeart}
-                className={` text-2xl 
+                className={` text-2xl cursor-pointer
                     ${
                       favouriteMovies.includes(movie.movieId)
                         ? "text-default hover:opacity-80"
@@ -201,7 +201,7 @@ const MovieDetails = () => {
             </button>
 
             <button
-              className="flex flex-col items-center w-18 h-18  my-2"
+              className="flex flex-col items-center w-18 h-18  my-2 cursor-pointer"
               onClick={() => setOpenModal(true)}
             >
               <FontAwesomeIcon
