@@ -8,9 +8,11 @@ import { movieColumns } from '@/lib/data'
 import axios from 'axios'
 import { toast } from 'sonner'
 import MovieModalForm from '@/components/MovieModalForm'
+import MoviesPdf from '@/components/GeneratePdf/MoviesPdf'
 
 const Movies = ({ movieList, refreshMovies }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [openModalPdf, setOpenModalPdf] = useState(false);
   const handleAdd = async (movieData) => {
     try {
       await axios.post("http://localhost:5001/api/movies", movieData);
@@ -50,29 +52,31 @@ const Movies = ({ movieList, refreshMovies }) => {
     (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
   );
   return (
-    <div className='ml-16 flex flex-col items-center mt-[63px]'>
-      <div className='mt-4 w-[96%]'>
+    <>
+      <div className='ml-16 flex flex-col items-center mt-[63px]'>
+        <div className='mt-4 w-[96%]'>
 
-        <p className='text-white font-bold text-3xl'>Quản lý phim</p>
+          <p className='text-white font-bold text-3xl'>Quản lý phim</p>
 
-        <div className='mt-10 flex justify-end'>
-          <div className="flex flex-wrap items-center gap-4">
-            <Button variant="default" className="border-2 border-[#2F2F2F] bg-[#181A1F] text-white hover:opacity-90">
-              <FontAwesomeIcon icon={faPrint} /> Tạo bản in
-            </Button>
-            <Button variant="outline" onClick={() => setOpenModal(true)}>
-              <FontAwesomeIcon icon={faSquarePlus} /> Thêm mới
-            </Button>
+          <div className='mt-10 flex justify-end'>
+            <div className="flex flex-wrap items-center gap-4">
+              <Button variant="default" className="border-2 border-[#2F2F2F] bg-[#181A1F] text-white hover:opacity-90"onClick={() => setOpenModalPdf(true)}>
+                <FontAwesomeIcon icon={faPrint} /> Tạo bản in
+              </Button>
+              <Button variant="outline" onClick={() => setOpenModal(true)}>
+                <FontAwesomeIcon icon={faSquarePlus} /> Thêm mới
+              </Button>
+            </div>
+          </div>
+
+          <div className='mt-4'>
+            <DataTable data={sortedMovies} columns={movieColumns} searchKey="title" deleteMovie={deleteMovie} handleUpdateMovie={handleUpdateMovie} />
           </div>
         </div>
-
-        <div className='mt-4'>
-          <DataTable data={sortedMovies} columns={movieColumns} searchKey="title" deleteMovie={deleteMovie} handleUpdateMovie={handleUpdateMovie} />
-        </div>
+        <MovieModalForm open={openModal} onOpenChange={setOpenModal} onSubmit={handleAdd} movies={movieList} mode="add" />
       </div>
-      <MovieModalForm open={openModal} onOpenChange={setOpenModal} onSubmit={handleAdd} movies={movieList} mode="add" />
-
-    </div>
+      <MoviesPdf data={sortedMovies} openModalPdf={openModalPdf} setOpenModalPdf={setOpenModalPdf}/>
+    </>
   )
 }
 

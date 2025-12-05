@@ -8,8 +8,10 @@ import { userColumns } from '@/lib/data'
 import axios from 'axios'
 import { toast } from 'sonner'
 import UserModalForm from '@/components/UserModalForm'
+import UserExcel from '@/components/GeneratePdf/UserExcel'
 const Account = ({ userList, refreshUsers }) => {
   const [openModal, setOpenModal] = useState(false);
+    const [openModalPdf, setOpenModalPdf] = useState(false);
   const handleAdd = async (userData) => {
     try {
       await axios.post("http://localhost:5001/api/users/", userData);
@@ -46,33 +48,36 @@ const Account = ({ userList, refreshUsers }) => {
     }
   }
   return (
-    <div className='ml-16 flex flex-col items-center mt-[63px]'>
-      <div className='mt-4 w-[96%]'>
-        {/* Title */}
-        <div >
-          <p className='text-white font-bold text-3xl'>Quản lý người dùng</p>
-        </div>
+    <>
+      <div className='ml-16 flex flex-col items-center mt-[63px]'>
+        <div className='mt-4 w-[96%]'>
+          {/* Title */}
+          <div >
+            <p className='text-white font-bold text-3xl'>Quản lý người dùng</p>
+          </div>
 
-        {/* Search + Buttons */}
-        <div className='mt-10 flex justify-end'>
-          <div className="flex flex-wrap items-center gap-4">
-            <Button variant="default" className="border-2 border-[#2F2F2F] bg-[#181A1F] text-white hover:opacity-90">
-              <FontAwesomeIcon icon={faPrint} /> Tạo bản in
-            </Button>
-            <Button variant="outline" className="hover:opacity-90" onClick={() => setOpenModal(true)}>
-              <FontAwesomeIcon icon={faSquarePlus} /> Thêm mới
-            </Button>
+          {/* Search + Buttons */}
+          <div className='mt-10 flex justify-end'>
+            <div className="flex flex-wrap items-center gap-4">
+              <Button variant="default" className="border-2 border-[#2F2F2F] bg-[#181A1F] text-white hover:opacity-90" onClick={() => setOpenModalPdf(true)}>
+                <FontAwesomeIcon icon={faPrint} /> Tạo bản in
+              </Button>
+              <Button variant="outline" className="hover:opacity-90" onClick={() => setOpenModal(true)}>
+                <FontAwesomeIcon icon={faSquarePlus} /> Thêm mới
+              </Button>
+            </div>
+          </div>
+
+          {/* DataTable */}
+          <div className='mt-4'>
+            <DataTable data={userList} columns={userColumns} searchKey="userName" deleteUser={deleteUser} handleUpdateUser={handleUpdateUser} />
           </div>
         </div>
-
-        {/* DataTable */}
-        <div className='mt-4'>
-          <DataTable data={userList} columns={userColumns} searchKey="userName" deleteUser={deleteUser} handleUpdateUser={handleUpdateUser} />
-        </div>
+        {/* Modal thêm */}
+        <UserModalForm open={openModal} onOpenChange={setOpenModal} onSubmit={handleAdd} users={userList} mode="add" />
       </div>
-      {/* Modal thêm */}
-      <UserModalForm open={openModal} onOpenChange={setOpenModal} onSubmit={handleAdd} users={userList} mode="add"/>
-    </div>
+      <UserExcel data={userList} openModalPdf={openModalPdf} setOpenModalPdf={setOpenModalPdf}/>
+    </>
   )
 }
 

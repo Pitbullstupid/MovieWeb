@@ -140,27 +140,27 @@ const MovieModalForm = ({ open, onOpenChange, onSubmit, initialData, movies = []
           {/* LEFT COLUMN */}
           <div className="flex flex-col gap-4">
             <div>
-              <Label>Movie ID</Label>
-              <Input name="movieId" onChange={handleChange} value={formData.movieId} placeholder="1267319" />
+              <Label className="pb-2">Movie ID</Label>
+              <Input name="movieId" onChange={handleChange} value={formData.movieId} placeholder="1267319"  />
             </div>
 
             <div>
-              <Label>Title</Label>
+              <Label className="pb-2">Title</Label>
               <Input name="title" onChange={handleChange} value={formData.title} />
             </div>
 
             <div>
-              <Label>Original Title</Label>
+              <Label className="pb-2">Original Title</Label>
               <Input name="original_title" onChange={handleChange} value={formData.original_title} />
             </div>
 
             <div>
-              <Label>Ngày phát hành</Label>
+              <Label className="pb-2">Ngày phát hành</Label>
               <Input type="date" name="release_date" onChange={handleChange} value={formData.release_date} />
             </div>
 
             <div>
-              <Label>Ngôn ngữ gốc</Label>
+              <Label className="pb-2">Ngôn ngữ gốc</Label>
               <Input
                 name="original_language"
                 onChange={handleChange}
@@ -191,17 +191,17 @@ const MovieModalForm = ({ open, onOpenChange, onSubmit, initialData, movies = []
           {/* RIGHT COLUMN */}
           <div className="flex flex-col gap-4">
             <div>
-              <Label>Thể loại (genre_ids)</Label>
+              <Label className="pb-2">Thể loại (genre_ids)</Label>
               <Input name="genre_ids" placeholder="28,80,53" onChange={handleChange} value={formData.genre_ids} />
             </div>
 
             <div>
-              <Label>Poster Path</Label>
+              <Label className="pb-2">Poster Path</Label>
               <Input name="poster_path" placeholder="/abc.jpg" onChange={handleChange} value={formData.poster_path} />
             </div>
 
             <div>
-              <Label>Backdrop Path</Label>
+              <Label className="pb-2">Backdrop Path</Label>
               <Input
                 name="backdrop_path"
                 placeholder="/xyz.jpg"
@@ -211,24 +211,24 @@ const MovieModalForm = ({ open, onOpenChange, onSubmit, initialData, movies = []
             </div>
 
             <div>
-              <Label>Popularity</Label>
+              <Label className="pb-2">Popularity</Label>
               <Input name="popularity" onChange={handleChange} value={formData.popularity} />
             </div>
 
             <div>
-              <Label>Vote Average</Label>
+              <Label className="pb-2">Vote Average</Label>
               <Input name="vote_average" onChange={handleChange} value={formData.vote_average} />
             </div>
 
             <div>
-              <Label>Vote Count</Label>
+              <Label className="pb-2">Vote Count</Label>
               <Input name="vote_count" onChange={handleChange} value={formData.vote_count} />
             </div>
           </div>
 
           {/* FULL WIDTH */}
           <div className="col-span-2">
-            <Label>Overview</Label>
+            <Label className="pb-2">Overview</Label>
             <Textarea name="overview" onChange={handleChange} value={formData.overview} />
           </div>
 

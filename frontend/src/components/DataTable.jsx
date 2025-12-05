@@ -38,7 +38,7 @@ import MovieModalForm from "./MovieModalForm"
 import UserModalForm from "./UserModalForm"
 import { toast } from "sonner"
 
-function DataTable({ data, columns, searchKey, deleteMovie, deleteUser, handleUpdateMovie, handleUpdateUser }) {
+function DataTable({ data, columns, searchKey, deleteMovie, deleteUser, handleUpdateMovie, handleUpdateUser, setSelectedOrder, setOpenModalOrder }) {
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
@@ -63,8 +63,8 @@ function DataTable({ data, columns, searchKey, deleteMovie, deleteUser, handleUp
             return (
               <>
                 <div className="flex justify-center">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                  <DropdownMenu >
+                    <DropdownMenuTrigger asChild  className="cursor-pointer">
                       <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-700 hover:text-white">
                         <MoreHorizontal />
                       </Button>
@@ -74,24 +74,24 @@ function DataTable({ data, columns, searchKey, deleteMovie, deleteUser, handleUp
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       {searchKey == "title" ? (
                         <>
-                          <DropdownMenuItem onClick={() => deleteMovie(item._id)}>
+                          <DropdownMenuItem onClick={() => deleteMovie(item._id)}  className="cursor-pointer">
                             Xóa phim
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => { setSelectedMovie(item); setOpenModalMovie(true) }}>Sửa</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => { setSelectedMovie(item); setOpenModalMovie(true) }}  className="cursor-pointer">Sửa</DropdownMenuItem>
                         </>
                       ) : searchKey == "userName" ? (
                         <>
-                          <DropdownMenuItem onClick={() => deleteUser(item._id)}>
+                          <DropdownMenuItem onClick={() => deleteUser(item._id)}  className="cursor-pointer">
                             Xóa người dùng
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => { setSelectedUser(item); setOpenModalUser(true) }}>Sửa</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => { setSelectedUser(item); setOpenModalUser(true) }}  className="cursor-pointer">Sửa</DropdownMenuItem>
                         </>
                       ) : (
                         <>
-                          <DropdownMenuItem onClick={() => { navigator.clipboard.writeText(item._id); toast.success("Đã lưu id đơn hàng vào clipboard!") }}>
-                            Id đơn hàng
+                          <DropdownMenuItem onClick={() => {setSelectedOrder(item._id); setOpenModalOrder(true)}}  className="cursor-pointer">
+                            In hóa đơn
                           </DropdownMenuItem>
                         </>
                       )}
