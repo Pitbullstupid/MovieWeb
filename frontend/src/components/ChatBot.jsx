@@ -1,11 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import ChatMessage from "./ChatMessage.jsx";
-import { Button } from "./ui/button.jsx";
-import { Input } from "./ui/input.jsx";
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "./ui/input-group.jsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp, faPaperPlane, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Send, Sparkles } from "lucide-react";
 
 
@@ -77,7 +72,7 @@ Câu hỏi người dùng: "${history[history.length - 1].text}"
       ];
 
       const response = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
         { contents: requestHistory },
         {
           headers: {

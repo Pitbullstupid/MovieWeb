@@ -268,7 +268,7 @@ const WatchMovie = () => {
               </>
             )
           ) : (
-            <div className="text-white p-10 min-h-[500px] bg-black w-[90%] mx-auto flex flex-col items-center justify-center ">
+            <div className="text-white p-10 min-h-[500px] bg-black w-[85%] mx-auto flex flex-col items-center justify-center ">
               <Spinner className="text-sm text-white" />
               <p className="text-sm text-white">Đang tải dữ liệu...</p>
             </div>

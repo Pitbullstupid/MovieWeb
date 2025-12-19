@@ -51,7 +51,7 @@ const PremiumCard = ({ label, price, oldPrice, duration, onSelect }) => {
 
           <div className="flex items-center gap-3">
             <FontAwesomeIcon icon={faCheck} />
-            <p>Hỗ trợ ưu tiên</p>
+            <p>Chat with agent AI</p>
           </div>
         </div>
 

@@ -33,18 +33,29 @@ const ChatMessage = ({ chat, movies, userList }) => {
     )
   }
 
-  let parsedTexts = []
-  if (typeof chat.text === "string") {
-    const regex = /```json([\s\S]*?)```/g
-    let match
+let parsedTexts = [];
+
+if (typeof chat.text === "string") {
+  // 1) Thử parse JSON trực tiếp
+  try {
+    const data = JSON.parse(chat.text.trim());
+    if (Array.isArray(data)) parsedTexts = data;
+    else parsedTexts = [data];
+  } catch {
+    // 2) Nếu không phải JSON thuần → tìm các block ```json ... ```
+    const regex = /```json([\s\S]*?)```/g;
+    let match;
+
     while ((match = regex.exec(chat.text)) !== null) {
       try {
-        const json = JSON.parse(match[1].trim())
-        if (Array.isArray(json)) parsedTexts.push(...json)
-        else parsedTexts.push(json)
-      } catch { }
+        const jsonBlock = JSON.parse(match[1].trim());
+        if (Array.isArray(jsonBlock)) parsedTexts.push(...jsonBlock);
+        else parsedTexts.push(jsonBlock);
+      } catch {}
     }
   }
+}
+
 
   const formattedText = parsedTexts.length === 0 ? chat.text : null
 
@@ -77,7 +88,7 @@ const ChatMessage = ({ chat, movies, userList }) => {
               <>
                 {movie && (
                   <Link to={`/phim/${movie.original_title}`}>
-                    <div className="flex gap-3 bg-slate-800/60 rounded-xl p-3 border border-slate-600/30 hover:border-purple-500/50 transition-all cursor-pointer mb-2  hover:scale-102">
+                    <div className="flex gap-3 bg-slate-800/60 rounded-xl p-3 border border-slate-600/30 hover:border-purple-500/50 transition-all cursor-pointer mb-2 hover:scale-102 duration-300">
 
                       <img
                         src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}

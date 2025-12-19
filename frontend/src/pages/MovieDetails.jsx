@@ -20,6 +20,7 @@ import ModalShare from "@/components/ModalShare";
 import AdModal from "@/components/AdModal";
 import { Spinner } from "@/components/ui/spinner";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import CommentSection from "@/components/CommentSection";
 
 const MovieDetails = () => {
   const { slug } = useParams();
@@ -71,7 +72,6 @@ const MovieDetails = () => {
   // add favourite movie
   const userId = localStorage.getItem("userId");
   const user = userList?.find((u) => u._id === userId);
-
   const [favouriteMovies, setFavouriteMovies] = useState([]);
   useEffect(() => {
     if (user && user.favoriteMovies) {
@@ -117,7 +117,7 @@ const MovieDetails = () => {
 
   return (
     <>
-      <Header movies={moviesData}/>
+      <Header movies={moviesData} />
       {(!user?.isPremium || isExpired) && <AdModal user={user} />}
       <AnimatedPage>
         {/* Banner */}
@@ -176,51 +176,55 @@ const MovieDetails = () => {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-start mt-8 gap-8">
-            <Link to={`/xem-phim/${movie.original_title}`}>
-              <button className="w-[200px] h-14 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] flex items-center justify-center hover:scale-110 transition duration-300 cursor-pointer">
-                <FontAwesomeIcon icon={faPlay} className="text-black text-xl" />
-                <span className="text-black text-xl ml-2">Xem ngay</span>
-              </button>
-            </Link>
+          <div>
+            <div className="flex items-start mt-8 gap-8">
+              <Link to={`/xem-phim/${movie.original_title}`}>
+                <button className="w-[200px] h-14 rounded-full bg-gradient-to-r from-[#face5c] to-[#FFEBB7] flex items-center justify-center hover:scale-110 transition duration-300 cursor-pointer">
+                  <FontAwesomeIcon icon={faPlay} className="text-black text-xl" />
+                  <span className="text-black text-xl ml-2">Xem ngay</span>
+                </button>
+              </Link>
 
-            <button
-              className="flex flex-col items-center w-18 h-18 my-2"
-              onClick={() => handleFavouriteMovie(movie.movieId)}
-            >
-              <FontAwesomeIcon
-                icon={faHeart}
-                className={` text-2xl cursor-pointer
-                    ${
-                      favouriteMovies.includes(movie.movieId)
-                        ? "text-default hover:opacity-80"
-                        : "text-white hover:text-default"
+              <button
+                className="flex flex-col items-center w-18 h-18 my-2"
+                onClick={() => handleFavouriteMovie(movie.movieId)}
+              >
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  className={` text-2xl cursor-pointer
+                    ${favouriteMovies.includes(movie.movieId)
+                      ? "text-default hover:opacity-80"
+                      : "text-white hover:text-default"
                     }`}
-              />
-              <p className="text-white text-sm">Yêu thích</p>
-            </button>
+                />
+                <p className="text-white text-sm">Yêu thích</p>
+              </button>
 
-            <button
-              className="flex flex-col items-center w-18 h-18  my-2 cursor-pointer"
-              onClick={() => setOpenModal(true)}
-            >
-              <FontAwesomeIcon
-                icon={faShare}
-                className="text-white text-2xl hover:text-default"
-              />
-              <p className="text-white text-sm">Chia sẻ</p>
-            </button>
+              <button
+                className="flex flex-col items-center w-18 h-18  my-2 cursor-pointer"
+                onClick={() => setOpenModal(true)}
+              >
+                <FontAwesomeIcon
+                  icon={faShare}
+                  className="text-white text-2xl hover:text-default"
+                />
+                <p className="text-white text-sm">Chia sẻ</p>
+              </button>
 
-            <button className="w-[150px] h-[40px] flex items-center gap-2 justify-center rounded-full bg-[#3556B6] ml-[150px] mr-2">
-              <FontAwesomeIcon
-                icon={faCertificate}
-                className="text-white text-xl"
-              />
-              <span className="text-white text-xl font-bold">
-                {movie.vote_average.toFixed(2)}
-              </span>
-              <span className="text-sm font-normal text-white">đánh giá</span>
-            </button>
+              <button className="w-[150px] h-[40px] flex items-center gap-2 justify-center rounded-full bg-[#3556B6] ml-[150px] mr-2">
+                <FontAwesomeIcon
+                  icon={faCertificate}
+                  className="text-white text-xl"
+                />
+                <span className="text-white text-xl font-bold">
+                  {movie.vote_average.toFixed(2)}
+                </span>
+                <span className="text-sm font-normal text-white">đánh giá</span>
+              </button>
+            </div>
+            <div>
+              <CommentSection  user={user}/>
+            </div>
           </div>
         </div>
         <Footer />
